@@ -1,0 +1,268 @@
+.add_ch {
+    width: 400px;
+    height: 70%;
+    background-color: white;
+    /* left: 15%; */
+    /* left: 0%; */
+    /* bottom: 10%; */
+    /* position: absolute; */
+    font-size: larger;
+    font-family: 'press start 2p';
+    color: black;
+    overflow: hidden;
+}
+
+
+
+.add_channel_compo {
+    width: 100%;
+    height: 100%;
+    /* position: absolute; */
+}
+
+.add_channel_promt {
+    /* width: 450px;
+    height: 500px; */
+    background-color: #222831;
+    /* position: absolute; */
+    /* bottom: 500%;
+    right: 30%; */
+    /* opacity: 1; */
+    /* z-index: 100; */
+}
+
+.add_create_chan_option {
+    width: 80%;
+    height: 80%;
+    background-color: #222831;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+}
+
+.exit_button {
+    width: 7%;
+    height: 14%;
+    right: 0%;
+    position: absolute;
+    background-color: black;
+}
+
+
+
+.add_channel_option {
+    width: 50%;
+    height: 100%;
+    /* position: absolute; */
+    left: 0%;
+    border: 2px solid blue;
+}
+.join_channel_option {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    border: 2px solid green;
+    right: 0%;
+}
+.insert_channel_name {
+    width: 100%;
+    height: 10%;
+    position: absolute;
+    color: black;
+    left: 10%;
+    top: 10%;
+}
+
+.write_channel_name{
+    width: 80%;
+    left: 10%;
+    border: 1px solid pink;
+    height: 5%;
+    position: absolute;
+    top: 15%;
+}
+
+.channel_public {
+    top: 25%;
+    left: 10%;
+    width: 80%;
+    height: 5%;
+    position: absolute;
+    border: 1px solid black;
+}
+
+
+.insert_channel_password
+{
+    width: 100%;
+    height: 10%;
+    position: absolute;
+    color: black;
+    left: 10%;
+    top: 40%;
+}
+
+.write_channel_password
+{
+
+}
+
+.add_channel {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    right: 30%;
+    background-color: antiquewhite;
+    top: 5%;
+}
+
+.create_channel 
+{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left: 30%;
+    background-color: antiquewhite;
+    top: 5%;
+}
+
+
+.create_chan_promt_option {
+    width: 100%;
+    height: 100%;
+    /* background-color: blue; */
+    position: absolute;
+}
+
+
+.create_channel_title {
+    width: 80%;
+    color: white;
+    height: 10%;
+    position: absolute;
+    top: 5%;
+    left: 10%;
+    text-align: center;
+    /* justify-content: center; */
+    vertical-align: middle;
+    /* background-color: bisque; */
+    font-size: 200%;
+    font-weight: 900;
+    -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: black;
+}
+
+
+
+.create_channel_name_input {
+    width: 80%;
+    color: black;
+    height: 10%;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+}
+
+.create_channel_password_input {
+    width: 80%;
+    color: black;
+    height: 10%;
+    position: absolute;
+    top: 60%;
+    left: 10%;
+}
+
+.submit_create_channel {
+    width: 80%;
+    color: white;
+    height: 10%;
+    top: 80%;
+    position: absolute;
+    left: 10%;
+    background-color: white;
+    color: black;
+}
+
+
+
+.create_channel_option_privilege {
+    width: 100%;
+    height: 100%;
+    /* background-color: ; */
+}
+
+
+.create_chanel_dropbar {
+    width: 80%;
+    position: absolute;
+    left: 10%;
+    height: 10%;
+    top: 40%;
+    background-color: white;
+}
+
+
+
+.drop_bar_combo {
+    width: 100%;
+    height: 100%;
+    /* background-color: yellow; */
+}
+
+.channel_option_dropbar_promt {
+    
+}
+
+.add_chan_promt_option {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+
+.join_channel_title {
+    width: 80%;
+    color: white;
+    height: 10%;
+    position: absolute;
+    top: 5%;
+    left: 10%;
+    text-align: center;
+    /* justify-content: center; */
+    vertical-align: middle;
+    /* background-color: bisque; */
+    font-size: 200%;
+    font-weight: 900;
+    -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: black;
+}
+
+
+.channel_name_to_join {
+    width: 80%;
+    color: black;
+    height: 10%;
+    position: absolute;
+    top: 20%;
+    left: 10%;
+}
+
+.channel_password_to_join {
+        width: 80%;
+    position: absolute;
+    left: 10%;
+    height: 10%;
+    top: 40%;
+    background-color: white;
+}
+
+.submit_join_channel {
+    width: 80%;
+    color: white;
+    height: 10%;
+    top: 60%;
+    position: absolute;
+    left: 10%;
+    background-color: white;
+    color: black;
+}

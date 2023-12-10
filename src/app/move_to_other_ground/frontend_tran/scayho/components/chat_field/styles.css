@@ -1,0 +1,56 @@
+.Chat_field_css {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.listingchat {
+    width: 80%;
+    /* height: 8%; */
+    left: 10%;
+    position: relative;
+    border: 2px solid pink;
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+.chat_inpute_field {
+    width: 100%;
+    height: 10%;
+    position: absolute;
+}
+
+.input_msg {
+    width: 80%;
+    height: 100%;
+    /* display: flex; */
+    background-color: white;
+    /* position: absolute; */
+    /* left: 0%;
+    bottom: 2%; */
+    /* text-align: left; */
+}
+
+.input_msg::placeholder {
+    text-align: center; /* Center the placeholder text */
+}
+
+
+
+.submit_button_chat_field {
+    width: 20%;
+    height: 100%;
+    position: absolute;
+    right: 0%;
+    background-image: url('/pictures/jahad_tag_profile.jpeg');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.message_tables_chat {
+    width: 100%;
+    height: 90%;
+}

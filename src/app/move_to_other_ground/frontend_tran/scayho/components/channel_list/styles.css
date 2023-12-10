@@ -1,0 +1,68 @@
+.o1o {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+
+
+.add_chh {
+    width: 500px;
+    /* width: 100%; */
+    height: 50px;
+    /* bottom: 0%; */
+    /* position: absolute; */
+}
+
+.channels_ground {
+    left: 0%;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #F05454;
+}
+
+.channels_name {
+    width: 100%;
+    height: 5%;
+    top: 2%;
+    text-align: center;
+    font-family: 'press start 2p';
+    /* border: 2px solid green; */
+    position: absolute;
+    font-size: larger;
+    color: white;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    overflow: hidden;
+}
+
+.chat_chan_ground {
+    width: 100%;
+    height: 100%;
+    right: 0%;
+    /* border: 5px solid white; */
+    background-color: #1E1E1E;
+    /* border: 10px solid black; */
+
+}
+
+
+.channels_field {
+    height: 85%;
+    /* position: absolute; */
+    width: 100%;
+    /* border: 4px solid yellow; */
+    /* border-radius: 10%; */
+    top: 5%;
+}
+
+
+.channel_element {
+    width: 100%;
+    top: 5%;
+    height: 15%;
+    /* border: 4px solid pink; */
+    position: relative;
+}
