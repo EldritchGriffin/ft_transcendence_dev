@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+  }
+}
+
+.red {
+  border: 4px solid red;
+}
+.blue {
+  border: 4px solid blue;
+}
+.green {
+  border: 4px solid green;
+}
+
+body {
+  /* background: #22#222831*/
+  /* background-image: url("/img2.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%; */
+  background-color: #222831;
+}
+
+.play-bot {
+  background: #f05454;
+  box-shadow: 20px 20px 0px 0px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+  color: #f05454;
+  text-shadow: 20px 20px 0px rgba(0, 0, 0, 0.5);
+  font-family: "Press Start 2P";
+  font-size: 100px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.start {
+  color: #ddd;
+  text-shadow: 10px 5px 0px rgba(0, 0, 0, 0.5);
+  font-family: "Press Start 2P";
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.start-btn {
+  background: #f05454;
+  box-shadow: 20px 20px 0px 0px rgba(0, 0, 0, 0.5);
+}
+
+.fontzabi {
+  color: #ddd;
+  text-shadow: 5px 2px 0px rgba(0, 0, 0, 0.2);
+  font-family: "Press Start 2P";
+  /* font-size: 30px; */
+  /* font-style: normal; */
+  /* font-weight: 900; */
+  line-height: normal;
+  text-overflow: clip;
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+  /* white-space: nowrap; */
+  /* -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: #222831; */
+}
+.fontbtn {
+  /* color: #ddd; */
+  text-shadow: 5px 2px 0px rgba(0, 0, 0, 0.2);
+  font-family: "Press Start 2P";
+  /* font-size: 30px; */
+  /* font-style: normal; */
+  /* font-weight: 900; */
+  line-height: normal;
+  text-overflow: clip;
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+  /* white-space: nowrap; */
+  /* -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: #222831; */
+}
+
+.rotate {
+  /* display: inline-block; */
+  transform: rotate(-90deg);
+  /* -moz-transform: rotate(-90deg); */
+  /* bottom: 40%; */
+  /* position: absolute; */
+  /* left: 38%; */
+  font-family: "press start 2p";
+  color: #f05454;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(0, 0, 0) 1;
+  text-shadow: 10px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.boxshadow {
+  box-shadow: 0px 20px 0px 0px rgba(0, 0, 0, 0.5);
+}
+@layer base {
+  .shap {
+    clip-path: polygon(
+      0 28%,
+      4% 14%,
+      8% 0,
+      85% 0%,
+      100% 0,
+      100% 15%,
+      100% 100%,
+      74% 100%,
+      66% 86%,
+      33% 86%,
+      24% 100%,
+      0 100%
+    );
+  }
+  .to {
+    clip-path: polygon(
+      0 23%,
+      11% 13%,
+      25% 1%,
+      85% 0%,
+      100% 0,
+      100% 15%,
+      100% 100%,
+      76% 100%,
+      62% 87%,
+      38% 87%,
+      25% 100%,
+      0 100%
+    );
+  }
+}
