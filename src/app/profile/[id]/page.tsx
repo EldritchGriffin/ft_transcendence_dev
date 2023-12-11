@@ -12,7 +12,7 @@ import axios from "axios";
 import { Result } from "postcss";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://10.13.10.12:3001",
 });
 
 export default function Profile({ params }: any) {
@@ -206,7 +206,7 @@ export default function Profile({ params }: any) {
     return (
       <div className="container sm:pr-24 py-24 mx-auto flex flex-col 2xl:flex-row justify-between  w-full sm:max-w-full h-screen">
         <div className="py-14">
-          <div className="space-y-5  bg-customRed lg:shap h-fit lg:h-[300px] sm:w-[700px] lg:w-[900px] boxshadow">
+          <div className="space-y-5  bg-customRed  h-fit lg:h-[300px] sm:w-[700px] lg:w-[900px] boxshadow">
             {userData.currUser && (
               <Profilestat result={userData} ra={rank2} u={upd} />
             )}

@@ -6,12 +6,12 @@ import { useEffect, useRef } from "react";
 const Profilestat = ({ result, ra, u }: any) => {
   return (
     <div className="space-y-10 pl-7 pt-5 flex flex-col lg:flex-row  justify-between items-center fontzabi">
-      <div className="flex ring-2 to ring-offset-2 hover:ring-offset-4 rounded-none justify-between items-center ">
+      <div className="flex ring-2 ring-offset-2 hover:ring-offset-4 rounded-full justify-between items-center ">
         <img
           draggable="false"
           src={result.currUser.avatarLink}
           alt=""
-          className="to w-[200px] h-[200px] border-2 border-white rounded-none dark:border-gray-800"
+          className="w-[200px] h-[200px] border-2 border-white rounded-full dark:border-gray-800"
         />
       </div>
       <div className="space-y-14 flex flex-col justify-center items-center w-80 ">

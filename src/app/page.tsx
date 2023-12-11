@@ -38,13 +38,13 @@ export default function Example() {
   const [value, setValue] = useState(0);
   useEffect(() => {
     // axios
-    //   .get("http://localhost:3001/users/me", { maxRedirects: 5 })
+    //   .get("http://10.13.10.12:3001/users/me", { maxRedirects: 5 })
     //   .then((res) => {
     //     setValue(res.data);
     //   });
     try {
       axios
-        .get("http://localhost:3001/users/me", {
+        .get("http://10.13.10.12:3001/users/me", {
           maxRedirects: 5,
         })
         .then((res) => {

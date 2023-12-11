@@ -62,21 +62,6 @@ const UpdateProfile = ({ update_nick_name }: any) => {
             />
           </div>
           <div>
-            <p className="text-sm text-gray-600">
-              Please enter your new description
-            </p>
-            <input
-              type="text"
-              className="input input-bordered rounded-none"
-              placeholder="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
-              minLength={3}
-              maxLength={10}
-            />
-          </div>
-          <div>
             <input
               type="file"
               className="file-input file-input-bordered rounded-none bg-customRed w-full max-w-xs"
@@ -101,7 +86,7 @@ const UpdateProfile = ({ update_nick_name }: any) => {
               <button
                 className="btn bg-customRed rounded-none"
                 type="submit"
-                onClick={() => update_nick_name(description)}
+                onClick={() => update_nick_name(nickname)}
               >
                 Update
                 {/* update_nick_name */}
