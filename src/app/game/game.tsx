@@ -184,7 +184,7 @@ const runGame = async (isMounted: boolean) => {
     const user = await getUser();
     let game: Game;
 
-    const socket = io("http://10.13.2.8:3000/game", {
+    const socket = io("http://localhost:3001/game", {
       query: { Username: user.intraLogin },
     });
 

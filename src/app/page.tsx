@@ -6,7 +6,7 @@ const Home = () => {
       <span className=" text-accent_red font-shadow md:text-[60px] xl:text-[100px] ">
         TRANSCENDENCE
       </span>
-      <form method="get" action="http://10.13.2.8:3000/users/me">
+      <form method="get" action="http://localhost:3001/users/me">
         <button
           className="bg-accent_red w-[120px] h-[50px] m-10 hover:bg-accent_red_hover 
                           box-shadow md:w-[250px] md:h-[100px] xl:w-[400px] xl:h-[150px]"
