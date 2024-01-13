@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { Press_Start_2P } from 'next/font/google'
+import { Lilita_One } from 'next/font/google'
 import './globals.css'
 
-const Font = Press_Start_2P({
+const Font = Lilita_One({
   subsets:['latin'],
   weight: '400'
 })
@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={Font.className +' bg-darkblue'}>{children}</body>
+      <body className={Font.className +' bg-bg_gray'}>{children}</body>
     </html>
   )
 }

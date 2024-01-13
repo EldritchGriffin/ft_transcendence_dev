@@ -1,22 +1,25 @@
 "use client";
+import Image from 'next/image'
 
 const Home = () => {
   return (
-    <div className="h-screen flex justify-center items-center flex-col">
-      <span className=" text-accent_red font-shadow md:text-[60px] xl:text-[100px] ">
-        TRANSCENDENCE
-      </span>
-      <form method="get" action="http://localhost:3001/users/me">
-        <button
-          className="bg-accent_red w-[120px] h-[50px] m-10 hover:bg-accent_red_hover 
-                          box-shadow md:w-[250px] md:h-[100px] xl:w-[400px] xl:h-[150px]"
-        >
-          <span className="text-[15px] text-primary_white font-shadow md:text-[30px] xl:text-[50px]">
-            START
+      <div className="flex gap-10 justify-center h-screen items-center">
+        <div className="flex flex-col">
+          <span className="text-[64px] text-accent_red">
+            PongVerse
           </span>
-        </button>
-      </form>
-    </div>
+          <span className="text-[19px] text-white">
+            PaddleBattles
+          </span>
+          <div className="flex gap-5 mt-5">
+            <form method="get" action="http://localhost:3001/users/me">
+                <button className="w-[110px] h-[40px] text-white text-[14px] bg-accent_red">Start</button>
+            </form>
+            <button className="w-[110px] h-[40px] text-white text-[14px] bg-primary_blue">About us</button>
+          </div>
+        </div>
+          <Image priority src="/paddle.jpg"  width={232} height={232}  alt='image' className='w-[232px] h-[232px]'/>
+      </div>
   );
 };
 

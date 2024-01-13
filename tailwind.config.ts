@@ -9,11 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'accent_red': '#F05454',
-        'accent_red_hover': '#F46C6C',
-        'accent_blue': '#30475E',
-        'darkblue': '#222831',
-        'primary_white': '#DDDDDD',
+        'bg_gray': '#50514F',
+        'accent_red': '#F25F5C',
+        'primary_blue': '#247BA0',
         },
     },
   },
