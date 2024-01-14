@@ -8,7 +8,7 @@ const Font = Lilita_One({
 })
 
 export const metadata: Metadata = {
-  title: 'PingPong Transcendence',
+  title: 'PongVerse',
   description: 'Made by abelahce absela hchahid ysakine aelyakou',
 }
 

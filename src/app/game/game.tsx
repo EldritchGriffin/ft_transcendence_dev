@@ -3,7 +3,6 @@ import * as PIXI from "pixi.js";
 import io from "socket.io-client";
 import { Press_Start_2P } from "next/font/google";
 import { fetchCurrentUser } from "../(handlers)/requestHandler";
-import { usePathname, useRouter } from "next/navigation";
 
 let p1score = 0;
 let p2score = 0;
