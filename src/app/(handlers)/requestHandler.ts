@@ -6,7 +6,7 @@ const api = axios.create({
 });
 
 export const fetchCurrentUser = async () => {
-  const url = `/users/me`;
+  const url = `/user/me`;
 
   try {
     const response = await api.get(url);
