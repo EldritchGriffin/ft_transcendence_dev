@@ -35,10 +35,10 @@ export default function TwoFactor() {
     console.log(requestData);
     axios.post(backendUrl, requestData, { withCredentials: true})
     .then((res) => {
-      console.log(res.data);
+      console.log(res);
     })
-    .catch((error) => {
-      console.error('Error:', error);
+    .catch((UnauthorizedException) => {
+      console.error('Error:', "mok ya moook");
     })
     .finally(() => {
       setValue(Array(6).fill(""));
