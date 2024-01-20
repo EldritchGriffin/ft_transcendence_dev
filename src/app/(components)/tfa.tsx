@@ -38,7 +38,7 @@ export default function TwoFactor() {
       console.log(res);
     })
     .catch((UnauthorizedException) => {
-      console.error('Error:', "mok ya moook");
+      console.error('Error:', "Unauthorized");
     })
     .finally(() => {
       setValue(Array(6).fill(""));
