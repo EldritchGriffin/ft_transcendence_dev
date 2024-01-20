@@ -1,24 +1,71 @@
 'use client'
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
+import { fetchChannels } from "../(handlers)/requestHandler";
+import { fetchUserDms } from "../(handlers)/requestHandler";
+import { Channel } from "../(interfaces)/channelInterface";
 
-const selectedTab = (selected:number) => {
-    if(selected === 0) 
+const FriendsTab = () => {
+    const [friends, setFriends] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const friends = await fetchUserDms();
+                setFriends(friends);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+    if (loading) {
+        return <p className='flex text-white h-full justify-center items-center text-2xl'>Loading...</p>;
+    }
     return (
-        <div className="flex h-full flex-col bg-slate-600">
+        <div className="h-full overflow-scroll custom-scrollbar">
+            <div className="flex flex-col gap-2">
+                {friends.map((friend:Channel, index) => (
+                    <button key={index} className="flex flex-row justify-start items-center gap-2 w-full h-10 px-5 text-white hover:bg-cyan-600">
+                        <span className="text-sm">{friend.title}</span>
+                    </button>
+                ))}
+            </div>
         </div>
-    )
-    else 
-    return (
-        <div className="h-full">
-        </div>
-    )
-}
+    );
+};
 
+const ChannelsTab = () => {
+    const [channels, setChannels] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const channels = await fetchChannels();
+                setChannels(channels);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+    if (loading) {
+        return <p className='flex text-white h-full justify-center items-center text-2xl'>Loading...</p>;
+    }
+    return (
+        <div className="h-full overflow-scroll custom-scrollbar">
+            <div className="flex flex-col gap-2">
+                {channels.map((channel:Channel, index) => (
+                    <button key={index} className="flex flex-row justify-start items-center gap-2 w-full h-10 px-5 text-white hover:bg-cyan-600">
+                        <span className="text-sm">{channel.title}</span>
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+};
 
 const ChatSelector = () => {
     const [selected, setSelected] = useState(0);
-    const tab = selectedTab(selected);
-
     const handleSelect = (index: number) => {
         let selected;
         let unselected;
@@ -47,8 +94,8 @@ const ChatSelector = () => {
     };
 
     return (
-        <div className="w-[200px] h-[430px] bg-primary_blue flex flex-col">
-            <div className="flex w-full h-10 justify-center gap-5">
+        <div className="flex flex-col w-[200px] h-[430px] bg-primary_blue">
+            <div className="flex w-full h-10 mt-2 justify-center gap-5">
                 <button onClick={() => handleSelect(0)}>
                     <span id="friends" className="text-accent_red text-sm">Friends</span>
                 </button>
@@ -64,11 +111,20 @@ const ChatSelector = () => {
                     onChange={handleSearch}
                 />
             </div>
-            {tab}
+            {selected === 0 ? <FriendsTab /> : <ChannelsTab />}
+            <div >
+                <button className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300">
+                    <span className="text-sm">Create Channel</span>
+                </button>
+            </div>
         </div>
     );
 };
 const ChatPage = () => {
+    const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
+    const handleSelectChannel = (channel: Channel) => {
+        setSelectedChannel(channel);
+    }
     return (
         <div className="flex h-screen justify-center items-center">
             <div className="flex flex-row gap-5">

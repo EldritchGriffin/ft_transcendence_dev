@@ -3,13 +3,11 @@
 @tailwind utilities;
 
 @layer base {
-
-  .font-shadow
-  {
-    text-shadow: 5px 2px 0px rgba(0, 0, 0, 0.50);
+  .custom-scrollbar::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
   }
-  .box-shadow
-  {
-    box-shadow: 10px 10px 0px 0px rgba(0, 0, 0, 0.50);
-  }
+  .custom-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }  
 }

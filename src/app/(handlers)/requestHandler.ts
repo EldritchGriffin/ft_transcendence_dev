@@ -22,3 +22,39 @@ export const fetchCurrentUser = async () => {
     throw error;
   }
 };
+
+export const fetchChannels = async () => {
+  const url = `/channel/joinedChannels`;
+
+  try {
+    const response = await api.get(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching channels:", error);
+    throw error;
+  }
+};
+
+export const fetchUserDms = async () => {
+  const url = `/channel/DMs`;
+
+  try {
+    const response = await api.get(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching dms:", error);
+    throw error;
+  }
+};
