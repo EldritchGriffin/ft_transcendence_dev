@@ -58,3 +58,21 @@ export const fetchUserDms = async () => {
     throw error;
   }
 };
+
+export const fetchChannelMessages = async (channelId: string) => {
+  const url = `/messages/findall/${channelId}`;
+
+  try {
+    const response = await api.get(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    throw error;
+  }
+};
