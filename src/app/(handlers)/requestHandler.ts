@@ -42,7 +42,7 @@ export const fetchChannels = async () => {
 };
 
 export const fetchUserDms = async () => {
-  const url = `/channel/DMs`;
+  const url = `/channel/alldms/`;
 
   try {
     const response = await api.get(url);
