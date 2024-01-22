@@ -19,7 +19,7 @@ const FriendsTab = ({onChannelSelect}:any) => {
             }
         };
         fetchData();
-    }, []);
+    }, [friends]);
     if (loading) {
         return <p className='flex text-white h-full justify-center items-center text-2xl'>Loading...</p>;
     }

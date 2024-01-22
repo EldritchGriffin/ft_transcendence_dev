@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Channel } from "../(interfaces)/channelInterface";
+import { postNewChannel } from "../(handlers)/requestHandler";
 
 const CreateChannelModal = (props:any) => {
     const [name, setName] = useState("");
     const [access, setAccess] = useState("Public");
     const [password, setPassword] = useState("");
   
-    const createChannel = () => {
+    const createChannel = async () => {
       const newChannel = {
         title: name,
         description: "doesn't really matter",
         access: access,
         password: access !== "Public" ? password : undefined,
       };
-      console.log(newChannel);  
+        await postNewChannel(newChannel);
       props.toggleModal();
     };
   
