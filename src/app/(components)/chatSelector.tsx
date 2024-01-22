@@ -1,16 +1,28 @@
 import React, { useState } from "react";
 import ChannelsTab from "./channelsTab";
 import FriendsTab from "./friendsTab";
+import CreateChannelModal from "./createChannelModal";
 
 const createChannel = () => {
+    const [showModal, setShowModal] = useState(false);
+    const toggleModal = () => {
+        setShowModal(!showModal);
+    };
     return (
-        <button className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300">
-            <span className="text-sm">New Channel</span>
-        </button>
+        <div className="flex">
+            <button onClick={() => toggleModal()} className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300">
+                <span className="text-sm">Create</span>
+            </button>
+            <button onClick={() => toggleModal()} className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300">
+                <span className="text-sm">Join</span>
+            </button>
+            {showModal ? <CreateChannelModal toggleModal={toggleModal}/> : null}
+        </div>
     );
 }
 
 const selectNewFriend = () => {
+    const [showModal, setShowModal] = useState(false);
     return (
         <button className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300">
             <span className="text-sm">New Chat</span>
