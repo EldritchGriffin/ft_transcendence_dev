@@ -3,14 +3,12 @@ import React from 'react';
 const ChannelHeader = (props:any) => {
     if(props.channel === null)
         return (
-            <div className="flex flex-row w-[32rem] h-12 justify-around items-center bg-primary_blue">
-                <div className="flex flex-row gap-2">
-                    <span className="text-white text-lg">Select a chat</span>
-                </div>
+            <div className="flex w-[32rem] mb-3 h-[12%] justify-center items-center bg-primary_blue">
+                <span className="text-white text-lg">Select a chat</span>
             </div>
         );
     return (
-        <div className="flex flex-row w-[32rem] h-12 justify-between items-center bg-primary_blue">
+        <div className="flex flex-row w-[32rem] mb-3 h-[12%] justify-between items-center bg-primary_blue">
             <div className="flex flex-row mx-10">
                 <span className="text-white text-lg">{props.channel.title}</span>
             </div>

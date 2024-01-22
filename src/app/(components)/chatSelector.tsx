@@ -48,7 +48,7 @@ const ChatSelector = ({onChannelSelect}:any) => {
     };
 
     return (
-        <div className="flex flex-col w-[200px] h-[430px] bg-primary_blue">
+        <div className="flex flex-col w-[200px] h-full bg-primary_blue">
             <div className="flex w-full h-10 mt-2 justify-center gap-5">
                 <button onClick={() => handleSelect(0)}>
                     <span id="friends" className="text-accent_red text-sm">Friends</span>
@@ -59,6 +59,7 @@ const ChatSelector = ({onChannelSelect}:any) => {
             </div>
             <div className="flex justify-center items-center flex-col">
                 <input
+                    id="search"
                     type="text"
                     placeholder="Search"
                     className="my-5 text-white text-[10px] bg-transparent border-b focus:outline-none"
