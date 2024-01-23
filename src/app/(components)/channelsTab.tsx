@@ -26,7 +26,7 @@ const ChannelsTab = ({onChannelSelect}:any) => {
         <div className="h-full overflow-scroll custom-scrollbar">
             <div className="flex flex-col gap-2">
                 {channels.map((channel:Channel, index) => (
-                    <button onClick={() => handleSelect(channel)} key={index} className="flex flex-row justify-start items-center gap-2 w-full h-10 px-5 text-white hover:bg-cyan-600">
+                    <button onClick={() => handleSelect(channel)} key={index} className="flex flex-row text-left justify-start items-center gap-2 w-full h-10 px-5 text-white hover:bg-cyan-600">
                         <span className="text-sm">{channel.title}</span>
                     </button>
                 ))}

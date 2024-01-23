@@ -27,7 +27,7 @@ const FriendsTab = ({onChannelSelect}:any) => {
         <div className="h-full overflow-scroll custom-scrollbar">
             <div className="flex flex-col gap-2">
                 {friends.map((friend:Channel, index) => (
-                    <button onClick={() => handleSelect(friend)} key={index} className="flex flex-row justify-start items-center gap-2 w-full h-10 px-5 text-white hover:bg-cyan-600">
+                    <button onClick={() => handleSelect(friend)} key={index} className="flex flex-row justify-start items-center text-left gap-2 w-full h-10 px-5 text-white hover:bg-cyan-600">
                         <span className="text-sm">{friend.title}</span>
                     </button>
                 ))}

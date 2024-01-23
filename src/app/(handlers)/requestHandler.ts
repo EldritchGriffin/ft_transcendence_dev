@@ -94,3 +94,21 @@ export const fetchChannelMessages = async (channelId: string) => {
       throw error;
     }
   }
+
+  export const postLeaveChannel = async (channelId: any) => {
+    const url = `/channel/leave`;
+  
+    try {
+      const response = await api.post(url, {channel: channelId});
+  
+      if (response.status >= 200 && response.status < 300) {
+        const data = await response.data;
+        return data;
+      } else {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    } catch (error) {
+        console.error("Error posting channel:", error);
+      throw error;
+    }
+  };
