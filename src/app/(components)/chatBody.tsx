@@ -4,9 +4,23 @@ import { Channel } from "../(interfaces)/channelInterface";
 import { fetchChannelMessages } from "../(handlers)/requestHandler";
 import ChatBubble from "./chatBubble";
 
+const handleSendMessage = (socket: any, channel: Channel) => {
+  const message = document.getElementById("message") as HTMLInputElement;
+  if (!message) return;
+  const messageText = message.value;
+  if (!messageText) return;
+  const messageData = {
+    channel: channel.id,
+    message: messageText,
+  };
+  socket.emit("sendMessage", messageData);
+  message.value = "";
+};
+
 const ChatBody = (props: any) => {
   const user = props.user;
   const channel: Channel = props.channel;
+  const socket = props.socket;
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -58,6 +72,9 @@ const ChatBody = (props: any) => {
           type="text"
           className=" border-b-2 bg-transparent w-full h-full px-4 text-white focus:outline-none"
           placeholder="Type a message..."
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSendMessage(socket, channel);
+          }}
         />
       </div>
     </div>
