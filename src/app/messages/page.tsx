@@ -36,9 +36,6 @@ const ChatPage = () => {
                 }
             });
             setSocket(newSocket);
-            newSocket.on("test", () => {
-                console.log("connected");
-            });
             return () => {
                 newSocket.disconnect();
             };

@@ -77,38 +77,92 @@ export const fetchChannelMessages = async (channelId: string) => {
   }
 };
 
-  export const postNewChannel = async (channel: any) => {
-    const url = `/channel/create`;
-  
-    try {
-      const response = await api.post(url, channel);
-  
-      if (response.status >= 200 && response.status < 300) {
-        const data = await response.data;
-        return data;
-      } else {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-    } catch (error) {
-        console.error("Error posting channel:", error);
-      throw error;
-    }
-  }
+export const postNewChannel = async (channel: any) => {
+  const url = `/channel/create`;
 
-  export const postLeaveChannel = async (channelId: any) => {
-    const url = `/channel/leave`;
-  
-    try {
-      const response = await api.post(url, {channel: channelId});
-  
-      if (response.status >= 200 && response.status < 300) {
-        const data = await response.data;
-        return data;
-      } else {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-    } catch (error) {
-        console.error("Error posting channel:", error);
-      throw error;
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-  };
+  } catch (error) {
+    console.error("Error posting channel:", error);
+    throw error;
+  }
+};
+
+export const postLeaveChannel = async (channelId: any) => {
+  const url = `/channel/leave`;
+
+  try {
+    const response = await api.post(url, { channel: channelId });
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error posting channel:", error);
+    throw error;
+  }
+};
+
+export const postJoinChannel = async (channelId: any) => {
+  const url = `/channel/join`;
+
+  try {
+    const response = await api.post(url, { channel: channelId });
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error posting channel:", error);
+    throw error;
+  }
+};
+
+export const fetchPublicChannels = async () => {
+  const url = `/channel/allNonJoinedPublic`;
+
+  try {
+    const response = await api.get(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching channels:", error);
+    throw error;
+  }
+};
+
+export const fetchProtectedChannels = async () => {
+  const url = `/channel/allNonJoinedProtected`;
+
+  try {
+    const response = await api.get(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching channels:", error);
+    throw error;
+  }
+};

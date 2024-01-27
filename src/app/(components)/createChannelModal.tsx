@@ -22,16 +22,16 @@ const CreateChannelModal = (props: any) => {
 
   const createChannel = async () => {
     if (!checkName(name)) return;
-    if (access !== "Public")
-    {
-      if (!checkPassword(password, confirmPassword)) //TODO implement proper error handling
-        return; 
+    if (access === "Protected") {
+      if (!checkPassword(password, confirmPassword))
+        //TODO implement proper error handling
+        return;
     }
     const newChannel = {
       title: name,
       description: "doesn't really matter",
       access: access,
-      password: access !== "Public" ? password : undefined,
+      password: access === "Protected" ? password : undefined,
     };
     console.log(newChannel);
     await postNewChannel(newChannel);
@@ -64,7 +64,7 @@ const CreateChannelModal = (props: any) => {
             <option value="Private">Private</option>
             <option value="Protected">Protected</option>
           </select>
-          {access !== "Public" && (
+          {access === "Protected" && (
             <div className="flex flex-col gap-3">
               <span className="text-sm mt-4">Password</span>
               <input
