@@ -40,7 +40,6 @@ const ChatPage = () => {
         newSocket.disconnect();
       };
     }
-    if (!user) fetchData();
   }, []);
   return (
     <div className="flex h-screen justify-center items-center">

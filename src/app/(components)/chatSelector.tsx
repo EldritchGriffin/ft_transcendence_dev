@@ -34,7 +34,10 @@ const CreateChannel = (props: any) => {
         />
       ) : null}
       {showJoinModal ? (
-        <JoinChannelModal toggleModal={toggleJoinModal} />
+        <JoinChannelModal
+          toggleModal={toggleJoinModal}
+          setChannels={props.setChannels}
+        />
       ) : null}
     </div>
   );

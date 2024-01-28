@@ -22,7 +22,7 @@ const CreateChannelModal = (props: any) => {
 
   const createChannel = async () => {
     if (!checkName(name)) return;
-    if (access === "Protected") {
+    if (access === "2") {
       if (!checkPassword(password, confirmPassword))
         //TODO implement proper error handling
         return;
@@ -31,9 +31,11 @@ const CreateChannelModal = (props: any) => {
       title: name,
       description: "doesn't really matter",
       access: access,
-      password: access === "Protected" ? password : undefined,
+      password: access === "2" ? password : undefined,
     };
+    console.log(newChannel);
     const channel = await postNewChannel(newChannel);
+    console.log(channel);
     props.setChannels((channels: Channel[]) => [...channels, channel]);
     props.toggleModal();
   };
@@ -60,11 +62,11 @@ const CreateChannelModal = (props: any) => {
             onChange={(e) => setAccess(e.target.value)}
             className="m-4 focus:outline-none"
           >
-            <option value="Public">Public</option>
-            <option value="Private">Private</option>
-            <option value="Protected">Protected</option>
+            <option value="0">Public</option>
+            <option value="1">Private</option>
+            <option value="2">Protected</option>
           </select>
-          {access === "Protected" && (
+          {access === "2" && (
             <div className="flex flex-col gap-3">
               <span className="text-sm mt-4">Password</span>
               <input

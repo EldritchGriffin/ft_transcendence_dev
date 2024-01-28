@@ -9,8 +9,9 @@ const ListProtectedChannels = (props: any) => {
   const [loading, setLoading] = useState(false);
 
   const joinChannel = async (channel: Channel) => {
-    // await postJoinChannel(channel.id.toString());
-    // props.toggleModal();
+    const newChannel = await postJoinChannel(channel.id.toString());
+    props.setChannels((channels: Channel[]) => [...channels, newChannel]);
+    props.toggleModal();
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +57,8 @@ const ListPublicChannels = (props: any) => {
   const [loading, setLoading] = useState(false);
 
   const joinChannel = async (channel: Channel) => {
-    await postJoinChannel(channel.id.toString());
+    const newChannel = await postJoinChannel(channel.id.toString());
+    props.setChannels((channels: Channel[]) => [...channels, newChannel]);
     props.toggleModal();
   };
   useEffect(() => {
@@ -109,10 +111,13 @@ const JoinChannelModal = (props: any) => {
     setSelected(state);
   };
 
-  const renderList = (toggleModal: any) => {
+  const renderList = () => {
     if (selected === "public") {
       return (
-        <ListPublicChannels toggleModal={toggleModal}></ListPublicChannels>
+        <ListPublicChannels
+          toggleModal={props.toggleModal}
+          setChannels={props.setChannels}
+        ></ListPublicChannels>
       );
     } else {
       return <ListProtectedChannels></ListProtectedChannels>;
@@ -143,7 +148,7 @@ const JoinChannelModal = (props: any) => {
               <span>Protected</span>
             </button>
           </div>
-          {renderList(props.toggleModal)}
+          {renderList()}
         </div>
       </div>
     </div>

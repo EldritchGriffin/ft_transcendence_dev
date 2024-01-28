@@ -36,11 +36,19 @@ const ChatBody = (props: any) => {
       }
     };
     fetchData();
+    socket.on("messageReceived", (message: any) => {
+      setMessages((messages) => [...messages, message]);
+    });
     return () => {
+      socket.off("messageReceived");
       setMessages([]);
       setLoading(true);
     };
   }, [channel]);
+  useEffect(() => {
+    const field = document.getElementById("messages") as HTMLInputElement;
+    if (field) field.scrollTop = field.scrollHeight;
+  }, [messages]);
   if (!channel) {
     return (
       <div className="flex text-white h-[85%] justify-center items-center text-2xl bg-primary_blue">
@@ -57,7 +65,10 @@ const ChatBody = (props: any) => {
   }
   return (
     <div className="flex h-[85%] flex-col bg-primary_blue">
-      <div className="h-full overflow-y-scroll overflow-x-hidden custom-scrollbar">
+      <div
+        id="messages"
+        className="h-full overflow-y-scroll overflow-x-hidden custom-scrollbar"
+      >
         {messages.length === 0 ? (
           <div className="flex text-white h-[85%] justify-center items-center text-2xl bg-primary_blue">
             No messages yet!
@@ -74,6 +85,7 @@ const ChatBody = (props: any) => {
           type="text"
           className=" border-b-2 bg-transparent w-full h-full px-4 text-white focus:outline-none"
           placeholder="Type a message..."
+          autoComplete="off"
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSendMessage(socket, channel, user);
           }}
