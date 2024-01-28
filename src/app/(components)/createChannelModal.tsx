@@ -33,8 +33,8 @@ const CreateChannelModal = (props: any) => {
       access: access,
       password: access === "Protected" ? password : undefined,
     };
-    console.log(newChannel);
-    await postNewChannel(newChannel);
+    const channel = await postNewChannel(newChannel);
+    props.setChannels((channels: Channel[]) => [...channels, channel]);
     props.toggleModal();
   };
 

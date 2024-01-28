@@ -16,7 +16,6 @@ const ListProtectedChannels = (props: any) => {
     const fetchData = async () => {
       try {
         const channels = await fetchProtectedChannels();
-        console.log(channels);
         setChannels(channels);
       } finally {
         setLoading(false);
@@ -65,7 +64,6 @@ const ListPublicChannels = (props: any) => {
       try {
         const channels = await fetchPublicChannels();
         setChannels(channels);
-        console.log(channels);
       } finally {
         setLoading(false);
       }
@@ -93,7 +91,10 @@ const ListPublicChannels = (props: any) => {
       {channels.map((channel: Channel, index: number) => (
         <div key={index} className="flex flex-row justify-between items-center">
           <span>{channel.title}</span>
-          <button onClick={() => joinChannel(channel)} className="bg-accent_red w-14 h-7 text-white">
+          <button
+            onClick={() => joinChannel(channel)}
+            className="bg-accent_red w-14 h-7 text-white"
+          >
             <span>Join</span>
           </button>
         </div>

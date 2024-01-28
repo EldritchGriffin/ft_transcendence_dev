@@ -4,7 +4,7 @@ import FriendsTab from "./friendsTab";
 import CreateChannelModal from "./createChannelModal";
 import JoinChannelModal from "./joinChannelModal";
 
-const createChannel = () => {
+const CreateChannel = (props: any) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const toggleCreateModal = () => {
@@ -28,7 +28,10 @@ const createChannel = () => {
         <span className="text-sm">Join</span>
       </button>
       {showCreateModal ? (
-        <CreateChannelModal toggleModal={toggleCreateModal} />
+        <CreateChannelModal
+          toggleModal={toggleCreateModal}
+          setChannels={props.setChannels}
+        />
       ) : null}
       {showJoinModal ? (
         <JoinChannelModal toggleModal={toggleJoinModal} />
@@ -37,7 +40,7 @@ const createChannel = () => {
   );
 };
 
-const selectNewFriend = () => {
+const SelectNewFriend = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const toggleModal = () => {
@@ -50,7 +53,7 @@ const selectNewFriend = () => {
   );
 };
 
-const ChatSelector = ({ onChannelSelect }: any) => {
+const ChatSelector = (props: any) => {
   const [selected, setSelected] = useState(0);
   const handleSelect = (index: number) => {
     let selected;
@@ -100,11 +103,21 @@ const ChatSelector = ({ onChannelSelect }: any) => {
         />
       </div>
       {selected === 0 ? (
-        <FriendsTab onChannelSelect={onChannelSelect} />
+        <FriendsTab onChannelSelect={props.onChannelSelect} />
       ) : (
-        <ChannelsTab onChannelSelect={onChannelSelect} />
+        <ChannelsTab
+          onChannelSelect={props.onChannelSelect}
+          channels={props.channels}
+          setChannels={props.setChannels}
+        />
       )}
-      <div>{selected === 0 ? selectNewFriend() : createChannel()}</div>
+      <div>
+        {selected === 0 ? (
+          <SelectNewFriend />
+        ) : (
+          <CreateChannel setChannels={props.setChannels} />
+        )}
+      </div>
     </div>
   );
 };
