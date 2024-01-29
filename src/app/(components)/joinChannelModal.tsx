@@ -39,7 +39,7 @@ const ListProtectedChannels = (props: any) => {
       </div>
     );
   return (
-    <div className="flex flex-col gap-3 h-96 w-80 ">
+    <div className="flex flex-col gap-4">
       {channels.map((channel: Channel, index: number) => (
         <div key={index} className="flex flex-row justify-between">
           <span>{channel.title}</span>

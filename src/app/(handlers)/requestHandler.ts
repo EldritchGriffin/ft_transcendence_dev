@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "http://10.13.10.14:3001",
   withCredentials: true,
 });
 
@@ -163,6 +163,25 @@ export const fetchProtectedChannels = async () => {
     }
   } catch (error) {
     console.error("Error fetching channels:", error);
+    throw error;
+  }
+};
+
+export const postNewDM = async (channel: any) => {
+  const url = `/channel/newDM`;
+
+  try {
+    const response = await api.post(url, { user: channel });
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      console.log("data", data);
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.log("Error posting message:", error);
     throw error;
   }
 };

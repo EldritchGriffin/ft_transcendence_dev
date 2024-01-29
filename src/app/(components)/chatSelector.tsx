@@ -3,6 +3,7 @@ import ChannelsTab from "./channelsTab";
 import FriendsTab from "./friendsTab";
 import CreateChannelModal from "./createChannelModal";
 import JoinChannelModal from "./joinChannelModal";
+import NewFriendModal from "./newFriendModal";
 
 const CreateChannel = (props: any) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -43,16 +44,28 @@ const CreateChannel = (props: any) => {
   );
 };
 
-const SelectNewFriend = () => {
+const SelectNewFriend = (props: any) => {
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const toggleModal = () => {
     setShowModal(!showModal);
   };
   return (
-    <button className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300">
-      <span className="text-sm">New Chat</span>
-    </button>
+    <div>
+      <button
+        onClick={() => toggleModal()}
+        className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300"
+      >
+        <span className="text-sm">New Chat</span>
+      </button>
+      {showModal ? (
+        <NewFriendModal
+          toggleModal={toggleModal}
+          user={props.user}
+          setChannels={props.setChannels}
+        />
+      ) : null}
+    </div>
   );
 };
 
@@ -116,7 +129,7 @@ const ChatSelector = (props: any) => {
       )}
       <div>
         {selected === 0 ? (
-          <SelectNewFriend />
+          <SelectNewFriend user={props.user} setChannels={props.setChannels} />
         ) : (
           <CreateChannel setChannels={props.setChannels} />
         )}
