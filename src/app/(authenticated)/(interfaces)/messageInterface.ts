@@ -5,5 +5,5 @@ export interface Message {
   senderLogin: string;
   content: string;
   id: number;
-  senderAvatar: string;
+  sender: { avatarLink: string };
 }

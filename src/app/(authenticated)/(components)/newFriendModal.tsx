@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { User } from "../(interfaces)/userInterface";
 import { Channel } from "../(interfaces)/channelInterface";
 import { postNewDM } from "../(handlers)/requestHandler";
+import { Bounce, toast } from "react-toastify";
 
 const NewFriendModal = (props: any) => {
   const user: User = props.user;
@@ -22,8 +23,22 @@ const NewFriendModal = (props: any) => {
 
   const startChat = async (friend: User) => {
     console.log(friend);
-    const channel: Channel = await postNewDM(friend.intraLogin);
-    props.setChannels((channels: Channel[]) => [...channels, channel]);
+    try {
+      const channel: Channel = await postNewDM(friend.intraLogin);
+      props.setChannels((channels: Channel[]) => [...channels, channel]);
+    } catch (error) {
+      toast.error("Chat already exists", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
     props.toggleModal();
   };
   return (

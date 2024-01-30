@@ -55,12 +55,14 @@ const ChannelHeader = (props: any) => {
         >
           Leave
         </button>
-        <button
-          onClick={() => toggleModal()}
-          className="text-white text-sm hover:text-accent_red"
-        >
-          Settings
-        </button>
+        {selectedChannel.type == "Channel" ? (
+          <button
+            onClick={() => toggleModal()}
+            className="text-white text-sm hover:text-accent_red"
+          >
+            Settings
+          </button>
+        ) : null}
         {showModal ? <SettingsModal toggleModal={toggleModal} /> : null}
       </div>
     </div>

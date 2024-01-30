@@ -37,6 +37,7 @@ const ChatBody = (props: any) => {
     };
     fetchData();
     socket.on("messageReceived", (message: any) => {
+      if (message.channelId !== channel.id) return;
       setMessages((messages) => [...messages, message]);
     });
     return () => {

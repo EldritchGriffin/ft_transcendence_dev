@@ -4,6 +4,7 @@ import { fetchProtectedChannels } from "../(handlers)/requestHandler";
 import { fetchPublicChannels } from "../(handlers)/requestHandler";
 import { postJoinChannel } from "../(handlers)/requestHandler";
 import { Bounce, toast } from "react-toastify";
+import { exit } from "process";
 
 const EnterPasswordModal = (props: any) => {
   const [password, setPassword] = useState<string>("");
@@ -80,6 +81,7 @@ const ListProtectedChannels = (props: any) => {
         theme: "light",
         transition: Bounce,
       });
+      //exit the function without toggling the modal in case of error
     }
     props.toggleModal();
   };
