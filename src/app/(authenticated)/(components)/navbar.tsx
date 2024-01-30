@@ -24,7 +24,7 @@ const Navbar_search_list = (props: any) => {
   };
   return (
     <div
-      className="w-full h-fit flex items-center space-x-5 flex-row space-y-3 overflow-hidden  font-lilita-one text-stroke border-2 "
+      className="w-full h-fit flex items-center space-x-5 flex-row space-y-3 overflow-hidden border-2 "
       key={props.index}
       onClick={() => {
         navigate_to_users_profile(props.item.intraLogin);
@@ -35,7 +35,7 @@ const Navbar_search_list = (props: any) => {
         alt=""
         className="h-10 w-10 sm:h-[60px] sm:w-[60px] flex-none red  "
       />
-      <label className="h-fit w-fit  text-sm flex items-center red justify-center text-center font-lilita-one  text-stroke text-white">
+      <label className="h-fit w-fit  text-sm flex items-center red justify-center text-center text-white">
         {" "}
         {props.item.nickname}{" "}
       </label>

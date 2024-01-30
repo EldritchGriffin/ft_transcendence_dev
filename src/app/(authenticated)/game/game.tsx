@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import io from "socket.io-client";
 import { Press_Start_2P } from "next/font/google";
 import { fetchCurrentUser } from "../(handlers)/requestHandler";
+import Cookies from "js-cookie";
 
 let p1score = 0;
 let p2score = 0;
@@ -182,9 +183,13 @@ const runGame = async (isMounted: boolean) => {
     const assets = initAssets(pixi.App);
     const user = await getUser();
     let game: Game;
+    const token = Cookies.get("token");
 
     const socket = io("http://localhost:3001/game", {
       query: { Username: user.intraLogin },
+      extraHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     socket.on("WaitingForOpponent", (data) => {

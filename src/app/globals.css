@@ -259,12 +259,6 @@ body {
   background-color: #222831;
 }
 
-/* 
-.jahad_border_text   { 
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: black;
-} */
-
 .top_bars {
   /* top: 3%; */
   height: 100%;
@@ -412,11 +406,6 @@ body {
 .sent_twofa {
   width: 100px;
   height: 100px;
-}
-
-.font-lilita-one {
-  font-family: "Lilita One", sans-serif;
-  /* font-family: 'Lilita One'; */
 }
 
 input::placeholder {

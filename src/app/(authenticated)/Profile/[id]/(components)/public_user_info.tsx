@@ -264,14 +264,14 @@ const Publicuserinfo = (props: any) => {
           alt=""
           className="h-32 w-32 sm:h-[174px] sm:w-[174px] border-4 br "
         />
-        <label className="h-full w-full text-4xl sm:w-[140px] sm:h-[41px] text-center font-lilita-one  text-stroke text-white">
+        <span className="h-full w-full text-4xl sm:w-[140px] sm:h-[41px] text-center text-white">
           {" "}
           {user_data.intraLogin}{" "}
-        </label>
-        <label className="h-full w-full text-2xl sm:w-[104] sm:h-[27px]  text-stroke text-center font-lilita-one text-white">
+        </span>
+        <span className="h-full w-full text-2xl sm:w-[104] sm:h-[27px] text-center text-white">
           {" "}
           {user_data.nickname}{" "}
-        </label>
+        </span>
         <div className="w-[full] h-[full] flex justify-center space-x-6">
           <div className="w-fit h-fit">
             <Publicuserinfo_add_remove_cancel
