@@ -5,7 +5,6 @@ import { Message } from "../(interfaces)/messageInterface";
 const ChatBubble = (props: any) => {
   const user: User = props.user;
   const message: Message = props.message;
-  console.log(message);
   const handleUsernameClick = () => {
     console.log("clicked");
   };

@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import EditNickname from "../(components)/editProfile";
-import { fetchCurrentUser } from "../(handlers)/requestHandler";
+import EditNickname from "./editProfile";
+import { fetchCurrentUser } from "./requestHandler";
 
 const EditProfile = () => {
   const [user, setUser] = useState(null);

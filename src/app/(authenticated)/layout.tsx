@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Lilita_One } from "next/font/google";
-import Navbar_compo from "./(authenticated)/(components)/navbar";
-import "./globals.css";
+import Navbar_compo from "./(components)/navbar";
+import "../globals.css";
+
 const Font = Lilita_One({
   subsets: ["latin"],
   weight: "400",
@@ -19,7 +20,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={Font.className + " bg-bg_gray"}>{children}</body>
+      <body className={Font.className + " bg-bg_gray"}>
+        <Navbar_compo />
+        {children}
+      </body>
     </html>
   );
 }

@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { fetchUserDms } from "../(handlers)/requestHandler";
 import { Channel } from "../(interfaces)/channelInterface";
 
-const FriendsTab = ({ onChannelSelect }: any) => {
-  const [friends, setFriends] = useState([]);
+const FriendsTab = (props: any) => {
+  const friends = props.channels;
   const [loading, setLoading] = useState(true);
   const handleSelect = (channel: Channel) => {
-    onChannelSelect(channel);
+    props.onChannelSelect(channel);
   };
   useEffect(() => {
     const fetchData = async () => {
       try {
         const friends = await fetchUserDms();
-        setFriends(friends);
+        props.setChannels(friends);
       } finally {
         setLoading(false);
       }
@@ -29,7 +29,7 @@ const FriendsTab = ({ onChannelSelect }: any) => {
   return (
     <div className="h-full overflow-scroll custom-scrollbar">
       <div className="flex flex-col gap-2">
-        {friends.map((friend: Channel, index) => (
+        {friends.map((friend: Channel, index: number) => (
           <button
             onClick={() => handleSelect(friend)}
             key={index}

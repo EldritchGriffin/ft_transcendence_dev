@@ -119,7 +119,11 @@ const ChatSelector = (props: any) => {
         />
       </div>
       {selected === 0 ? (
-        <FriendsTab onChannelSelect={props.onChannelSelect} />
+        <FriendsTab
+          onChannelSelect={props.onChannelSelect}
+          channels={props.channels}
+          setChannels={props.setChannels}
+        />
       ) : (
         <ChannelsTab
           onChannelSelect={props.onChannelSelect}
