@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://10.13.10.14:3001",
+  baseURL: "http://localhost:3001",
   withCredentials: true,
 });
 
@@ -113,11 +113,11 @@ export const postLeaveChannel = async (channelId: any) => {
   }
 };
 
-export const postJoinChannel = async (channelId: any) => {
+export const postJoinChannel = async (channel: any) => {
   const url = `/channel/join`;
 
   try {
-    const response = await api.post(url, { channel: channelId });
+    const response = await api.post(url, channel);
 
     if (response.status >= 200 && response.status < 300) {
       const data = await response.data;

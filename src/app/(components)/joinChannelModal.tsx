@@ -4,13 +4,73 @@ import { fetchProtectedChannels } from "../(handlers)/requestHandler";
 import { fetchPublicChannels } from "../(handlers)/requestHandler";
 import { postJoinChannel } from "../(handlers)/requestHandler";
 
+const EnterPasswordModal = (props: any) => {
+  const [password, setPassword] = useState<string>("");
+
+  const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  const handleJoin = () => {
+    props.joinChannel(props.selectedChannel, password);
+    props.togglePasswordModal();
+    props.toggleModal();
+  };
+
+  return (
+    <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
+      <div className="flex flex-col bg-white rounded-lg shadow-lg p-4">
+        <div className="flex flex-row justify-between items-center">
+          <h1 className="text-xl mb-4">Enter password</h1>
+          <button
+            onClick={() => props.togglePasswordModal()}
+            className="text-xl mb-4"
+          >
+            &times;
+          </button>
+        </div>
+        <div className="flex flex-col gap-3">
+          <input
+            className="border-b-2 border-gray-300 rounded-md p-2 focus:outline-none"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={handlePassword}
+          ></input>
+          <button
+            className="bg-accent_red w-full text-white hover:bg-red-400 h-10"
+            onClick={handleJoin}
+          >
+            <span>Join</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ListProtectedChannels = (props: any) => {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [loading, setLoading] = useState(false);
+  const [passwordModal, setPasswordModal] = useState(false);
+  const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
 
-  const joinChannel = async (channel: Channel) => {
-    const newChannel = await postJoinChannel(channel.id.toString());
-    props.setChannels((channels: Channel[]) => [...channels, newChannel]);
+  const togglePasswordModal = (channel: Channel) => {
+    setSelectedChannel(channel);
+    setPasswordModal(!passwordModal);
+  };
+  const joinChannel = async (channel: Channel, password: string) => {
+    const data = {
+      channel: channel.id.toString(),
+      password: password,
+    };
+    try {
+      const newChannel = await postJoinChannel(data);
+      props.setChannels((channels: Channel[]) => [...channels, newChannel]);
+    } catch (error) {
+      alert(error);
+      // console.log("hana matl3tsh");
+    }
     props.toggleModal();
   };
   useEffect(() => {
@@ -39,13 +99,25 @@ const ListProtectedChannels = (props: any) => {
       </div>
     );
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3 h-96 w-80 overflow-scroll custom-scrollbar">
       {channels.map((channel: Channel, index: number) => (
-        <div key={index} className="flex flex-row justify-between">
+        <div key={index} className="flex flex-row justify-between items-center">
           <span>{channel.title}</span>
-          <button onClick={() => joinChannel(channel)}>
+          <button
+            onClick={() => togglePasswordModal(channel)}
+            className="bg-accent_red w-14 h-7 text-white"
+          >
             <span>Join</span>
           </button>
+          {passwordModal ? (
+            <EnterPasswordModal
+              toggleModal={props.toggleModal}
+              togglePasswordModal={togglePasswordModal}
+              setChannels={props.setChannels}
+              joinChannel={joinChannel}
+              selectedChannel={selectedChannel}
+            ></EnterPasswordModal>
+          ) : null}
         </div>
       ))}
     </div>
@@ -57,7 +129,9 @@ const ListPublicChannels = (props: any) => {
   const [loading, setLoading] = useState(false);
 
   const joinChannel = async (channel: Channel) => {
-    const newChannel = await postJoinChannel(channel.id.toString());
+    const newChannel = await postJoinChannel({
+      channel: channel.id.toString(),
+    });
     props.setChannels((channels: Channel[]) => [...channels, newChannel]);
     props.toggleModal();
   };
@@ -120,7 +194,12 @@ const JoinChannelModal = (props: any) => {
         ></ListPublicChannels>
       );
     } else {
-      return <ListProtectedChannels></ListProtectedChannels>;
+      return (
+        <ListProtectedChannels
+          toggleModal={props.toggleModal}
+          setChannels={props.setChannels}
+        ></ListProtectedChannels>
+      );
     }
   };
 

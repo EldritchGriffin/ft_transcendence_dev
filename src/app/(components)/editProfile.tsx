@@ -61,7 +61,7 @@ export default function Edit_nickname(props: any) {
     // after the new NickName passes the error checks i POST it on the back-end
     if (!name) return;
     try {
-      const new_nickname = "http://10.13.10.14:3001/user/updatenick/" + name;
+      const new_nickname = "http://localhost:3001/user/updatenick/" + name;
       const res = await fetch(new_nickname, {
         method: "POST",
         mode: "cors",
@@ -100,7 +100,7 @@ export default function Edit_nickname(props: any) {
       seterrimg(0);
       const data = new FormData();
       data.append("avatar", files);
-      const res = await fetch("http://10.13.10.14:3001/user/updateavatar", {
+      const res = await fetch("http://localhost:3001/user/updateavatar", {
         mode: "cors",
         credentials: "include",
         method: "POST",

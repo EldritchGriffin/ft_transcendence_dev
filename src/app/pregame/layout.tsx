@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Press_Start_2P } from "next/font/google";
-import Navbar from "../(components)/navbar";
 import "../globals.css";
 
 const Font = Press_Start_2P({
@@ -18,10 +17,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className={Font.className + " bg-darkblue"}>
-      <Navbar />
-      {children}
-    </div>
-  );
+  return <div className={Font.className + " bg-darkblue"}>{children}</div>;
 }

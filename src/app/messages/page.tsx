@@ -30,7 +30,7 @@ const ChatPage = () => {
     fetchData();
     if (!socket) {
       const token = Cookies.get("token");
-      const newSocket = io("http://10.13.10.14:3001/channels", {
+      const newSocket = io("http://localhost:3001/channels", {
         extraHeaders: {
           Authorization: `Bearer ${token}`,
         },

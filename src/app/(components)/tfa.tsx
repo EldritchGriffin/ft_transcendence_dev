@@ -28,7 +28,7 @@ export default function TwoFactor() {
     inputRef.current?.focus();
   }, [activeinput]);
 
-  const backendUrl = "http://10.13.10.14:3001/auth/signinTFA";
+  const backendUrl = "http://localhost:3001/auth/signinTFA";
 
   const handleButtonClick = () => {
     const requestData = {

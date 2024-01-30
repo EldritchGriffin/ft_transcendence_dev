@@ -8,7 +8,7 @@ const Home = () => {
         <span className="text-[64px] text-accent_red">PongVerse</span>
         <span className="text-[19px] text-white">PaddleBattles</span>
         <div className="flex gap-5 mt-5">
-          <form method="get" action="http://10.13.10.14:3001/user/me">
+          <form method="get" action="http://localhost:3001/user/me">
             <button className="w-[110px] h-[40px] text-white text-[14px] bg-accent_red">
               Start
             </button>
