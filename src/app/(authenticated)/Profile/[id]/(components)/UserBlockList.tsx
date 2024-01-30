@@ -99,7 +99,7 @@ const UserBlockList = (props: any) => {
                         navigate_to_users_profile(item.intraLogin);
                       }}
                     />
-                    <label
+                    <span
                       className="h-2 w-2 text-sm items-center  flex ml-1 text-center  mr-4  text-white "
                       onClick={() => {
                         navigate_to_users_profile(item.intraLogin);
@@ -107,7 +107,7 @@ const UserBlockList = (props: any) => {
                     >
                       {" "}
                       {item.nickname}{" "}
-                    </label>
+                    </span>
                     <button
                       className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white"
                       onClick={() => Unblock_user(item)}

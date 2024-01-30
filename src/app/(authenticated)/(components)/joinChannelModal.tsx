@@ -3,6 +3,7 @@ import { Channel } from "../(interfaces)/channelInterface";
 import { fetchProtectedChannels } from "../(handlers)/requestHandler";
 import { fetchPublicChannels } from "../(handlers)/requestHandler";
 import { postJoinChannel } from "../(handlers)/requestHandler";
+import { Bounce, toast } from "react-toastify";
 
 const EnterPasswordModal = (props: any) => {
   const [password, setPassword] = useState<string>("");
@@ -68,8 +69,17 @@ const ListProtectedChannels = (props: any) => {
       const newChannel = await postJoinChannel(data);
       props.setChannels((channels: Channel[]) => [...channels, newChannel]);
     } catch (error) {
-      alert(error);
-      // console.log("hana matl3tsh");
+      toast.error("Wrong password", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
     props.toggleModal();
   };

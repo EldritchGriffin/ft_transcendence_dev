@@ -1,10 +1,30 @@
-import React from "react";
 import { Channel } from "../(interfaces)/channelInterface";
 import { postLeaveChannel } from "../(handlers)/requestHandler";
+import { useState } from "react";
+
+const SettingsModal = (props: any) => {
+  return (
+    <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
+      <div className="flex flex-col bg-white rounded-lg shadow-lg p-4">
+        <div className="flex flex-row justify-between items-center">
+          <h1 className="text-xl">Settings</h1>
+          <button onClick={() => props.toggleModal()} className="text-xl">
+            &times;
+          </button>
+        </div>
+        <div className="flex flex-col gap-3 h-96 w-80"></div>
+      </div>
+    </div>
+  );
+};
 
 const ChannelHeader = (props: any) => {
   const selectedChannel: Channel = props.channel;
   const channels: Channel[] = props.channels;
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
   const handleLeave = async () => {
     try {
       await postLeaveChannel(selectedChannel.id);
@@ -35,9 +55,13 @@ const ChannelHeader = (props: any) => {
         >
           Leave
         </button>
-        <button className="text-white text-sm hover:text-accent_red">
+        <button
+          onClick={() => toggleModal()}
+          className="text-white text-sm hover:text-accent_red"
+        >
           Settings
         </button>
+        {showModal ? <SettingsModal toggleModal={toggleModal} /> : null}
       </div>
     </div>
   );

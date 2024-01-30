@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Lilita_One } from "next/font/google";
 import Navbar_compo from "./(components)/navbar";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import "../globals.css";
 
 const Font = Lilita_One({
@@ -23,6 +26,7 @@ export default function RootLayout({
       <body className={Font.className + " bg-bg_gray"}>
         <Navbar_compo />
         {children}
+        <ToastContainer />
       </body>
     </html>
   );

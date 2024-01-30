@@ -35,10 +35,10 @@ const Navbar_search_list = (props: any) => {
         alt=""
         className="h-10 w-10 sm:h-[60px] sm:w-[60px] flex-none red  "
       />
-      <label className="h-fit w-fit  text-sm flex items-center red justify-center text-center text-white">
+      <span className="h-fit w-fit  text-sm flex items-center red justify-center text-center text-white">
         {" "}
         {props.item.nickname}{" "}
-      </label>
+      </span>
     </div>
   );
 };
@@ -155,7 +155,7 @@ export default function Navbar_compo() {
                 router.push("/messages");
               }}
             >
-              <AiOutlineComment size={25} className="text-white" />
+              <AiOutlineComment size={25} className="text-white mr-4" />
               <a className="text-white text-sm lg:text-lg font-bold">
                 Messages
               </a>
@@ -171,7 +171,7 @@ export default function Navbar_compo() {
                 router.push("/user/me");
               }}
             >
-              <AiOutlineIdcard size={25} className="text-white" />
+              <AiOutlineIdcard size={25} className="text-white mr-4" />
               <a className="text-white text-sm lg:text-lg font-bold">Profile</a>
             </div>
             <div
@@ -185,7 +185,7 @@ export default function Navbar_compo() {
                 router.push("/pregame");
               }}
             >
-              <GiPingPongBat size={25} className="text-white" />
+              <GiPingPongBat size={25} className="text-white mr-4" />
               <a className="text-white text-sm lg:text-lg font-bold">Game</a>
             </div>
           </div>
@@ -214,7 +214,7 @@ export default function Navbar_compo() {
         >
           <div className="flex flex-col space-y-10 mt-10">
             <div className="flex">
-              <AiFillHome size={25} className="text-white" />
+              <AiFillHome size={25} className="text-white mr-4" />
               <a className="text-white text-sm lg:text-lg font-bold">Home</a>
             </div>
             <div
@@ -224,7 +224,7 @@ export default function Navbar_compo() {
                 router.push("/messages");
               }}
             >
-              <AiOutlineComment size={25} className="text-white" />
+              <AiOutlineComment size={25} className="text-white mr-4" />
               <a className="text-white text-sm lg:text-lg font-bold">
                 Messages
               </a>
@@ -236,7 +236,7 @@ export default function Navbar_compo() {
                 router.push("/user/me");
               }}
             >
-              <AiOutlineIdcard size={25} className="text-white" />
+              <AiOutlineIdcard size={25} className="text-white mr-4" />
               <a className="text-white text-sm lg:text-lg font-bold">Profile</a>
             </div>
             <div
@@ -246,7 +246,7 @@ export default function Navbar_compo() {
                 router.push("/pregame");
               }}
             >
-              <GiPingPongBat size={25} className="text-white" />
+              <GiPingPongBat size={25} className="text-white mr-4" />
               <a className="text-white text-sm lg:text-lg font-bold">Game</a>
             </div>
           </div>
