@@ -9,4 +9,5 @@ export interface Channel {
   admins: User[];
   access: string;
   type: string;
+  ownerLogin: string;
 }

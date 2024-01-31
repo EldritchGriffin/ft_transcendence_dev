@@ -56,6 +56,7 @@ const ChatPage = () => {
             setSelectedChannel={setSelectedChannel}
             setChannels={setChannels}
             channels={channels}
+            user={user}
           />
           <ChatBody user={user} socket={socket} channel={selectedChannel} />
         </div>

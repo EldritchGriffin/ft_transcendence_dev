@@ -2,8 +2,31 @@ import { Channel } from "../(interfaces)/channelInterface";
 import { postLeaveChannel } from "../(handlers)/requestHandler";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { User } from "../(interfaces)/userInterface";
+
+const deduceGrade = (
+  ownerLogin: string,
+  admins: User[],
+  members: User[],
+  currentUser: User
+) => {
+  if (currentUser.intraLogin === ownerLogin) return "owner";
+  if (admins.some((admin: User) => admin.intraLogin === currentUser.intraLogin))
+    return "admin";
+  if (members.some((member: User) => member.intraLogin === currentUser.intraLogin))
+    return "member";
+  return "none";
+};
 
 const SettingsModal = (props: any) => {
+  const channel: Channel = props.channel;
+  const user: User = props.user;
+  const userGrade = deduceGrade(
+    channel.ownerLogin,
+    channel.admins,
+    channel.members,
+    user
+  );
   return (
     <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
       <div className="flex flex-col bg-white rounded-lg shadow-lg p-4">
@@ -13,7 +36,9 @@ const SettingsModal = (props: any) => {
             &times;
           </button>
         </div>
-        <div className="flex flex-col gap-3 h-96 w-80"></div>
+        <div className="flex flex-col gap-3 h-96 w-80">
+          
+        </div>
       </div>
     </div>
   );
@@ -64,7 +89,13 @@ const ChannelHeader = (props: any) => {
             Settings
           </button>
         ) : null}
-        {showModal ? <SettingsModal toggleModal={toggleModal} /> : null}
+        {showModal ? (
+          <SettingsModal
+            toggleModal={toggleModal}
+            channel={selectedChannel}
+            user={props.user}
+          />
+        ) : null}
       </div>
     </div>
   );
