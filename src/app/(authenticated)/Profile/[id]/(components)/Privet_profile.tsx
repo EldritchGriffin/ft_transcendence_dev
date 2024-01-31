@@ -9,11 +9,13 @@ import Publicuserinfo from "./public_user_info";
 import Leadrboard from "./board";
 import Stats from "./stats";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import Achievements from "@/app/(authenticated)/achive/Achievements";
 
 const PrivetProfile = (props: any) => {
   const router = useRouter();
 
-  const [users_data, setusers_data] = useState([]);
+  const [users_data, setusers_data] = useState(null);
   const [loading, setloading] = useState(true);
   const [leader_board, setleader_board] = useState([]);
 
@@ -32,7 +34,7 @@ const PrivetProfile = (props: any) => {
       const result = await response.json();
       setusers_data(result);
     } catch (error) {
-      console.error("Error posting data:", error);
+      router.push("/not-found");
     } finally {
       setloading(false);
     }
@@ -51,12 +53,14 @@ const PrivetProfile = (props: any) => {
       const result = await response.json();
       setleader_board(result);
     } catch (error) {
-      console.error("Error posting data:", error);
     }
   };
   useEffect(() => {
-    fetchGetDataBack();
-    fetchGetLeaderBoard();
+    if(!users_data)
+    {
+      fetchGetDataBack();
+      fetchGetLeaderBoard();
+    }
   }, []);
 
   if (loading) {
@@ -89,6 +93,8 @@ const PrivetProfile = (props: any) => {
         {users_data && <Stats win={users_data} place={leader_board} />}
         </div>
       </div>
+      <Achievements matchHistory={users_data.matchHistory}/>
+
     </div>
   );
 };

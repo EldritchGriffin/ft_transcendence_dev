@@ -13,7 +13,6 @@ const UserFriendList = (props: any) => {
     const next_rout = "/Profile/" + users_target_intra;
     router.push(next_rout);
   };
-  console.log("anasssssss list", user_data);
   return (
     <div className="h-full    w-full  sm:h-[407px] sm:w-[464px] ">
       <span className="text-white truncate">FRIENDS</span>

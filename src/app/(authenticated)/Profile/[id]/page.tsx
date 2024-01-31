@@ -21,13 +21,16 @@ const PublicProfile = (params: any) => {
         mode: "cors",
         credentials: "include",
       });
+      if (response.status === 404)
+        toast.error("rani sekrana bl 404 privat profile");
       if (!response.ok)
-        throw new Error(
-          "An error occurred while attempting to update the new Nickname."
-        );
-      const result = await response.json();
-      setusers_data(result);
-    } catch (error) {
+      throw new Error(
+    "An error occurred while attempting to update the new Nickname."
+    );
+    const result = await response.json();
+    setusers_data(result);
+  } catch (error) {
+      toast.error("99999999rani sekrana bl 404 privat profile");
       toast.error("salam");
     } finally {
       setloading(false);

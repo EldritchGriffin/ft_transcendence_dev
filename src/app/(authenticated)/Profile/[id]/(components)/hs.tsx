@@ -36,7 +36,6 @@ const checkwiner = (person: any, h: any) => {
 const Mhistory = ({ result }: any) => {
   const history: any = result?.matchHistory;
   const router = useRouter();
-  console.log("tatatata", result);
   return (
     <div className="bck flex flex-col h-full    w-full  sm:h-[407px] sm:w-[464px] ">
       <a className="text-white truncate ">MATCH HISTORY</a>

@@ -7,11 +7,12 @@ import Mhistory from "../../Profile/[id]/(components)/hs";
 import UserFriendList from "../../Profile/[id]/(components)/UserFriendList";
 import Stats from "../../Profile/[id]/(components)/stats";
 import Leadrboard from "../../Profile/[id]/(components)/board";
+import Achievements from "../../achive/Achievements";
 // import Navbar_compo from '/testing/page';
 
 const ProfilePage = (props: any) => {
-  const [users_data, setusers_data] = useState([]);
-  const [leader_board, setleader_board] = useState([]);
+  const [users_data, setusers_data] = useState(null);
+  const [leader_board, setleader_board] = useState(null);
   const [loading, setloading] = useState(true);
 
   const fetchGetDataBack = async () => {
@@ -86,6 +87,7 @@ const ProfilePage = (props: any) => {
           <UserBlockList users_data={users_data} />
         </div>
       </div>
+      {/* <Achievements matchHistory={users_data.matchHistory} /> */}
     </div>
   );
 };
