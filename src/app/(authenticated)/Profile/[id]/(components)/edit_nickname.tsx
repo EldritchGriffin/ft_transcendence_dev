@@ -105,6 +105,7 @@ export default function Edit_nickname(props: any) {
         throw new Error(
           "An error occurred while attempting to update the new profile picture."
         );
+        console.log("babe you have juste uploaded the avatar");
     } catch (error) {
       // console.log(error);
     }
@@ -194,7 +195,8 @@ export default function Edit_nickname(props: any) {
         onClick={updateNickname}
       >
         {" "}
-        Save{" "}
+        babe{" "}
+        {/* Save{" "} */}
       </button>
     </div>
   );

@@ -90,7 +90,7 @@ export default function Edit_nickname(props: any) {
     }
 
     console.log(
-      "correct image type !:",
+      "**correct image type !:",
       files.type,
       "correct image size !:",
       files.size
@@ -199,7 +199,8 @@ export default function Edit_nickname(props: any) {
         onClick={updateNickname}
       >
         {" "}
-        Save{" "}
+        koko{" "}
+        {/* Save{" "} */}
       </button>
     </div>
   );

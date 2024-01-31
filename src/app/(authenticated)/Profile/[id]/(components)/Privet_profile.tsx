@@ -57,14 +57,14 @@ const PrivetProfile = (props: any) => {
   useEffect(() => {
     fetchGetDataBack();
     fetchGetLeaderBoard();
-  }, );
+  }, []);
 
   if (loading) {
     return <p>loading........</p>;
   }
   return (
 
-    <div className="w-full flex flex-row gap-6 flex-wrap justify-center pt-20 ">
+    <div className="w-full  flex flex-row gap-6 flex-wrap justify-center pt-20 min-h-screen">
       <div className="w-full  sm:w-[468px] md:w-[468px] flex flex-col test:order-2 pt-5 space-y-5">
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl ">
           <Publicuserinfo
@@ -76,7 +76,7 @@ const PrivetProfile = (props: any) => {
           {leader_board && <Leadrboard result={leader_board} />}
         </div>
       </div>
-      <div className="w-full  sm:w-[468px] md:w-[468px] flex flex-col  test:order-1 pt-5 space-y-5">
+      <div className="w-full h-[825px] sm:w-[468px] md:w-[468px] flex flex-col  test:order-1 pt-5 space-y-5">
         <div className="w-full  h-full sm:w-[468px]  md:w-full shadow-xl">
           {users_data && <Mhistory result={users_data} />}
         </div>

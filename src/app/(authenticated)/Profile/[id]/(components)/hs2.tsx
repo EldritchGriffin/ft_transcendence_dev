@@ -38,7 +38,7 @@ const Mhistory = ({ result }: any) => {
   const router = useRouter();
   console.log("tatatata", result);
   return (
-    <div className="bck flex flex-col h-full    w-full  sm:h-[825px] sm:w-[464px] ">
+    <div className="bck flex flex-col w-full  h-[825px] sm:w-[464px] ">
       <a className="text-white truncate ">MATCH HISTORY</a>
       <div className="w-full h-full sm:h-[full] sm:w-[464px] bg-primary_blue">
         {!history?.length ? (
