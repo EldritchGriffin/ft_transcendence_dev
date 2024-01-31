@@ -3,9 +3,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import ProfilePage from "../../user/me/page";
 import PrivetProfile from "./(components)/Privet_profile";
+import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
 
 const PublicProfile = (params: any) => {
-  const [users_data, setusers_data] = useState<any>();
+  const router = useRouter();
+  const [users_data, setusers_data] = useState<any>(null);
   const [leader_board, setleader_board] = useState<any>();
   const [loading, setloading] = useState(true);
   const linkRef = useRef<HTMLAnchorElement>(null);
@@ -25,30 +28,35 @@ const PublicProfile = (params: any) => {
       const result = await response.json();
       setusers_data(result);
     } catch (error) {
-      console.error("Error posting data:", error);
+      toast.error("salam");
     } finally {
       setloading(false);
     }
   };
 
   useEffect(() => {
-    fetchGetDataBack();
-  }, []);
+    if (users_data && users_data.intraLogin == params?.params?.id) {
+      router.push("/user/me");
+    }
+    if(!users_data)
+      fetchGetDataBack();
+  }, [users_data]);
+  
 
   if (loading) {
-    return <div className="flex justify-center items-center"></div>;
+    return <div className="flex justify-center items-center"> Loading . . . .  </div>;
   }
-
-  if (users_data && users_data.intraLogin == params?.params?.id) {
-    profiletype = true;
-  }
-  return (
-    <div className="flex flex-col justify-center items-center space-y-10 bg-bg_gray">
-      {profiletype ? (
+  
+  // if (users_data && users_data.intraLogin == params?.params?.id) {
+    //   profiletype = true;
+    // }
+    return (
+      <div className="flex h-auto min-h-screen flex-col justify-center items-center space-y-10 bg-bg_gray">
+      {/* {profiletype ? (
         <ProfilePage />
-      ) : (
+      ) : ( */}
         <PrivetProfile id={params.params.id} users_data={users_data} />
-      )}
+      {/* )} */}
     </div>
   );
 };

@@ -60,17 +60,6 @@ export default  function Edit_nickname( props:any ) {
       }, []);
 
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const handleImageUpload = async (event:any) => {
-        const file = event.target.files[0];
-        const formData = new FormData();
-        formData.append('image', file);
-        if (file)
-        {
-            setnew_file(file);
-            handleFileUpload(new_file);
-        }
-    };
-
   const handleClickProgrammatically = () => { // here i automaticly click the input_file to make it 
     if (inputRef.current) {
       inputRef.current.click();
@@ -108,6 +97,13 @@ export default  function Edit_nickname( props:any ) {
 
 
   const handleFileUpload = async (files:any) => { // here i made the final tests for the new Profile Picture before POSTED on the back-end
+    if (files.type !== "image/jpeg")  
+    {
+      console.log("wrong image type !:", files.type);
+      imgflag = 1;
+      seterrimg(imgflag);
+      return 1;
+    } 
     if (files.size > 5 * 10 **6)  
     {
       console.log("wrong image size !:", files.size);
@@ -116,13 +112,6 @@ export default  function Edit_nickname( props:any ) {
       return 1;
     }
     
-    if (files.type !== "image/jpeg")  
-    {
-      console.log("wrong image type !:", files.type);
-      imgflag = 1;
-      seterrimg(imgflag);
-      return 1;
-    } 
     
     console.log("correct image type !:", files.type, "correct image size !:", files.size);
       imgflag = 0;
@@ -185,7 +174,7 @@ export default  function Edit_nickname( props:any ) {
             <div className="h-fit w-fit border border-accent_red relative flex justify-center ">
                 <img src={props.user_data?.avatarLink} id="profile_pic" className=" h-32 w-28 border-4 border-red-400 " />
                 <button  className=" w-9 h-6 bg-accent_red font-bold text-white absolute bottom-[-10px]" onClick={handleClickProgrammatically} > Edit </button>
-                <input name="image"  type="file" placeholder="Edit" id='inpt' accept='/image/*' className="outline-none oda w-0 h-0 bg-red-500  absolute bottom-[-10px] opacity-0 " ref={inputRef} onClick={handleImageUpload} />
+                <input name="image"  type="file" placeholder="Edit" id='inpt' accept='/image/*' className="outline-none oda w-0 h-0 bg-red-500  absolute bottom-[-10px] opacity-0 " ref={inputRef}  />
             </div>
                 {errimg ? 
                   <span  className="font-bold pt-2 border-solid text-xs  text-red-600 "> Wrong Image </span>
@@ -204,3 +193,10 @@ export default  function Edit_nickname( props:any ) {
              </div>
     );
   }
+
+
+
+// 401
+//            403  Forbidden action
+//            415 
+// 302

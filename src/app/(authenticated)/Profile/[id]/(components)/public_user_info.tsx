@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function isRequesting(data: any, users_name: string) {
   // if (!data)
@@ -29,7 +30,7 @@ const Publicuserinfo_block_unblock = (props: any) => {
             "An error occurred while attempting to update the new Nickname."
           );
       } catch (error) {
-        console.error("Error posting data:", error);
+        // console.error("Error posting data:", error);
       }
     };
     const block_unblock_user = () => {
@@ -60,7 +61,7 @@ const Publicuserinfo_block_unblock = (props: any) => {
             "An error occurred while attempting to update the new Nickname."
           );
       } catch (error) {
-        console.error("Error posting data:", error);
+        // console.error("Error posting data:", error);
       }
     };
     const block_unblock_user = () => {
@@ -84,12 +85,12 @@ function knowstheuserrelationship(data:any, users_name:string) {
   var friends_list = data.friends;
   var requested_list = data.requested;
   
-  if (friends_list.some((obj:any) => obj.intraLogin === users_name))
+  if ( requested_list.some((obj:any) => obj.intraLogin === users_name))
+    return ("Accept");
+  else if (friends_list.some((obj:any) => obj.intraLogin === users_name))
     return ("Remove");
   else if ( requesting_list.some((obj:any) => obj.intraLogin === users_name))
     return ("Cancel");
-  else if ( requested_list.some((obj:any) => obj.intraLogin === users_name))
-    return ("Accept");
   else
     return ("Add");
 }
@@ -118,11 +119,13 @@ console.log("thats the data you pass to the add remove cancel friend :" , props)
         mode: 'cors',
         credentials : 'include',
       })
-      if (!response.ok)
-        throw new Error("An error occurred while attempting to update the new Nickname.");
+      // if (!response.ok)
+      //   throw new Error("An error occurred while attempting to update the new Nickname.");
+      // if(response.status === 403)
+        // console.error("wa fin a charika l3ama :D");
       console.log("a sidi rak dkholti l field dyal Remove");
     } catch (error) {
-      console.error('Error posting data:', error);
+      // console.error('Error posting data:', error);
     }
   }
   
@@ -152,12 +155,13 @@ else if(buttonstate === "Cancel")
         mode: 'cors',
         credentials : 'include',
       })
-      if (!response.ok) throw new Error("An error occurred while attempting to update the new Nickname.");
-
-      console.log("a sidi rak dkholti l field dyal Cancel");
+      // if (!response.ok) throw new Error("An error occurred while attempting to update the new Nickname.");
+      // if(response.status === 403)
+      // console.error("wa fin a charika l3ama :D");
+      // console.log("a sidi rak dkholti l field dyal Cancel");
 
     } catch (error) {
-      console.error('Error posting data:', error);
+      // console.error('Error posting data:', error);
     }
   }
   
@@ -188,13 +192,8 @@ else if(buttonstate === "Accept")
         mode: 'cors',
         credentials : 'include',
       })
-      if (!response.ok) throw new Error("An error occurred while attempting to update the new Nickname.");
-
-
-      console.log("a sidi rak dkholti l field dyal Cancel");
 
     } catch (error) {
-      console.error('Error posting data:', error);
     }
   }
   
@@ -217,6 +216,7 @@ else if(buttonstate === "Accept")
 
   else {
 
+ 
     const send_add = async () => {
       try {
         const usersurl = "http://localhost:3001/user/addfriend/" + user_data.intraLogin;
@@ -226,11 +226,11 @@ else if(buttonstate === "Accept")
           mode: 'cors',
           credentials : 'include',
         })
-        if (!response.ok) throw new Error("An error occurred while attempting to update the new Nickname.");
-        // props.updatingadd_remov_cancel(!props.setupdatingadd_remov_cancel);
+        if (!response.ok) throw  response;
 
       } catch (error) {
-        console.error('Error posting data:', error);
+        toast.error("salam");
+
       }
     }
     const add_user = () => {
