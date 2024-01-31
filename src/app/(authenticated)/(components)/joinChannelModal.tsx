@@ -70,18 +70,7 @@ const ListProtectedChannels = (props: any) => {
       const newChannel = await postJoinChannel(data);
       props.setChannels((channels: Channel[]) => [...channels, newChannel]);
     } catch (error) {
-      toast.error("Wrong password", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-      //exit the function without toggling the modal in case of error
+      toast.error("Wrong password");
     }
     props.toggleModal();
   };

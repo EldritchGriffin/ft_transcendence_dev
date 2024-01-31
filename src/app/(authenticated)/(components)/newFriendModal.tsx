@@ -27,17 +27,7 @@ const NewFriendModal = (props: any) => {
       const channel: Channel = await postNewDM(friend.intraLogin);
       props.setChannels((channels: Channel[]) => [...channels, channel]);
     } catch (error) {
-      toast.error("Chat already exists", {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.error("Chat already exists");
     }
     props.toggleModal();
   };

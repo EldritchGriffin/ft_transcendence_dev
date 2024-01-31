@@ -1,6 +1,7 @@
 import { Channel } from "../(interfaces)/channelInterface";
 import { postLeaveChannel } from "../(handlers)/requestHandler";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const SettingsModal = (props: any) => {
   return (
@@ -34,7 +35,7 @@ const ChannelHeader = (props: any) => {
       props.setChannels(newChannels);
       props.setSelectedChannel(null);
     } catch (error) {
-      console.log("Error leaving channel");
+      toast.error("Cannot leave a DM");
     }
   };
   if (selectedChannel === null)

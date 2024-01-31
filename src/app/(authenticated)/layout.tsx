@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Lilita_One } from "next/font/google";
 import Navbar_compo from "./(components)/navbar";
-import { ToastContainer } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "../globals.css";
@@ -26,7 +26,19 @@ export default function RootLayout({
       <body className={Font.className + " bg-bg_gray"}>
         <Navbar_compo />
         {children}
-        <ToastContainer />
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
       </body>
     </html>
   );
