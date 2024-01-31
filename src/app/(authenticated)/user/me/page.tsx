@@ -61,7 +61,7 @@ const ProfilePage = (props: any) => {
     return <p>uploading........</p>;
   }
   return (
-    <div className="w-full flex flex-row h-screen flex-wrap justify-center pt-20 ">
+    <div className="w-full flex flex-row min-h-screen flex-wrap justify-center pt-20 ">
       <div className="w-full sm:w-[468px] md:w-[468px] flex flex-col test:order-2 pt-5 space-y-5">
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl ">
           <ProfileUserInfo users_data={users_data} />
