@@ -11,7 +11,7 @@ export default  function Edit_nickname( props:any ) {
 
 
   let [loading, setLoading] = useState(false);
-  let [color, setColor] = useState("#ffffff");
+
 
 
 
@@ -166,14 +166,14 @@ export default  function Edit_nickname( props:any ) {
       seterrNickName(nickflag);
     }
     return (
-      <div className="h-full w-full edit_n ickname bg-primary_blue flex flex-col items-center space-y-10 pt-10"         style={{ 
+      <div className="h-full w-full  bg-primary_blue flex flex-col items-center space-y-10 pt-20"         style={{ 
           opacity: (!name || !image) ? 0.4 : 1
         }} >
 
             <div className="h-fit w-fit flex flex-col items-center">
             <div className="h-fit w-fit border border-accent_red relative flex justify-center ">
-                <img src={props.user_data?.avatarLink} id="profile_pic" className=" h-32 w-28 border-4 border-red-400 " />
-                <button  className=" w-9 h-6 bg-accent_red font-bold text-white absolute bottom-[-10px]" onClick={handleClickProgrammatically} > Edit </button>
+                <img src={props.user_data?.avatarLink} id="profile_pic" className=" h-44 w-44 border-4 border-red-400 " />
+                <button  className=" w-12 h-6 bg-accent_red font-bold text-white absolute bottom-[-10px]" onClick={handleClickProgrammatically} > Edit </button>
                 <input name="image"  type="file" placeholder="Edit" id='inpt' accept='/image/*' className="outline-none oda w-0 h-0 bg-red-500  absolute bottom-[-10px] opacity-0 " ref={inputRef}  />
             </div>
                 {errimg ? 
@@ -182,14 +182,14 @@ export default  function Edit_nickname( props:any ) {
                   null
                 }
              </div>
-            <span  className="font-bold text-white"> {NickName} </span>
+            <span  className="font-bold w-24 text-4xl h-12 items-center pr-32  text-white"> {NickName} </span>
             <div className="h-fit w-fit flex flex-col items-center">
-            <input type="text" id='inpt_nickname' className="outline-none bg-primary_blue border-b-2 border-white-500  text-sm font-bold text-white" placeholder="NickName" defaultValue={updatenick} onChange={handleInputChange} onKeyDown={handleInputChangek} />
-             {errNickName ? 
-             <span  className="font-bold pt-0 border-solid text-xs text-red-600 "> Wrong NickName </span>
-             : null}
+              <input type="text" id='inpt_nickname' className="outline-none bg-primary_blue border-b-2 border-white-500  text-lg font-bold text-white" placeholder="NickName" defaultValue={updatenick} onChange={handleInputChange} onKeyDown={handleInputChangek} />
+              {errNickName ? 
+              <span  className="font-bold pt-0 border-solid text-xs text-red-600 "> Wrong NickName </span>
+              : null}
             </div>
-            <button className="bg-accent_red h-10 w-16 font-bold text-white" onClick={updateNickname}> Save </button>
+            <button className="bg-accent_red h-12 w-20 text-xl  text-white" onClick={updateNickname}> Save </button>
              </div>
     );
   }

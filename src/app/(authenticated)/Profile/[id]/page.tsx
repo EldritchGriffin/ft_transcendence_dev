@@ -54,7 +54,7 @@ const PublicProfile = (params: any) => {
     //   profiletype = true;
     // }
     return (
-      <div className="flex h-auto min-h-screen flex-col justify-center items-center space-y-10 bg-bg_gray">
+      <div className="flex h-screen min-h-screen flex-col  justify-center items-center space-y-10 red bg-bg_gray">
       {/* {profiletype ? (
         <ProfilePage />
       ) : ( */}

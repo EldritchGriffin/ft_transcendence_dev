@@ -68,7 +68,7 @@ const PrivetProfile = (props: any) => {
   }
   return (
 
-    <div className="w-full  flex flex-row gap-6 flex-wrap justify-center pt-20 min-h-screen">
+    <div className="w-full  flex flex-row gap-6 flex-wrap justify-center items-center min-h-screen">
       <div className="w-full  sm:w-[468px] md:w-[468px] flex flex-col test:order-2 pt-5 space-y-5">
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl ">
           <Publicuserinfo

@@ -24,7 +24,7 @@ const EditProfile = () => {
   }
   return (
     <div className="h-screen flex justify-center items-center">
-      <div className="w-[300px] h-[390px]">
+      <div className="w-[500px] h-[590px]">
         <EditNickname user_data={user}/>
       </div>
     </div>
