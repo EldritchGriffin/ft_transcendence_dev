@@ -193,7 +193,7 @@ export default function Navbar_compo() {
             </div>
           </div>
         </div>
-        <div className="hidden md:flex justify-end items-center space-x-4 w-[359px] ">
+        <div className="hidden md:flex justify-end items-center space-x-4 w-[359px] cursor-pointer">
         <div className="dropdown dropdown-end">
         <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]">
