@@ -5,6 +5,7 @@ import ProfilePage from "../../user/me/page";
 import PrivetProfile from "./(components)/Privet_profile";
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
+import { fetchCurrentUser } from "../../(handlers)/requestHandler";
 
 const PublicProfile = (params: any) => {
   const router = useRouter();
@@ -16,22 +17,22 @@ const PublicProfile = (params: any) => {
   var profiletype = false;
   const fetchGetDataBack = async () => {
     try {
-      const response = await fetch("http://localhost:3001/user/me", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-      });
-      if (response.status === 404)
-        toast.error("rani sekrana bl 404 privat profile");
-      if (!response.ok)
-      throw new Error(
-    "An error occurred while attempting to update the new Nickname."
-    );
-    const result = await response.json();
+    //   const response = await fetch("http://localhost:3001/user/me", {
+    //     method: "GET",
+    //     mode: "cors",
+    //     credentials: "include",
+    //   });
+    //   if (response.status === 404)
+    //     toast.error("rani sekrana bl 404 privat profile");
+    //   if (!response.ok)
+    //   throw new Error(
+    // "An error occurred while attempting to update the new Nickname."
+    // );
+    // const result = await response.json();
+    // setusers_data(result);
+    const result = await fetchCurrentUser();
     setusers_data(result);
   } catch (error) {
-      toast.error("99999999rani sekrana bl 404 privat profile");
-      toast.error("salam");
     } finally {
       setloading(false);
     }

@@ -8,6 +8,7 @@ import UserFriendList from "../../profile/[id]/(components)/UserFriendList";
 import Stats from "../../profile/[id]/(components)/stats";
 import Leadrboard from "../../profile/[id]/(components)/board";
 import Achievements from "../../achive/Achievements";
+import { fetchCurrentUser, fetchLeaderBoard } from "../../(handlers)/requestHandler";
 // import Navbar_compo from '/testing/page';
 
 const ProfilePage = (props: any) => {
@@ -17,39 +18,40 @@ const ProfilePage = (props: any) => {
 
   const fetchGetDataBack = async () => {
     try {
-      const response = await fetch("http://localhost:3001/user/me", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-      });
-      if (!response.ok)
-        throw new Error(
-          "An error occurred while attempting to update the new Nickname."
-        );
-      const result = await response.json();
-      // console.log("users data ====>", result);
+      // const response = await fetch("http://localhost:3001/user/me", {
+      //   method: "GET",
+      //   mode: "cors",
+      //   credentials: "include",
+      // });
+      // if (!response.ok)
+      //   throw new Error(
+      //     "An error occurred while attempting to update the new Nickname."
+      //   );
+      // const result = await response.json();
+      // setusers_data(result);
+      const result = await fetchCurrentUser();
       setusers_data(result);
     } catch (error) {
-      console.error("Error posting data:", error);
     } finally {
       setloading(false);
     }
   };
   const fetchGetLeaderBoard = async () => {
     try {
-      const response = await fetch("http://localhost:3001/leaderboard", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-      });
-      if (!response.ok)
-        throw new Error(
-          "An error occurred while attempting to update the new Nickname."
-        );
-      const result = await response.json();
+      // const response = await fetch("http://localhost:3001/leaderboard", {
+      //   method: "GET",
+      //   mode: "cors",
+      //   credentials: "include",
+      // });
+      // if (!response.ok)
+      //   throw new Error(
+      //     "An error occurred while attempting to update the new Nickname."
+      //   );
+      // const result = await response.json();
+      // setleader_board(result);
+      const result = await fetchLeaderBoard();
       setleader_board(result);
     } catch (error) {
-      console.error("Error posting data:", error);
     }
   };
   useEffect(() => {
@@ -75,7 +77,6 @@ const ProfilePage = (props: any) => {
           {users_data && <Mhistory result={users_data} />}
         </div>
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl">
-          {/* {users_data && <Achievements matchHistory={users_data.matchHistory} />} */}
           {users_data && <Stats win={users_data} place={leader_board} />}
         </div>
       </div>
