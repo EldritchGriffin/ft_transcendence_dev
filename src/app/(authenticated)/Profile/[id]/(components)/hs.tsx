@@ -57,7 +57,7 @@ const Mhistory = ({ result }: any) => {
                     className="flex flex-col items-center cursor-pointer"
                     onClick={() => {
                       router.push(
-                        `/Profile/${
+                        `/profile/${
                           h.players &&
                           h.players[0].intraLogin === result.intraLogin
                             ? h.players[0].intraLogin
@@ -93,7 +93,7 @@ const Mhistory = ({ result }: any) => {
                     className="flex flex-col items-center cursor-pointer"
                     onClick={() => {
                       router.push(
-                        `/Profile/${
+                        `/profile/${
                           h.players &&
                           h.players[1].intraLogin === result.intraLogin
                             ? h.players[0].intraLogin

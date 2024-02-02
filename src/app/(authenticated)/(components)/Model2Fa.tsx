@@ -47,10 +47,6 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
       }
   };
 
-
-
- 
-
   const backendUrl = "http://localhost:3001/user/validate2fa";
 
   const backendUrl2 = "http://localhost:3001/user/enable2fa";

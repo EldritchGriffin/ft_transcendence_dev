@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import progress from "../../../progress.json";
 import Lottie from "lottie-react";
 import Achievements from "@/app/(authenticated)/achive/Achievements";
 
@@ -10,6 +9,7 @@ const Stats = (props: any) => {
 
   const x = win.matchHistory;
   const tole = win?.matchHistory?.length;
+  const sizeld = place?.length;
 
   const winrate = () => {
     let wine = 0;
@@ -48,7 +48,7 @@ const Stats = (props: any) => {
 
   const place1 = () => {
     if (win) {
-      for (let i = 0; i < place.length; i++) {
+      for (let i = 0; i < sizeld; i++) {
         if (win.intraLogin === place[i].intraLogin) {
           return i + 1;
         }
@@ -62,16 +62,15 @@ const Stats = (props: any) => {
     <div className="flex flex-col w-full sm:w-[464px]">
       <a className="text-white truncate flex ">STATS</a>
       <div className="bg-primary_blue  flex flex-col w-full sm:w-[464px] h-[380px] container">
-        <div className="w-full flex flex-col">
-          <p className="flex justify-center">Achievements</p>
-          <div className="pl-5 ">
+        <div className="w-full pt-7">
+          <div className="">
                {win && <Achievements matchHistory={win.matchHistory} />}
           </div>
         </div>
         <div className="circular-progress" style={circularProgressStyle}>
-          <div className="flex flex-col text-2xl progress-value ">
-          <p className="flex justify-center">{`${stat}%`} </p>
-          <p className="">WinRate:</p>
+          <div className="flex flex-col progress-value ">
+          <p className="flex text-2xl justify-center">{`${stat}%`} </p>
+          <p className="text-md">WinRate:</p>
           </div>
         </div>
         <div className="text-xl w-full  text-white flex flex-row">
