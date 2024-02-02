@@ -4,6 +4,9 @@ import { Channel } from "../(interfaces)/channelInterface";
 import { fetchChannelMessages } from "../(handlers)/requestHandler";
 import ChatBubble from "./chatBubble";
 import { User } from "../(interfaces)/userInterface";
+import { toast } from "react-toastify";
+
+//TODO either fix leaving channels with sockets or find a way to secure it
 
 const handleSendMessage = (socket: any, channel: Channel, user: User) => {
   const message = document.getElementById("message") as HTMLInputElement;
@@ -31,6 +34,8 @@ const ChatBody = (props: any) => {
       try {
         const messages = await fetchChannelMessages(channel.id.toString());
         setMessages(messages);
+      } catch (error) {
+        toast.error("Error fetching messages");
       } finally {
         setLoading(false);
       }

@@ -13,7 +13,7 @@ const ChatPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [socket, setSocket] = useState<any>(null);
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
-  const [channels, setChannels] = useState<Channel[]>([]);
+  const [channels, setChannels] = useState<Channel[] | null>(null);
   const handleSelectChannel = (channel: Channel) => {
     setSelectedChannel(channel);
   };
@@ -41,6 +41,12 @@ const ChatPage = () => {
       };
     }
   }, []);
+  if (!user || !socket)
+    return (
+      <div>
+        <p>Loading...</p>
+      </div>
+    );
   return (
     <div className="flex h-screen justify-center items-center">
       <div className="flex flex-row gap-5 h-[430px]">
@@ -51,13 +57,16 @@ const ChatPage = () => {
           user={user}
         />
         <div className="flex-col h-full">
-          <ChannelHeader
-            channel={selectedChannel}
-            setSelectedChannel={setSelectedChannel}
-            setChannels={setChannels}
-            channels={channels}
-            user={user}
-          />
+          {channels ? (
+            <ChannelHeader
+              channel={selectedChannel}
+              setSelectedChannel={setSelectedChannel}
+              setChannels={setChannels}
+              channels={channels}
+              user={user}
+              socket={socket}
+            />
+          ) : null}
           <ChatBody user={user} socket={socket} channel={selectedChannel} />
         </div>
       </div>

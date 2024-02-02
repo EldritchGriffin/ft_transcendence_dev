@@ -18,7 +18,6 @@ export const fetchCurrentUser = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error fetching user:", error);
     throw error;
   }
 };
@@ -36,7 +35,6 @@ export const fetchChannels = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error fetching channels:", error);
     throw error;
   }
 };
@@ -54,7 +52,6 @@ export const fetchUserDms = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error fetching dms:", error);
     throw error;
   }
 };
@@ -72,7 +69,6 @@ export const fetchChannelMessages = async (channelId: string) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error fetching messages:", error);
     throw error;
   }
 };
@@ -90,7 +86,6 @@ export const postNewChannel = async (channel: any) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error posting channel:", error);
     throw error;
   }
 };
@@ -108,7 +103,6 @@ export const postLeaveChannel = async (channelId: any) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error posting channel:", error);
     throw error;
   }
 };
@@ -126,7 +120,6 @@ export const postJoinChannel = async (channel: any) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error posting channel:", error);
     throw error;
   }
 };
@@ -144,7 +137,6 @@ export const fetchPublicChannels = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error fetching channels:", error);
     throw error;
   }
 };
@@ -162,7 +154,6 @@ export const fetchProtectedChannels = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error fetching channels:", error);
     throw error;
   }
 };
@@ -175,13 +166,43 @@ export const postNewDM = async (channel: any) => {
 
     if (response.status >= 200 && response.status < 300) {
       const data = await response.data;
-      console.log("data", data);
       return data;
     } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
-    console.log("Error posting message:", error);
+    throw error;
+  }
+};
+export const postChmod = async (channel: any) => {
+  const url = `/channel/chmod`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const postChangeTitle = async (channel: any) => {
+  const url = `/channel/changeTitle`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
     throw error;
   }
 };
