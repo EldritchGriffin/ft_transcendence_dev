@@ -45,21 +45,12 @@ const PublicProfile = (params: any) => {
       fetchGetDataBack();
   }, [users_data]);
   
-
   if (loading) {
     return <div className="flex justify-center items-center"> Loading . . . .  </div>;
   }
-  
-  // if (users_data && users_data.intraLogin == params?.params?.id) {
-    //   profiletype = true;
-    // }
     return (
       <div className="flex h-screen min-h-screen flex-col  justify-center items-center space-y-10 red bg-bg_gray">
-      {/* {profiletype ? (
-        <ProfilePage />
-      ) : ( */}
-        <PrivetProfile id={params.params.id} users_data={users_data} />
-      {/* )} */}
+        {users_data &&  <PrivetProfile id={params.params.id} users_data={users_data} />}
     </div>
   );
 };

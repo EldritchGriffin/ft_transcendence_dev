@@ -14,20 +14,28 @@ const ProfileUserInfo = (props: any) => {
     <div className="flex flex-col w-full sm:w-[464px]">
       <span className="text-white truncate ">PROFILE</span>
       <div className=" w-full h-[380px] sm:w-[464px]  bg-primary_blue flex flex-col items-center space-y-5 pt-8 pb-8">
+     { user_data?.avatarLink && (
         <img
-          src={user_data.avatarLink}
+          src={user_data?.avatarLink}
           alt=""
           draggable="false"
           className="h-32 w-32 sm:h-[174px]   sm:w-[174px] border-4 br "
         />
+        )}
+     { user_data?.intraLogin && (
+
         <span className="h-full w-full text-4xl sm:w-[140px] sm:h-[41px] text-center  text-white">
           {" "}
-          {user_data.intraLogin}{" "}
+          {user_data?.intraLogin}{" "}
         </span>
+     )}
+     { user_data?.nickname && (
+
         <span className="h-full w-full text-2xl sm:w-[104] sm:h-[27px]  text-center text-white">
           {" "}
-          {user_data.nickname}{" "}
+          {user_data?.nickname}{" "}
         </span>
+     )}
         <button
           className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white"
           onClick={updateNickname}

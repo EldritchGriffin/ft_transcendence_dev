@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 
 const UserBlockList = (props: any) => {
   const router = useRouter();
+  const [loading, setloading] = useState(true);
 
   const [user_data, setUser_data] = useState<any>([]);
   const [Blocksearch, setBlocksearch] = useState("");
@@ -25,6 +26,8 @@ const UserBlockList = (props: any) => {
       console.log("the blocked users ====>", result);
     } catch (error) {
       console.error("Error posting data:", error);
+    } finally {
+      setloading(false);
     }
   };
   useEffect(() => {
@@ -64,6 +67,9 @@ const UserBlockList = (props: any) => {
     const next_rout = "/Profile/" + users_target_intra;
     router.push(next_rout);
   };
+  if (loading) {
+    return <p>loading........</p>;
+  }
   return (
     <div className="h-full    w-full  sm:h-[407px]    sm:w-[464px] ">
       <span className="text-white truncate">BLOCKED</span>

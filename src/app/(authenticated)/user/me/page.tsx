@@ -47,7 +47,6 @@ const ProfilePage = (props: any) => {
           "An error occurred while attempting to update the new Nickname."
         );
       const result = await response.json();
-      // console.log(" leader board ====>", result);
       setleader_board(result);
     } catch (error) {
       console.error("Error posting data:", error);
@@ -65,7 +64,7 @@ const ProfilePage = (props: any) => {
     <div className="w-full flex flex-row min-h-screen flex-wrap justify-center items-center ">
       <div className="w-full sm:w-[468px] md:w-[468px] flex flex-col test:order-2 pt-5 space-y-5">
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl ">
-          <ProfileUserInfo users_data={users_data} />
+         {users_data &&  <ProfileUserInfo users_data={users_data} />}
         </div>
         <div className="w-full h-[400px] sm:w-full  md:w-full shadow-xl">
           {leader_board && <Leadrboard result={leader_board} />}
@@ -81,10 +80,10 @@ const ProfilePage = (props: any) => {
       </div>
       <div className="w-full  sm:w-[468px] test1:w-[940px] test:w-[468px] flex flex-col pt-5 test1:flex-row test:flex-col space-y-5 test1:space-y-0 test:order-3 test:space-y-5">
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl">
-          <UserFriendList users_data={users_data} />
+         {users_data &&  <UserFriendList users_data={users_data} />}
         </div>
         <div className="w-full h-[400px] sm:w-[468px] md:w-full shadow-xl">
-          <UserBlockList users_data={users_data} />
+        {users_data &&   <UserBlockList users_data={users_data} />}
         </div>
       </div>
       {users_data && <Achievements matchHistory={users_data.matchHistory} />}

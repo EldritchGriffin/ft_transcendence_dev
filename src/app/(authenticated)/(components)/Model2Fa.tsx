@@ -34,6 +34,7 @@ export default function Model2Fa({OpenModel, CloseModel}:any) {
 
   useEffect(() => {
     inputRef.current?.focus();
+
   }, [activeinput]);
   const handelOnkeydown = (
     e: React.KeyboardEvent<HTMLInputElement>,

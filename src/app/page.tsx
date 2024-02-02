@@ -31,3 +31,11 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+// protection   || public_user_info.tsx || profile_user_info.tsx ============== test
+//  not found 
+//   uploaded image thats not a imgae , create a file and name it {something.jpeg}  , recheck the protections
+// nickname already set 
+// responses , other than forbiden

@@ -98,12 +98,10 @@ function knowstheuserrelationship(data:any, users_name:string) {
 
 const Publicuserinfo_add_remove_cancel = ( props:any ) => {
 
-console.log("thats the data you pass to the add remove cancel friend :" , props);
-
   const [buttonstate, setbuttonstate] = useState<string>("Add");
-  const user_data = props.users_data;
+  const user_data = props?.users_data;
   useEffect(() => {
-    var relationship = knowstheuserrelationship(props.connected_user, props.users_data.intraLogin);
+    var relationship = knowstheuserrelationship(props?.connected_user, props?.users_data?.intraLogin);
     setbuttonstate(relationship);
 
   }, []);
@@ -260,20 +258,21 @@ const Publicuserinfo = (props: any) => {
       <a className="text-white truncate ">PROFILE</a>
       <div className=" w-full h-[380px]  sm:w-[464px]    bg-primary_blue flex flex-col items-center space-y-5 pt-8 pb-8">
         <img
-          src={user_data.avatarLink}
+          src={user_data?.avatarLink || ''}
           alt=""
           className="h-32 w-32 sm:h-[174px] sm:w-[174px] border-4 br "
         />
         <span className="h-full w-full text-4xl sm:w-[140px] sm:h-[41px] text-center text-white">
           {" "}
-          {user_data.intraLogin}{" "}
+          {user_data?.intraLogin || ''}{" "}
         </span>
         <span className="h-full w-full text-2xl sm:w-[104] sm:h-[27px] text-center text-white">
           {" "}
-          {user_data.nickname}{" "}
+          {user_data?.nickname || ''}{" "}
         </span>
         <div className="w-[full] h-[full] flex justify-center space-x-6">
-          <div className="w-fit h-fit">
+          {user_data &&
+          <> (<div className="w-fit h-fit">
             <Publicuserinfo_add_remove_cancel
               users_data={user_data}
               connected_user={props.connected_user}
@@ -284,7 +283,7 @@ const Publicuserinfo = (props: any) => {
               users_data={user_data}
               connected_user={props.connected_user}
             />
-          </div>
+          </div>)</>}
         </div>
       </div>
     </div>

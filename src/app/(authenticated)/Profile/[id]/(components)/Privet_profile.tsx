@@ -15,9 +15,9 @@ import Achievements from "@/app/(authenticated)/achive/Achievements";
 const PrivetProfile = (props: any) => {
   const router = useRouter();
 
-  const [users_data, setusers_data] = useState(null);
+  const [users_data, setusers_data] = useState<any>(null);
   const [loading, setloading] = useState(true);
-  const [leader_board, setleader_board] = useState([]);
+  const [leader_board, setleader_board] = useState<any>([]);
 
   const fetchGetDataBack = async () => {
     try {
@@ -62,8 +62,7 @@ const PrivetProfile = (props: any) => {
       fetchGetLeaderBoard();
     }
   }, []);
-
-  if (loading) {
+  if (loading || !leader_board) {
     return <p>loading........</p>;
   }
   return (
@@ -71,10 +70,10 @@ const PrivetProfile = (props: any) => {
     <div className="w-full  flex flex-row gap-6 flex-wrap justify-center items-center min-h-screen">
       <div className="w-full  sm:w-[468px] md:w-[468px] flex flex-col test:order-2 pt-5 space-y-5">
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl ">
-          <Publicuserinfo
+         {users_data &&  <Publicuserinfo
             users_data={users_data}
             connected_user={props.users_data}
-          />
+          />}
         </div>
         <div className="w-full h-[400px] sm:w-full  md:w-full shadow-xl">
           {leader_board && <Leadrboard result={leader_board} />}
@@ -87,13 +86,13 @@ const PrivetProfile = (props: any) => {
       </div>
       <div className="w-full  sm:w-[468px] test1:w-[940px] test:w-[468px] flex flex-col pt-5 test1:flex-row test1:gap-6 test:gap-0 test:flex-col space-y-5 test1:space-y-0 test:order-3 test:space-y-5">
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl">
-          <UserFriendList users_data={users_data} />
+          {users_data &&   <UserFriendList users_data={users_data} />}
         </div>
         <div className="w-full h-[400px] sm:w-[468px]   md:w-full shadow-xl">
-        {users_data && <Stats win={users_data} place={leader_board} />}
+        {leader_board && <Stats win={users_data} place={leader_board} />}
         </div>
       </div>
-      <Achievements matchHistory={users_data.matchHistory}/>
+      {users_data &&  <Achievements matchHistory={users_data.matchHistory}/>}
 
     </div>
   );
