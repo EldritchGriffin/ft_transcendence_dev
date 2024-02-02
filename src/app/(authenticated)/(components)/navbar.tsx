@@ -318,7 +318,8 @@ export default function Navbar_compo() {
             </div>
             <div className="flex">
               <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="toggle"  />
+              <input type="checkbox" className="toggle" checked={twofa}
+                 onChange={() => {handlecheck()}}  />
                 <span className="ms-3 text-xs   text-white dark:text-gray-300">
                   Two Factor Authentication
                 </span>

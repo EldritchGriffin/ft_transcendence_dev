@@ -272,7 +272,7 @@ const Publicuserinfo = (props: any) => {
         </span>
         <div className="w-[full] h-[full] flex justify-center space-x-6">
           {user_data &&
-          <> (<div className="w-fit h-fit">
+          <> <div className="w-fit h-fit">
             <Publicuserinfo_add_remove_cancel
               users_data={user_data}
               connected_user={props.connected_user}
@@ -283,7 +283,7 @@ const Publicuserinfo = (props: any) => {
               users_data={user_data}
               connected_user={props.connected_user}
             />
-          </div>)</>}
+          </div></>}
         </div>
       </div>
     </div>

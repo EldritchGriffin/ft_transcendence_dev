@@ -3,6 +3,7 @@ import { Press_Start_2P } from "next/font/google";
 import PixiComponent from "./game";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const Font = Press_Start_2P({
   subsets: ["latin"],
@@ -10,6 +11,7 @@ const Font = Press_Start_2P({
 });
 
 export default function game(props: any) {
+  toast.success("SALAM");
   const router = useRouter();
   const pathname = usePathname();
   useEffect(() => {
@@ -18,7 +20,7 @@ export default function game(props: any) {
     }
   }, [pathname]);
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-darkblue">
+    <div className="flex flex-col red items-center justify-center h-screen bg-darkblue">
       <PixiComponent />
     </div>
   );
