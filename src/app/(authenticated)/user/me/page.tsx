@@ -75,6 +75,7 @@ const ProfilePage = (props: any) => {
           {users_data && <Mhistory result={users_data} />}
         </div>
         <div className="w-full h-[400px] sm:w-[468px]  md:w-full shadow-xl">
+          {/* {users_data && <Achievements matchHistory={users_data.matchHistory} />} */}
           {users_data && <Stats win={users_data} place={leader_board} />}
         </div>
       </div>
@@ -86,7 +87,6 @@ const ProfilePage = (props: any) => {
         {users_data &&   <UserBlockList users_data={users_data} />}
         </div>
       </div>
-      {users_data && <Achievements matchHistory={users_data.matchHistory} />}
     </div>
   );
 };

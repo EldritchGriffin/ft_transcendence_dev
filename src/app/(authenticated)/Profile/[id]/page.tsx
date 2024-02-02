@@ -49,7 +49,7 @@ const PublicProfile = (params: any) => {
     return <div className="flex justify-center items-center"> Loading . . . .  </div>;
   }
     return (
-      <div className="flex h-screen min-h-screen flex-col  justify-center items-center space-y-10 red bg-bg_gray">
+      <div className="flex h-screen min-h-screen flex-col  justify-center items-center space-y-10  bg-bg_gray">
         {users_data &&  <PrivetProfile id={params.params.id} users_data={users_data} />}
     </div>
   );

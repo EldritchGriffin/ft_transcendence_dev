@@ -414,8 +414,8 @@ input::placeholder {
 }
 .circular-progress {
   position: relative;
-  height: 250px;
-  width: 150px;
+  height: 252px;
+  width: 181px;
   border-radius: 50%;
   background: conic-gradient(#f25f5c 3.6deg, #ededed 0deg);
   display: flex;
@@ -425,14 +425,12 @@ input::placeholder {
 .circular-progress::before {
   content: "";
   position: absolute;
-  height: 128px;
-  width: 120px;
+  height: 150px;
+  width: 148px;
   border-radius: 50%;
   background-color: #247ba0;
 }
 .progress-value {
   position: relative;
-  font-size: 40px;
-  font-weight: 600;
   color: #fff;
 }

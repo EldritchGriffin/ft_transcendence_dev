@@ -92,8 +92,6 @@ const PrivetProfile = (props: any) => {
         {leader_board && <Stats win={users_data} place={leader_board} />}
         </div>
       </div>
-      {users_data && <Achievements matchHistory={users_data.matchHistory}/>}
-
     </div>
   );
 };

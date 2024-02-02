@@ -20,7 +20,7 @@ export default function game(props: any) {
     }
   }, [pathname]);
   return (
-    <div className="flex flex-col red items-center justify-center h-screen bg-darkblue">
+    <div className="flex flex-col items-center justify-center h-screen bg-darkblue">
       <PixiComponent />
     </div>
   );
