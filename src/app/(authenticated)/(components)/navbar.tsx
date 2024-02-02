@@ -15,6 +15,7 @@ import axios from "axios";
 import { redirect, useRouter } from "next/navigation";
 import { Cookie } from "next/font/google";
 import Model2Fa from "./Model2Fa"
+import { toast } from "react-toastify";
 
 const Navbar_search_list = (props: any) => {
   const router = useRouter();
@@ -53,9 +54,37 @@ export default function Navbar_compo() {
   const [navsearch, setnavsearch] = useState("");
   const searchRef = useRef(null);
   const [show2fa, setshow2fa] = useState(false);
+  const [twofa, settwofa] = useState(false);
   const openNav = () => {
     setShow(!show);
   };
+
+  const fetchuser = async () => {
+    try {
+    const response = await axios.get("http://localhost:3001/user/me", {withCredentials: true,});
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      settwofa(data.TFA);
+    } else {
+      
+    }}
+    catch (error) {
+      console.error("Error fetching user:", error);
+      throw error;
+    }
+  }
+  const handeldesaible2fa = async () => {// takhwira hnaya 3andak tnsa
+
+    try {
+     const response = await axios.get("http://localhost:3001/user/disable2fa", {withCredentials: true});
+        toast.success("Two Factor Authentication Disabled");
+        settwofa(false);
+    } catch (error) {
+      toast.error("Error Disabling Two Factor Authentication");
+    }
+
+  }
+
   const fetchserch = async () => {
     try {
       const response = await axios.get("http://localhost:3001/user/all", {
@@ -65,20 +94,23 @@ export default function Navbar_compo() {
         const data = await response.data;
         setusers_data(data);
       } else {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        
       }
     } catch (error) {
       console.error("Error fetching user:", error);
       throw error;
     }
   };
+
   const handleLogoutClick = () => {
     Cookies.remove("token");
     window.location.href = "/";
   };
   useEffect(() => {
     fetchserch();
+    fetchuser();
   }, []);
+
   const handlenavsearch = (event: any) => {
     setnavsearch(event.target.value);
   };
@@ -89,6 +121,15 @@ export default function Navbar_compo() {
   };
   const hidesearchfield = () => {
     setshowsearch(false);
+  };
+
+  const handlecheck = () => {
+    if (show2fa === false && twofa === false) {
+      setshow2fa(true);
+    }
+    else if (show2fa === false && twofa === true) {
+      handeldesaible2fa();
+    }
   };
 
   useEffect(() => {
@@ -110,7 +151,8 @@ export default function Navbar_compo() {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, [searchRef]);
-
+  console.log("twofa", twofa);
+  console.log("********2fa", show2fa);
   return (
     <Fragment>
     <nav className=" fixed w-full h-16 z-10 shadow-xl bg-primary_blue ">
@@ -123,10 +165,8 @@ export default function Navbar_compo() {
                 type="text"
                 className="w-[120px] sm:w-auto outline-none bg-transparent text-white text-sm  border-b-2 border-white-500 placeholder-opacity-50 placeholder-white"
                 placeholder="Search"
-                // onFocus={(e) => setShow(false)}
                 onChange={handlenavsearch}
                 onFocus={showsearchfield}
-                // onBlur={hidesearchfield}
               />
               {showsearch && users_data ? (
                 <div className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar">
@@ -198,9 +238,13 @@ export default function Navbar_compo() {
         <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]">
               <li><a>
-              <div onClick={()=> setshow2fa(true)} >
+              <div 
+
+              >
               <label className="relative inline-flex items-center cursor-pointer" >
-                <input type="checkbox" value="" className="sr-only peer" />
+                <input type="checkbox" value="" className="sr-only peer" checked={twofa}
+                 onChange={() => {handlecheck()}}
+                 />
                 <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-accent_red"></div>
                 <span className="ms-3 text-lg font-medium  text-white dark:text-gray-300">
                   Two Factor Authentication
@@ -293,7 +337,8 @@ export default function Navbar_compo() {
         </div>
       </div>
     </nav>
-    <Model2Fa  OpenModel={show2fa} CloseModel={()=> setshow2fa(false)}/>
-    </Fragment>
+    {/* {show2fa && <Model2Fa  OpenModel={show2fa} settwofa={settwofa} twofa={twofa}  CloseModel={()=> { toast.success("SALAM ana 9a7ba ") ,setshow2fa(false)}} /> } */}
+    {show2fa && <Model2Fa  OpenModel={show2fa} settwofa={settwofa}  CloseModel={setshow2fa} /*takhwira hnaya 3andak tnsa */ /> }
+    </ Fragment >
   );
 }
