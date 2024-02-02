@@ -1,5 +1,10 @@
 import { Channel } from "../(interfaces)/channelInterface";
-import { postLeaveChannel } from "../(handlers)/requestHandler";
+import {
+  postBanUser,
+  postKickUser,
+  postLeaveChannel,
+  postNewAdmin,
+} from "../(handlers)/requestHandler";
 import { use, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { User } from "../(interfaces)/userInterface";
@@ -7,6 +12,8 @@ import { SlArrowDown } from "react-icons/sl";
 import { Socket } from "socket.io-client";
 import { postChmod } from "../(handlers)/requestHandler";
 import { postChangeTitle } from "../(handlers)/requestHandler";
+import { verifyName, verifyPasswords } from "../(handlers)/inputHandlers";
+import { useRouter } from "next/navigation";
 
 const deduceGrade = (
   ownerLogin: string,
@@ -32,13 +39,30 @@ const OwnerControls = (props: any) => {
   const handleChangeAccess = async () => {
     const access = document.getElementById("access") as HTMLSelectElement;
     const value = access.value;
-    const data = {
-      channel: channel.id,
-      access: value,
-    };
+    let data;
+    if (value === "2") {
+      try {
+        verifyPasswords(password, confirmPassword);
+      } catch (error) {
+        toast.error("Invalid Password");
+        return;
+      }
+      data = {
+        channel: channel.id,
+        access: value,
+        password: password,
+      };
+    } else {
+      data = {
+        channel: channel.id,
+        access: value,
+      };
+    }
     try {
       await postChmod(data);
       toast.success("Access changed");
+      setPassword("");
+      setConfirmPassword("");
     } catch (error) {
       console.log(error);
       toast.error("Error changing access");
@@ -47,6 +71,13 @@ const OwnerControls = (props: any) => {
   const handleChangeTitle = async () => {
     const title = document.getElementById("title") as HTMLInputElement;
     const value = title.value;
+
+    try {
+      verifyName(value);
+    } catch (error) {
+      toast.error("Invalid name");
+      return;
+    }
     const data = {
       channel: channel.id,
       title: value,
@@ -106,33 +137,46 @@ const OwnerControls = (props: any) => {
               Submit
             </button>
           </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-sm mt-4">Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border-b-2 bg-transparent w-full h-full px-4 mb-4 text-black focus:outline-none"
-            />
-            <span className="text-sm mt-4">Confirm Password</span>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="border-b-2 bg-transparent w-full h-full px-4 mb-4 text-black focus:outline-none"
-            />
-          </div>
+          {access === "2" ? (
+            <div className="flex flex-col gap-3">
+              <span className="text-sm mt-4 text-white">Password</span>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="border-b-2 bg-transparent w-full h-full  mb-4 text-white focus:outline-none placeholder:text-white placeholder:opacity-30"
+                placeholder="New password"
+              />
+              <span className="text-sm mt-4 text-white">Confirm Password</span>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="border-b-2 bg-transparent w-full h-full  mb-4 text-white focus:outline-none placeholder:text-white placeholder:opacity-30"
+                placeholder="Confirm password"
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
   );
 };
 
+//TODO: check because it didnt work when the user wasnt an admin
 const UserControls = (props: any) => {
+  const router = useRouter();
   const member: User = props.member;
+  const handleProfile = () => {
+    router.push(`/profile/${member.intraLogin}`);
+  };
   return (
+    //TODO: add ability to invite a user to play a game
     <div className="flex gap-3">
-      <button className="text-accent_red text-sm hover:text-red-300">
+      <button
+        onClick={() => handleProfile()}
+        className="text-accent_red text-sm hover:text-red-300"
+      >
         Profile
       </button>
       <button className="text-accent_red text-sm hover:text-red-300">
@@ -146,6 +190,12 @@ const AdminControls = (props: any) => {
   const userGrade = props.userGrade;
   const member: User = props.member;
   const channel: Channel = props.channel;
+  const socket: Socket = props.socket;
+  const [showModal, setShowModal] = useState(false);
+  const [duration, setDuration] = useState("1");
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
   const memberGrade = deduceGrade(
     channel.ownerLogin,
     channel.admins,
@@ -153,25 +203,130 @@ const AdminControls = (props: any) => {
     member
   );
   const value = memberGrade === "admin" ? "Demote" : "Promote";
+  const handlePromote = async () => {
+    const data = {
+      channel: channel.id,
+      user: member.intraLogin,
+    };
+    try {
+      await postNewAdmin(data);
+      toast.success("User promoted");
+    } catch (error) {
+      toast.error("Error promoting user");
+    }
+  };
+  //TODO: add demote functionality
+  // const handleDemote = async () => {
+  //   const data = {
+  //     channel: channel.id,
+  //     user: member.intraLogin,
+  //   };
+  // try {
+  //     await postNewAdmin(data);
+  //     toast.success("User demoted");
+  //   } catch (error) {
+  //     toast.error("Error demoting user");
+  //   }
+  // };
 
+  const handleKick = async () => {
+    const data = {
+      channel: channel.id,
+      user: member.intraLogin,
+    };
+    try {
+      await postKickUser(data);
+      toast.success("User kicked");
+    } catch (error) {
+      console.log(error);
+      toast.error("Error kicking user");
+    }
+  };
+
+  const handleBan = async () => {
+    const data = {
+      channel: channel.id,
+      user: member.intraLogin,
+    };
+    try {
+      await postBanUser(data);
+      toast.success("User banned");
+    } catch (error) {
+      console.log(error);
+      toast.error("Error banning user");
+    }
+  };
+  const handleMute = (value: number) => {
+    const data = {
+      channelId: channel.id,
+      toMuteLogin: member.intraLogin,
+      mutePeriod: value,
+    };
+    socket.emit("mute", data, (payload:any) => {
+      if (payload.error) {
+        toast.error(payload.error);
+      } else {
+        toast.success("User muted");
+      }
+    });
+  };
   return (
-    <div className="flex gap-3">
-      <button className="text-accent_red text-sm hover:text-red-300">
-        Kick
-      </button>
-      <button className="text-accent_red text-sm hover:text-red-300">
-        Ban
-      </button>
-      <button className="text-accent_red text-sm hover:text-red-300">
-        Mute
-      </button>
-      {userGrade === "owner" ? (
-        <button className="text-accent_red text-sm hover:text-red-300">
-          {value}
+    <>
+      <div className="flex gap-3">
+        <button
+          onClick={() => handleKick()}
+          className="text-accent_red text-sm hover:text-red-300"
+        >
+          Kick
         </button>
+        <button
+          onClick={() => handleBan()}
+          className="text-accent_red text-sm hover:text-red-300"
+        >
+          Ban
+        </button>
+        <button
+          onClick={() => toggleModal()}
+          className="text-accent_red text-sm hover:text-red-300"
+        >
+          Mute
+        </button>
+        {userGrade === "owner" ? (
+          <button
+            onClick={() => handlePromote()}
+            className="text-accent_red text-sm hover:text-red-300"
+          >
+            {value}
+          </button>
+        ) : null}
+        <UserControls member={member} />
+      </div>
+      {showModal ? (
+        <div className="mt-4 flex">
+          <select
+            className="bg-transparent border-b-2 text-sm focus:outline-none"
+            onChange={(e) => setDuration(e.target.value)}
+            id="mute"
+          >
+            <option value="1">1 Minute</option>
+            <option value="2">1 Hour</option>
+            <option value="3">1 Day</option>
+          </select>
+          <button
+            onClick={() => handleMute(parseInt(duration))}
+            className="text-accent_red text-sm hover:text-red-300 ml-10"
+          >
+            save
+          </button>
+          <button
+            onClick={() => toggleModal()}
+            className="text-accent_red text-sm hover:text-red-300 ml-10"
+          >
+            close
+          </button>
+        </div>
       ) : null}
-      <UserControls member={member} />
-    </div>
+    </>
   );
 };
 
@@ -223,6 +378,7 @@ const MemberList = (props: any) => {
                       channel={channel}
                       userGrade={userGrade}
                       member={member}
+                      socket={props.socket}
                     />
                   ) : (
                     <UserControls member={member} />
@@ -260,7 +416,12 @@ const SettingsModal = (props: any) => {
             {userGrade === "owner" ? <OwnerControls channel={channel} /> : null}
           </div>
           <div className="flex flex-col gap-3 h-96 w-80">
-            <MemberList channel={channel} userGrade={userGrade} user={user} />
+            <MemberList
+              channel={channel}
+              userGrade={userGrade}
+              user={user}
+              socket={props.socket}
+            />
           </div>
         </div>
       </div>
@@ -280,6 +441,7 @@ const ChannelHeader = (props: any) => {
   const handleLeave = async () => {
     try {
       await postLeaveChannel(selectedChannel.id);
+      props.setSelectedChannel(null);
     } catch (error) {
       toast.error("Cannot leave a DM");
     }
@@ -299,11 +461,17 @@ const ChannelHeader = (props: any) => {
       props.setChannels(newChannels);
     });
     socket.on("leftChannel", (message: Channel) => {
-      const newChannels = channels.filter(
-        (channel: Channel) => channel.id !== message.id
-      );
+      //TODO tell yasser to add the user who left in the payload
+      const newChannels = channels.map((channel: Channel) => {
+        if (channel.id === message.id) {
+          const newMembers = channel.members.filter(
+            (member: User) => member.intraLogin !== message.ownerLogin
+          );
+          return { ...channel, members: newMembers };
+        }
+        return channel;
+      });
       props.setChannels(newChannels);
-      props.setSelectedChannel(null);
     });
     return () => {
       socket.off("leftChannel");
@@ -342,6 +510,7 @@ const ChannelHeader = (props: any) => {
             channel={selectedChannel}
             channels={channels}
             user={props.user}
+            socket={socket}
           />
         ) : null}
       </div>

@@ -25,7 +25,7 @@ const ChatBubble = (props: any) => {
           className="flex gap-3 items-center"
         >
           <img
-            src={message.sender.avatarLink} //TODO: change to avatar
+            src={message.sender.avatarLink}
             alt="Profile Picture"
             className="w-8 h-8 rounded-full mb-2"
           />

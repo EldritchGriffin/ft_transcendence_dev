@@ -1,18 +1,8 @@
 import React, { useState } from "react";
 import { Channel } from "../(interfaces)/channelInterface";
 import { postNewChannel } from "../(handlers)/requestHandler";
-
-//TODO add validation for name and password length and characters allowed
-const checkName = (name: string) => {
-  if (name.length < 3) return false;
-  return true;
-};
-
-const checkPassword = (password: string, confirmPassword: string) => {
-  if (password.length < 8) return false;
-  if (password !== confirmPassword) return false;
-  return true;
-};
+import { verifyName, verifyPasswords } from "../(handlers)/inputHandlers";
+import { toast } from "react-toastify";
 
 const CreateChannelModal = (props: any) => {
   const [name, setName] = useState("");
@@ -21,11 +11,19 @@ const CreateChannelModal = (props: any) => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const createChannel = async () => {
-    if (!checkName(name)) return;
+    try {
+      verifyName(name);
+    } catch (error) {
+      toast.error("Invalid Name");
+      return;
+    }
     if (access === "2") {
-      if (!checkPassword(password, confirmPassword))
-        //TODO implement proper error handling
+      try {
+        verifyPasswords(password, confirmPassword);
+      } catch (error) {
+        toast.error("Invalid Password");
         return;
+      }
     }
     const newChannel = {
       title: name,

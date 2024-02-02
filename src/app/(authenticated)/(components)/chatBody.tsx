@@ -6,8 +6,6 @@ import ChatBubble from "./chatBubble";
 import { User } from "../(interfaces)/userInterface";
 import { toast } from "react-toastify";
 
-//TODO either fix leaving channels with sockets or find a way to secure it
-
 const handleSendMessage = (socket: any, channel: Channel, user: User) => {
   const message = document.getElementById("message") as HTMLInputElement;
   if (!message) return;
@@ -18,7 +16,11 @@ const handleSendMessage = (socket: any, channel: Channel, user: User) => {
     content: messageText,
     senderLogin: user.intraLogin,
   };
-  socket.emit("sendMessage", messageData);
+  socket.emit("sendMessage", messageData, (payload: any) => {
+    if (payload.error) {
+      toast.error(payload.error);
+    }
+  });
   message.value = "";
 };
 

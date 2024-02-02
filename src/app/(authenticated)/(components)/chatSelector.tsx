@@ -78,9 +78,11 @@ const ChatSelector = (props: any) => {
     if (index === 0) {
       selected = "friends";
       unselected = "channels";
+      props.onChannelSelect(null);
     } else {
       selected = "channels";
       unselected = "friends";
+      props.onChannelSelect(null);
     }
 
     document.getElementById(selected)?.classList.remove("text-white");
@@ -92,7 +94,6 @@ const ChatSelector = (props: any) => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
     const searchTerm = event.target.value;
-    //TODO Perform search operations based on the searchTerm
   };
 
   return (

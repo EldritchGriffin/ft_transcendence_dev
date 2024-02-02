@@ -64,7 +64,7 @@ const UserBlockList = (props: any) => {
     handleRemoveItem(item.intraLogin);
   };
   const navigate_to_users_profile = (users_target_intra: string) => {
-    const next_rout = "/Profile/" + users_target_intra;
+    const next_rout = "/profile/" + users_target_intra;
     router.push(next_rout);
   };
   if (loading) {

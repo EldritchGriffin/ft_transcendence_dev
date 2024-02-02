@@ -206,3 +206,88 @@ export const postChangeTitle = async (channel: any) => {
     throw error;
   }
 };
+
+export const postNewAdmin = async (channel: any) => {
+  const url = `/channel/newAdmin`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const postKickUser = async (channel: any) => {
+  const url = `/channel/kick`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postBanUser = async (channel: any) => {
+  const url = `/channel/ban`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postUnbanUser = async (channel: any) => {
+  //TODO implement a place for this in the channel header admin controls
+  const url = `/channel/unban`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postMuteUser = async (channel: any) => {
+  const url = `/channel/mute`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
