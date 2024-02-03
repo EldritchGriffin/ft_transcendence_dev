@@ -308,7 +308,7 @@ export const fetchLeaderBoard = async () => {
   }
 };
 
-const fetchAllUsers = async () => {
+export const fetchAllUsers = async () => {
   const url = `/user/all`;
 
   try {

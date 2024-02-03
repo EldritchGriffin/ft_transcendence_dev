@@ -17,7 +17,7 @@ import { redirect, usePathname, useRouter } from "next/navigation";
 import { Cookie } from "next/font/google";
 import Model2Fa from "./Model2Fa";
 import { toast } from "react-toastify";
-import { fetchCurrentUser, handlTFA } from "../(handlers)/requestHandler";
+import { fetchCurrentUser, handlTFA, fetchAllUsers } from "../(handlers)/requestHandler";
 
 const Navbar_search_list = (props: any) => {
   const router = useRouter();
@@ -98,16 +98,20 @@ export default function Navbar_compo() {
 
   const fetchserch = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/user/all", {
-        withCredentials: true,
-      });
-      if (response.status >= 200 && response.status < 300) {
-        const data = await response.data;
-        setusers_data(data);
-      } else {
-      }
+
+      const res = await fetchAllUsers();
+      setusers_data(res);
+
+      // const response = await axios.get("http://localhost:3001/user/all", {
+      //   withCredentials: true,
+      // });
+      // if (response.status >= 200 && response.status < 300) {
+      //   const data = await response.data;
+      //   setusers_data(data);
+      // } else {
+      // }
     } catch (error) {
-      throw error;
+      console.log("error");
     }
   };
 
