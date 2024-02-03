@@ -1,3 +1,4 @@
+import { postacceptfriend, postaddfriend, postblockuser, postcancelfriend, postremovefriend, postunblockuser } from "@/app/(authenticated)/(handlers)/requestHandler";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -18,19 +19,24 @@ const Publicuserinfo_block_unblock = (props: any) => {
   if (!isBlocked) {
     const send_block = async () => {
       try {
-        const usersurl =
-          "http://localhost:3001/user/blockuser/" + user_data.intraLogin;
-        const response = await fetch(usersurl, {
-          method: "POST",
-          mode: "cors",
-          credentials: "include",
-        });
-        if (!response.ok)
-          throw new Error(
-            "An error occurred while attempting to update the new Nickname."
-          );
-      } catch (error) {
+        // const usersurl =
+        //   "http://localhost:3001/user/blockuser/" + user_data.intraLogin;
+        // const response = await fetch(usersurl, {
+        //   method: "POST",
+        //   mode: "cors",
+        //   credentials: "include",
+        // });
+        // if (!response.ok)
+        //   throw new Error(
+        //     "An error occurred while attempting to update the new Nickname."
+        //   );
+        const response = await postblockuser(user_data.intraLogin);
+        // setisBlocked(response);
+        toast.error("User Blocked successfuly !");
+      } catch (error:any) {
         // console.error("Error posting data:", error);
+        if (error?.response?.status === 403)
+          toast.error("User Not Blocked !");
       }
     };
     const block_unblock_user = () => {
@@ -49,18 +55,24 @@ const Publicuserinfo_block_unblock = (props: any) => {
   } else {
     const send_unblock = async () => {
       try {
-        const usersurl =
-          "http://localhost:3001/user/unblockuser/" + user_data.intraLogin;
-        const response = await fetch(usersurl, {
-          method: "POST",
-          mode: "cors",
-          credentials: "include",
-        });
-        if (!response.ok)
-          throw new Error(
-            "An error occurred while attempting to update the new Nickname."
-          );
-      } catch (error) {
+        // const usersurl =
+        //   "http://localhost:3001/user/unblockuser/" + user_data.intraLogin;
+        // const response = await fetch(usersurl, {
+        //   method: "POST",
+        //   mode: "cors",
+        //   credentials: "include",
+        // });
+        // if (!response.ok)
+        //   throw new Error(
+        //     "An error occurred while attempting to update the new Nickname."
+        //   );
+        const response = await postunblockuser(user_data.intraLogin);
+        // setUser_data(response);
+        toast.success("User UnBlocked successfully");
+  
+      } catch (error:any) {
+        if (error?.response?.status === 403)
+          toast.error("User Not Blocked !");
         // console.error("Error posting data:", error);
       }
     };
@@ -111,18 +123,24 @@ const Publicuserinfo_add_remove_cancel = ( props:any ) => {
   
   const send_remove = async () => {
     try {
-      const usersurl = "http://localhost:3001/user/removefriend/" + user_data.intraLogin;
-      const response = await fetch(usersurl, {
-        method: 'POST',
-        mode: 'cors',
-        credentials : 'include',
-      })
-      // if (!response.ok)
-      //   throw new Error("An error occurred while attempting to update the new Nickname.");
-      // if(response.status === 403)
-        // console.error("wa fin a charika l3ama :D");
-      console.log("a sidi rak dkholti l field dyal Remove");
-    } catch (error) {
+      // const usersurl = "http://localhost:3001/user/removefriend/" + user_data.intraLogin;
+      // const response = await fetch(usersurl, {
+      //   method: 'POST',
+      //   mode: 'cors',
+      //   credentials : 'include',
+      // })
+      // // if (!response.ok)
+      // //   throw new Error("An error occurred while attempting to update the new Nickname.");
+      // // if(response.status === 403)
+      //   // console.error("wa fin a charika l3ama :D");
+      // console.log("a sidi rak dkholti l field dyal Remove");
+      const response = await postremovefriend(user_data.intraLogin);
+      // setUser_data(response);
+      toast.success("User Removed successfully");
+
+    } catch (error:any) {
+      if (error?.response?.status === 403)
+        toast.error("User Not Friend !");
       // console.error('Error posting data:', error);
     }
   }
@@ -147,18 +165,24 @@ else if(buttonstate === "Cancel")
 
   const send_cancel = async () => {
     try {
-      const usersurl = "http://localhost:3001/user/cancelfriend/" + user_data.intraLogin;
-      const response = await fetch(usersurl, {
-        method: 'POST',
-        mode: 'cors',
-        credentials : 'include',
-      })
+      // const usersurl = "http://localhost:3001/user/cancelfriend/" + user_data.intraLogin;
+      // const response = await fetch(usersurl, {
+      //   method: 'POST',
+      //   mode: 'cors',
+      //   credentials : 'include',
+      // })
       // if (!response.ok) throw new Error("An error occurred while attempting to update the new Nickname.");
       // if(response.status === 403)
       // console.error("wa fin a charika l3ama :D");
       // console.log("a sidi rak dkholti l field dyal Cancel");
 
-    } catch (error) {
+      const response = await postcancelfriend(user_data.intraLogin);
+      // setUser_data(response);
+      toast.success("User Canceled successfully");
+
+    } catch (error:any) {
+      if (error?.response?.status === 403)
+        toast.error("User Not Waiting For Invite !");
       // console.error('Error posting data:', error);
     }
   }
@@ -184,14 +208,18 @@ else if(buttonstate === "Accept")
 
   const send_accept = async () => {
     try {
-      const usersurl = "http://localhost:3001/user/acceptfriend/" + user_data.intraLogin;
-      const response = await fetch(usersurl, {
-        method: 'POST',
-        mode: 'cors',
-        credentials : 'include',
-      })
-
-    } catch (error) {
+      // const usersurl = "http://localhost:3001/user/acceptfriend/" + user_data.intraLogin;
+      // const response = await fetch(usersurl, {
+      //   method: 'POST',
+      //   mode: 'cors',
+      //   credentials : 'include',
+      // })
+      const response = await postacceptfriend(user_data.intraLogin);
+      // setUser_data(response);
+      toast.success("User Accept successfully");
+    } catch (error:any) {
+      if (error?.response?.status === 403)
+        toast.error("User has nothing to Accept !");
     }
   }
   
@@ -217,18 +245,21 @@ else if(buttonstate === "Accept")
  
     const send_add = async () => {
       try {
-        const usersurl = "http://localhost:3001/user/addfriend/" + user_data.intraLogin;
+        // const usersurl = "http://localhost:3001/user/addfriend/" + user_data.intraLogin;
 
-        const response = await fetch(usersurl, {
-          method: 'POST',
-          mode: 'cors',
-          credentials : 'include',
-        })
-        if (!response.ok) throw  response;
+        // const response = await fetch(usersurl, {
+        //   method: 'POST',
+        //   mode: 'cors',
+        //   credentials : 'include',
+        // })
+        // if (!response.ok) throw  response;
 
-      } catch (error) {
-        toast.error("salam");
-
+        const response = await postaddfriend(user_data.intraLogin);
+        // setUser_data(response);
+        toast.success("User Add successfully");
+      } catch (error:any) {
+        if (error?.response?.status === 403)
+          toast.error("User Can't be Add !");
       }
     }
     const add_user = () => {

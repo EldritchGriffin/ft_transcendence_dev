@@ -6,6 +6,7 @@ import React, { useEffect, useState, useRef } from 'react';
 // import HashLoader from "react-spinners/ClipLoader";
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { fetchUsernickname, postUserAvatar } from '../(handlers)/requestHandler';
 
 export default  function EditNickname( props:any ) {
   const router = useRouter();
@@ -24,17 +25,22 @@ export default  function EditNickname( props:any ) {
   };
   const handleNickNameUpload = async (name:any) => { // after the new NickName passes the error checks i POST it on the back-end
     if (!name)  return 
-        setName(false);
-        const new_nickname = "http://localhost:3001/user/updatenick/" + name;
-        const res = await fetch(new_nickname, {
-          method: 'POST',   
-          mode: 'cors',
-          credentials : 'include',
-        }).then((res) =>{
+    try{
+
+      setName(false);
+      // const new_nickname = "http://localhost:3001/user/updatenick/" + name;
+      const res = await fetchUsernickname(name);
+      // const res = await fetch(new_nickname, {
+        //   method: 'POST',   
+        //   mode: 'cors',
+        //   credentials : 'include',
+        // }).then((res) =>{
           setName(true)
-        }).catch((error)=>{
-          console.log(error);
-        })
+          // }).catch((error)=>{
+        }
+        catch(error){
+          toast.error("Invalid NickName ");
+        }
   };
   const handleInputChangek = (event:any) => {// here i keep the state of the updated NickName updated when the user click on "Enter" button
     if (event?.key === 'Enter') {
@@ -45,7 +51,7 @@ export default  function EditNickname( props:any ) {
     setupdatenick(event?.target?.value);
   }
   const handleFileUpload =  (files:any) => { // here i made the final tests for the new Profile Picture before POSTED on the back-end
-    if (files && files.type !== "image/jpeg")  
+    if (files && files.type !== "image/jpeg")
     {
       imgflag = 1;
                   toast.error("image type error");
@@ -62,18 +68,29 @@ export default  function EditNickname( props:any ) {
       const data = new FormData();
       data.append('avatar', files);
         setRes(false);
-        const res =   fetch('http://localhost:3001/user/updateavatar', {
-          mode: 'cors',
-          credentials : 'include',
-          method: 'POST',   
-          body: data
-        }).then((res)=>{
-          setRes(true);
-          imgflag = 0;
-          toast.success("Avatar updated successfully");
-        }).catch((error)=>{
-          console.log(error)
-        })
+        // const res =   fetch('http://localhost:3001/user/updateavatar', {
+        //   mode: 'cors',
+        //   credentials : 'include',
+        //   method: 'POST',   
+        //   body: data
+        // }).then((res)=>{
+        //   setRes(true);
+        //   imgflag = 0;
+        //   toast.success("Avatar updated successfully");
+        // }).catch((error)=>{
+  const handleAvatarUpload = async (setavatar:any) => { // after the new NickName passes the error checks i POST it on the back-end
+
+          try {
+            
+            const res =   await postUserAvatar(setavatar);
+              setRes(true);
+            }
+            catch(error){
+              toast.error("invalide Image");
+              setRes(true);
+        }
+      }
+      handleAvatarUpload(data);
       var imageDisplay = document.getElementById('profile_pic') as HTMLImageElement;
               var reader = new FileReader();
               reader.onload = function (e) {
@@ -88,7 +105,7 @@ export default  function EditNickname( props:any ) {
     const updateNickname = () => { // here i check the values that will be POSTED to the back-end for any error
       const nickname_state = document.getElementById("inpt_nickname");
       const validInput = /^[a-zA-Z0-9]*$/;
-      if (updatenick?.length > 15 || updatenick?.length === 0 || !validInput?.test(updatenick) || !/^[a-zA-Z]*$/.test(updatenick?.charAt(0)))
+      if (!updatenick || updatenick?.length < 3 || updatenick?.length > 15 || updatenick?.length === 0 || !validInput?.test(updatenick) || !/^[a-zA-Z]*$/.test(updatenick?.charAt(0)))
       {
         if (nickname_state)
          nickname_state.style.borderColor = 'red';

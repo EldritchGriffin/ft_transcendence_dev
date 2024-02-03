@@ -308,3 +308,171 @@ export const fetchLeaderBoard = async () => {
     throw error;
   }
 };
+
+
+export const postblockuser = async (channel: any) => {
+  const url = `/user/blockuser/` + channel;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const postunblockuser = async (channel: any) => {
+  const url = `/user/unblockuser/` + channel;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const postremovefriend = async (channel: any) => {
+  const url = `/user/removefriend/` + channel;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const postcancelfriend = async (channel: any) => {
+  const url = `/user/cancelfriend/` + channel;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const postacceptfriend = async (channel: any) => {
+  const url = `/user/acceptfriend/` + channel;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const postaddfriend = async (channel: any) => {
+  const url = `/user/addfriend/` + channel;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const fetchBlockedList = async () => {
+  const url = `/user/blocked`;
+
+  try {
+    const response = await api.get(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchUserPublic = async (channelId: string) => {
+  const url = `/user/${channelId}`;
+
+  try {
+    const response = await api.get(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+export const fetchUsernickname = async (channelId: string) => {
+  const url = `/user/updatenick/${channelId}`;
+
+  try {
+    const response = await api.post(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+export const postUserAvatar = async (channel: any) => {
+  const url = `/user/updateavatar`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
