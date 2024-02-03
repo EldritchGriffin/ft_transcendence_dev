@@ -258,7 +258,6 @@ export const postBanUser = async (channel: any) => {
 };
 
 export const postUnbanUser = async (channel: any) => {
-  //TODO implement a place for this in the channel header admin controls
   const url = `/channel/unban`;
 
   try {
@@ -294,6 +293,23 @@ export const postMuteUser = async (channel: any) => {
 
 export const fetchLeaderBoard = async () => {
   const url = `/leaderboard`;
+
+  try {
+    const response = await api.get(url);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+const fetchAllUsers = async () => {
+  const url = `/user/all`;
 
   try {
     const response = await api.get(url);
