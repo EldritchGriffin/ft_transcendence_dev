@@ -476,3 +476,21 @@ export const postUserAvatar = async (channel: any) => {
     throw error;
   }
 };
+
+
+export const handlTFA = async () => {
+  const url = `user/disable2fa`;
+
+  try {
+    const response = await api.get(url);
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    }
+    else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};

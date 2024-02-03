@@ -17,6 +17,7 @@ import { redirect, usePathname, useRouter } from "next/navigation";
 import { Cookie } from "next/font/google";
 import Model2Fa from "./Model2Fa";
 import { toast } from "react-toastify";
+import { fetchCurrentUser, handlTFA } from "../(handlers)/requestHandler";
 
 const Navbar_search_list = (props: any) => {
   const router = useRouter();
@@ -63,29 +64,33 @@ export default function Navbar_compo() {
 
   const fetchuser = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/user/me", {
-        withCredentials: true,
-      });
-      if (response.status >= 200 && response.status < 300) {
-        const data = await response.data;
-        settwofa(data.TFA);
-      } else {
-      }
+
+      const res = await fetchCurrentUser();
+      settwofa(res.TFA);
+      // const response = await axios.get("http://localhost:3001/user/me", {
+      //   withCredentials: true,
+      // });
+      // if (response.status >= 200 && response.status < 300) {
+      //   const data = await response.data;
+      //   settwofa(data.TFA);
+      // } else {
+      // }
     } catch (error) {
-      console.error("Error fetching user:", error);
-      throw error;
     }
   };
   const handeldesaible2fa = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/user/disable2fa",
-        { withCredentials: true }
-      );
-      if (response.status >= 200 && response.status < 300) {
-        toast.success("Two Factor Authentication Disabled");
-        settwofa(false);
-      }
+
+      const res = await handlTFA();
+      settwofa(false);
+      // const response = await axios.get(
+      //   "http://localhost:3001/user/disable2fa",
+      //   { withCredentials: true }
+      // );
+      // if (response.status >= 200 && response.status < 300) {
+      //   toast.success("Two Factor Authentication Disabled");
+      //   settwofa(false);
+      // }
     } catch (error) {
       toast.error("Error Disabling Two Factor Authentication");
     }
