@@ -39,3 +39,9 @@ export default Home;
 // responses , other than forbiden
 
 // add the editnickname page when first login
+
+
+// when first login in case refused to inter a NickName , and when to the URL and made 3000/user/me , he is pushed to the profile , whitout having a NickName , think to block him or automaticly make NickName his intralogin
+
+
+// open the image >>  the file blabla on the desktop  || when i post it on the backend it gets updatedo n the database

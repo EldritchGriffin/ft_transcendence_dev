@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { fetchBlockedList, postunblockuser } from "@/app/(authenticated)/(handlers)/requestHandler";
+import { toast } from "react-toastify";
 
 const UserBlockList = (props: any) => {
   const router = useRouter();
@@ -12,20 +14,20 @@ const UserBlockList = (props: any) => {
   };
   const fetchGetDataBack = async () => {
     try {
-      const response = await fetch("http://localhost:3001/user/blocked", {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-      });
-      if (!response.ok)
-        throw new Error(
-          "An error occurred while attempting to update the new Nickname."
-        );
-      const result = await response.json();
-      setUser_data(result);
-      console.log("the blocked users ====>", result);
+      // const response = await fetch("http://localhost:3001/user/blocked", {
+      //   method: "GET",
+      //   mode: "cors",
+      //   credentials: "include",
+      // });
+      // if (!response.ok)
+      //   throw new Error(
+      //     "An error occurred while attempting to update the new Nickname."
+      //   );
+      // const result = await response.json();
+      // setUser_data(result);
+      const response = await fetchBlockedList();
+      setUser_data(response);
     } catch (error) {
-      console.error("Error posting data:", error);
     } finally {
       setloading(false);
     }
@@ -36,19 +38,24 @@ const UserBlockList = (props: any) => {
 
   const send_unblock = async (item: any) => {
     try {
-      const usersurl =
-        "http://localhost:3001/user/unblockuser/" + item.intraLogin;
-      const response = await fetch(usersurl, {
-        method: "POST",
-        mode: "cors",
-        credentials: "include",
-      });
-      if (!response.ok)
-        throw new Error(
-          "An error occurred while attempting to update the new Nickname."
-        );
-    } catch (error) {
-      console.error("Error posting data:", error);
+      // const usersurl =
+      //   "http://localhost:3001/user/unblockuser/" + item.intraLogin;
+      // const response = await fetch(usersurl, {
+      //   method: "POST",
+      //   mode: "cors",
+      //   credentials: "include",
+      // });
+      // if (!response.ok)
+      //   throw new Error(
+      //     "An error occurred while attempting to update the new Nickname."
+      //   );
+      const response = await postunblockuser(item.intraLogin);
+      setUser_data(response);
+      toast.success("User UnBlocked successfully");
+
+    } catch (error:any) {
+      if (error?.response?.status === 403)
+        toast.error("User Not Blocked !");
     }
   };
 
@@ -77,7 +84,7 @@ const UserBlockList = (props: any) => {
         {!user_data?.length ? (
           <p className="h-full w-full flex justify-center items-center   text-white">
             {" "}
-            You have no blocked users{" "}
+            No blocked users{" "}
           </p>
         ) : (
           <div className="w-full h-full flex flex-col  space-y-3  pb-3 bg-primary_blue">
@@ -92,7 +99,7 @@ const UserBlockList = (props: any) => {
 
             <div className="w-full flex flex-row flex-wrap  overflow-y-auto custom-scrollbar  pl-4 pr-4">
               {user_data?.map((item: any, index: any) =>
-                item.nickname.toLowerCase().includes(Blocksearch) ? (
+                item?.nickname?.toLowerCase().includes(Blocksearch) ? (
                   <div
                     className="w-full h-[128px]  flex justify-between items-center  flex-row  mr-4 pt-4   "
                     key={index}

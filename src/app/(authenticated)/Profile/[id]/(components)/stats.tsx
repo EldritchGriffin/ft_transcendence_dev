@@ -4,10 +4,10 @@ import Lottie from "lottie-react";
 import Achievements from "@/app/(authenticated)/achive/Achievements";
 
 const Stats = (props: any) => {
-  const win = props.win;
-  const place = props.place;
+  const win = props?.win;
+  const place = props?.place;
 
-  const x = win.matchHistory;
+  const x = win?.matchHistory;
   const tole = win?.matchHistory?.length;
   const sizeld = place?.length;
 
