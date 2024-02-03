@@ -36,9 +36,9 @@ const Navbar_search_list = (props: any) => {
       <img
         src={props.item.avatarLink}
         alt=""
-        className="h-10 w-10 sm:h-[60px] sm:w-[60px] flex-none red  "
+        className="h-10 w-10 sm:h-[60px] sm:w-[60px] flex-none   "
       />
-      <span className="h-fit w-fit  text-sm flex items-center red justify-center text-center text-white">
+      <span className="h-fit w-fit  text-sm flex items-center  justify-center text-center text-white">
         {" "}
         {props.item.nickname}{" "}
       </span>
@@ -102,7 +102,6 @@ export default function Navbar_compo() {
       } else {
       }
     } catch (error) {
-      console.error("Error fetching user:", error);
       throw error;
     }
   };
@@ -168,7 +167,7 @@ export default function Navbar_compo() {
               <span className="oo text-sm md:text-2xl font-bold">
                 PongVerse
               </span>
-              <div className="flex flex-col space-y-10 " ref={searchRef}>
+              <div tabIndex={0}  className="flex red flex-col space-y-10 " ref={searchRef}>
                 <input
                   type="text"
                   className="w-[120px] sm:w-auto outline-none bg-transparent text-white text-sm  border-b-2 border-white-500 placeholder-opacity-50 placeholder-white"
@@ -177,7 +176,7 @@ export default function Navbar_compo() {
                   onFocus={showsearchfield}
                 />
                 {showsearch && users_data ? (
-                  <div className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar">
+                  <div tabIndex={0} className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar">
                     {users_data.map((item: any, index: any) =>
                       item.intraLogin.includes(navsearch) ? (
                         <Navbar_search_list
@@ -243,7 +242,7 @@ export default function Navbar_compo() {
               </div>
             </div>
           </div>
-          <div className="red flex flex-row w-[300px] justify-between">
+          <div className="flex flex-row w-[300px] justify-between">
           <div className="hidden md:flex justify-end items-center space-x-4 cursor-pointer ">
             <div className="dropdown dropdown-end">
               <AiFillNotification size={35} tabIndex={0} className="text-white" />
