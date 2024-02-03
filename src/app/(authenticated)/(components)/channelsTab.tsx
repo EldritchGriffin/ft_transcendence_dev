@@ -17,6 +17,9 @@ const ChannelsTab = (props: any) => {
       }
     };
     fetchData();
+    return () => {
+      props.setChannels(null);
+    };
   }, []);
   if (loading) {
     return (

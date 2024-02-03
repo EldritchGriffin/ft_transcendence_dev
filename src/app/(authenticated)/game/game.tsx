@@ -3,7 +3,7 @@ import * as PIXI from "pixi.js";
 import io from "socket.io-client";
 import { Press_Start_2P } from "next/font/google";
 import { fetchCurrentUser } from "../(handlers)/requestHandler";
-import Cookies from "../../../../node_modules/@types/js-cookie";
+import Cookies from "js-cookie";
 
 let p1score = 0;
 let p2score = 0;

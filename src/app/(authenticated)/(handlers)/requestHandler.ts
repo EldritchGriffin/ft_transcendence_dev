@@ -325,7 +325,6 @@ export const fetchAllUsers = async () => {
   }
 };
 
-
 export const postblockuser = async (channel: any) => {
   const url = `/user/blockuser/` + channel;
 
@@ -423,7 +422,6 @@ export const postaddfriend = async (channel: any) => {
   }
 };
 
-
 export const fetchBlockedList = async () => {
   const url = `/user/blocked`;
 
@@ -474,8 +472,6 @@ export const fetchUsernickname = async (channelId: string) => {
   }
 };
 
-
-
 export const postUserAvatar = async (channel: any) => {
   const url = `/user/updateavatar`;
 
@@ -493,7 +489,6 @@ export const postUserAvatar = async (channel: any) => {
   }
 };
 
-
 export const handlTFA = async () => {
   const url = `user/disable2fa`;
 
@@ -502,8 +497,22 @@ export const handlTFA = async () => {
     if (response.status >= 200 && response.status < 300) {
       const data = await response.data;
       return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    else {
+  } catch (error) {
+    throw error;
+  }
+};
+export const postInviteUser = async (data: any) => {
+  const url = `channel/invite`;
+
+  try {
+    const response = await api.post(url, data);
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {

@@ -70,7 +70,8 @@ const SelectNewFriend = (props: any) => {
 };
 
 const ChatSelector = (props: any) => {
-  const [selected, setSelected] = useState(0);
+  const selected = props.selected;
+  const setSelected = props.setSelected;
   const handleSelect = (index: number) => {
     let selected;
     let unselected;

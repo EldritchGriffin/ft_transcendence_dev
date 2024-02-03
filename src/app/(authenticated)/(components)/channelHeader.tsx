@@ -1,6 +1,8 @@
 import { Channel } from "../(interfaces)/channelInterface";
 import {
+  fetchAllUsers,
   postBanUser,
+  postInviteUser,
   postKickUser,
   postLeaveChannel,
   postNewAdmin,
@@ -15,6 +17,7 @@ import { postChmod } from "../(handlers)/requestHandler";
 import { postChangeTitle } from "../(handlers)/requestHandler";
 import { verifyName, verifyPasswords } from "../(handlers)/inputHandlers";
 import { useRouter } from "next/navigation";
+import { channel } from "diagnostics_channel";
 
 const deduceGrade = (
   ownerLogin: string,
@@ -204,31 +207,35 @@ const AdminControls = (props: any) => {
     member
   );
   const value = memberGrade === "admin" ? "Demote" : "Promote";
-  const handlePromote = async () => {
+  const handleDemote = async () => {
     const data = {
       channel: channel.id,
       user: member.intraLogin,
     };
     try {
       await postNewAdmin(data);
-      toast.success("User promoted");
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+      toast.success("User demoted");
+    } catch (error) {
+      toast.error("Error demoting user");
+    }
+  };
+  const handlePromote = async () => {
+    if (value === "Promote") {
+      const data = {
+        channel: channel.id,
+        user: member.intraLogin,
+      };
+      try {
+        await postNewAdmin(data);
+        toast.success("User promoted");
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+      }
+      // } else {
+      // handleDemote();
     }
   };
   //TODO: add demote functionality
-  // const handleDemote = async () => {
-  //   const data = {
-  //     channel: channel.id,
-  //     user: member.intraLogin,
-  //   };
-  // try {
-  //     await postNewAdmin(data);
-  //     toast.success("User demoted");
-  //   } catch (error) {
-  //     toast.error("Error demoting user");
-  //   }
-  // };
 
   const handleKick = async () => {
     const data = {
@@ -333,9 +340,25 @@ const MemberList = (props: any) => {
   const channel: Channel = props.channel;
   const user: User = props.user;
   const userGrade = props.userGrade;
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredMembers, setFilteredMembers] = useState<User[]>(
     channel.members
   );
+
+  const handleInvite = async (invited: string) => {
+    console.log(channel);
+    const data = {
+      channel: channel.id.toString(),
+      user: invited,
+    };
+    try {
+      await postInviteUser(data);
+      toast.success("User invited");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    }
+  };
+
   const handleUnban = async (banned: string) => {
     const data = {
       channel: channel.id,
@@ -359,6 +382,25 @@ const MemberList = (props: any) => {
         )
       );
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const users: User[] = await fetchAllUsers();
+        setAllUsers(users);
+      } catch (error) {
+        toast.error("Error fetching users");
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (allUsers.length === 0) {
+    return (
+      <div>
+        <p className="text-4xl">Loading...</p>
+      </div>
+    );
+  }
   return (
     <div className="">
       <div className="flex flex-col justify-between items-center mb-8">
@@ -405,7 +447,24 @@ const MemberList = (props: any) => {
               <span className="text-white">Invite a user</span>
               <SlArrowDown className="text-sm ml-auto" />
             </div>
-            <div className="collapse-content"></div>
+            <div className="collapse-content">
+              {allUsers.map((invited: User, index: number) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-row justify-between items-center"
+                  >
+                    <span className="text-white">{invited.intraLogin}</span>
+                    <button
+                      onClick={() => handleInvite(invited.intraLogin)}
+                      className="bg-white text-accent_red text-sm hover:text-red-300 p-1 m-1"
+                    >
+                      Invite
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         ) : null}
         {filteredMembers.map((member: User, index) =>
@@ -500,6 +559,7 @@ const ChannelHeader = (props: any) => {
   };
   useEffect(() => {
     socket.on("changeTitle", (message: Channel) => {
+      if (props.selected !== 1) return;
       const newChannels = channels.map((channel: Channel) => {
         if (channel.id === message.id) {
           return (message.ownerLogin = channel.ownerLogin), message;
@@ -515,6 +575,7 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "leftChannel",
       (message: { targetChannel: Channel; leavingUser: string }) => {
+        if (props.selected !== 1) return;
         if (message.leavingUser === props.user.intraLogin) {
           const newChannels = channels.filter(
             (channel: Channel) => channel.id !== message.targetChannel.id
@@ -548,13 +609,25 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "joinedChannel",
       (message: { joinedChannel: Channel; newUser: User }) => {
-        if (message.newUser.intraLogin !== props.user.intraLogin) {
-          if (
-            selectedChannel &&
-            message.joinedChannel.id === selectedChannel.id
-          ) {
-            props.setSelectedChannel(message.joinedChannel);
-          }
+        if (props.selected !== 1) return;
+        if (
+          message.newUser.intraLogin === props.user.intraLogin &&
+          props.selected === 1
+        ) {
+          props.setChannels([...channels, message.joinedChannel]);
+        } else if (
+          selectedChannel &&
+          message.joinedChannel.id === selectedChannel.id
+        ) {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.joinedChannel.id) {
+              return message.joinedChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+          props.setSelectedChannel(message.joinedChannel);
+        } else {
           const newChannels = channels.map((channel: Channel) => {
             if (channel.id === message.joinedChannel.id) {
               return message.joinedChannel;
@@ -568,6 +641,7 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "newOwner",
       (message: { currChannel: Channel; newOwner: string }) => {
+        if (props.selected !== 1) return;
         if (selectedChannel && message.currChannel.id === selectedChannel.id) {
           const newChannels = channels.map((channel: Channel) => {
             if (channel.id === message.currChannel.id) {
@@ -591,6 +665,36 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "unban",
       (message: { targetChannel: Channel; toUnban: string }) => {
+        if (props.selected !== 1) return;
+        if (message.toUnban === props.user.intraLogin) {
+          return;
+        } else if (
+          selectedChannel &&
+          message.targetChannel.id === selectedChannel.id
+        ) {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.targetChannel.id) {
+              return message.targetChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+          props.setSelectedChannel(message.targetChannel);
+        } else {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.targetChannel.id) {
+              return message.targetChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+        }
+      }
+    );
+    socket.on(
+      "newAdmin",
+      (message: { targetChannel: Channel; newAdmin: string }) => {
+        if (props.selected !== 1) return;
         if (
           selectedChannel &&
           message.targetChannel.id === selectedChannel.id
@@ -614,10 +718,13 @@ const ChannelHeader = (props: any) => {
         }
       }
     );
+
     return () => {
       socket.off("leftChannel");
       socket.off("changeTitle");
       socket.off("joinedChannel");
+      socket.off("newOwner");
+      socket.off("unban");
     };
   }, [selectedChannel]);
   if (selectedChannel === null)
