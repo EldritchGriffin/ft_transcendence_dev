@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Lilita_One } from "next/font/google";
-import Navbar_compo from "./(authenticated)/(components)/navbar";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import "./globals.css";
+
 const Font = Lilita_One({
   subsets: ["latin"],
   weight: "400",
@@ -18,8 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html data-theme="light" lang="en">
-      <body className={Font.className + " bg-bg_gray"}>{children}</body>
+    <html data-theme="light" lang="en" suppressHydrationWarning>
+      <body  className={Font.className + " bg-bg_gray"}>
+        {children}
+      </body>
     </html>
   );
 }

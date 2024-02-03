@@ -1,5 +1,5 @@
 import React from "react";
-import TwoFactor from "../(components)/tfa"
+import TwoFactor from "../(authenticated)/(components)/tfa"
 
 const TwoFactorAuth = () => {
     return (

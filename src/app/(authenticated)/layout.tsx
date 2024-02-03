@@ -22,8 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html data-theme="light" lang="en" suppressHydrationWarning>
-      <body  className={Font.className + " bg-bg_gray"}>
+      <div  className={Font.className + " bg-bg_gray"}>
         <Navbar_compo />
         {children}
         <ToastContainer
@@ -39,7 +38,6 @@ export default function RootLayout({
           theme="light"
           transition={Bounce}
         />
-      </body>
-    </html>
+      </div>
   );
 }

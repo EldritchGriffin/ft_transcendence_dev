@@ -7,12 +7,13 @@ import {
   AiOutlineComment,
   AiOutlineIdcard,
   AiFillHome,
+  AiFillNotification,
 } from "react-icons/ai";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdLogout } from "react-icons/md";
 import { GiPingPongBat } from "react-icons/gi";
 import axios from "axios";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { Cookie } from "next/font/google";
 import Model2Fa from "./Model2Fa";
 import { toast } from "react-toastify";
@@ -55,6 +56,7 @@ export default function Navbar_compo() {
   const searchRef = useRef(null);
   const [show2fa, setshow2fa] = useState(false);
   const [twofa, settwofa] = useState(false);
+  const checkpathname = usePathname();
   const openNav = () => {
     setShow(!show);
   };
@@ -75,15 +77,15 @@ export default function Navbar_compo() {
     }
   };
   const handeldesaible2fa = async () => {
-    // takhwira hnaya 3andak tnsa
-
     try {
       const response = await axios.get(
         "http://localhost:3001/user/disable2fa",
         { withCredentials: true }
       );
-      toast.success("Two Factor Authentication Disabled");
-      settwofa(false);
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Two Factor Authentication Disabled");
+        settwofa(false);
+      }
     } catch (error) {
       toast.error("Error Disabling Two Factor Authentication");
     }
@@ -153,8 +155,10 @@ export default function Navbar_compo() {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, [searchRef]);
-  console.log("twofa", twofa);
-  console.log("********2fa", show2fa);
+
+  if (checkpathname === "/twoFactorAuth") {
+    return null;
+  }
   return (
     <Fragment>
       <nav className=" fixed w-full h-16 z-10 shadow-xl bg-primary_blue ">
@@ -239,7 +243,22 @@ export default function Navbar_compo() {
               </div>
             </div>
           </div>
-          <div className="hidden md:flex justify-end items-center space-x-4 w-[359px] cursor-pointer">
+          <div className="red flex flex-row w-[300px] justify-between">
+          <div className="hidden md:flex justify-end items-center space-x-4 cursor-pointer ">
+            <div className="dropdown dropdown-end">
+              <AiFillNotification size={35} tabIndex={0} className="text-white" />
+              <ul
+                tabIndex={0}
+                className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]"
+              >
+                <li>
+                  <a>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="hidden md:flex justify-end items-center space-x-4  cursor-pointer ">
             <div className="dropdown dropdown-end">
               <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
               <ul
@@ -280,6 +299,7 @@ export default function Navbar_compo() {
                 </li>
               </ul>
             </div>
+          </div>
           </div>
           <div
             onClick={openNav}

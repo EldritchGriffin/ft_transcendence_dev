@@ -2,12 +2,16 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function TwoFactor() {
   const [value, setValue] = useState<string[]>(Array(6).fill(""));
   const [activeinput, setActiveinput] = useState<number>(0);
+  const [redirect, setRedirect] = useState<boolean>(false);
   const code = value.join("");
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const handleonchange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -29,23 +33,20 @@ export default function TwoFactor() {
   }, [activeinput]);
 
   const backendUrl = "http://localhost:3001/auth/signinTFA";
-
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     const requestData = {
-      code: code,
+      code: code as string,
     };
     console.log(requestData);
-    axios
-      .post(backendUrl, requestData, { withCredentials: true })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((UnauthorizedException) => {
-        console.error("Error:", "Unauthorized");
-      })
-      .finally(() => {
-        setValue(Array(6).fill(""));
-      });
+    try{
+     const res =  await axios.post(backendUrl, requestData, { withCredentials: true })
+      if (res.status >= 200 && res.status < 300) {
+        toast.success("2FA enabled");
+        router.push("/user/me");
+      }
+    } catch (error) {
+      toast.error("Invalid code");
+    }
   };
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden py-12">
@@ -62,6 +63,9 @@ export default function TwoFactor() {
           <div>
             <div className="flex flex-col space-y-16 ">
               <div className="flex flex-row  items-center justify-between w-full ">
+                {/* <input type="number"
+                  onChange={(e) => setValue(e.target.value.split(""))} 
+                /> */}
                 {value.map((value, index) => (
                   <input
                     ref={index === activeinput ? inputRef : null}
