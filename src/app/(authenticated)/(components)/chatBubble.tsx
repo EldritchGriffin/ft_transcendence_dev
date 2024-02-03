@@ -1,12 +1,14 @@
 import React from "react";
 import { User } from "../(interfaces)/userInterface";
 import { Message } from "../(interfaces)/messageInterface";
+import { useRouter } from "next/navigation";
 
 const ChatBubble = (props: any) => {
   const user: User = props.user;
   const message: Message = props.message;
+  const router = useRouter();
   const handleUsernameClick = () => {
-    console.log("clicked");
+    router.push(`/profile/${message.senderLogin}`);
   };
 
   if (message.senderLogin === user.intraLogin) {

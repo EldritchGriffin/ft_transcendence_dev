@@ -130,11 +130,15 @@ const ListPublicChannels = (props: any) => {
   const [loading, setLoading] = useState(false);
 
   const joinChannel = async (channel: Channel) => {
-    const newChannel = await postJoinChannel({
-      channel: channel.id.toString(),
-    });
-    props.setChannels((channels: Channel[]) => [...channels, newChannel]);
-    props.toggleModal();
+    try {
+      const newChannel = await postJoinChannel({
+        channel: channel.id.toString(),
+      });
+      props.setChannels((channels: Channel[]) => [...channels, newChannel]);
+      props.toggleModal();
+    } catch (error:any) {
+      toast.error(error.response.data.message);
+    }
   };
   useEffect(() => {
     const fetchData = async () => {

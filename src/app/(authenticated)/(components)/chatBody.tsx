@@ -36,8 +36,8 @@ const ChatBody = (props: any) => {
       try {
         const messages = await fetchChannelMessages(channel.id.toString());
         setMessages(messages);
-      } catch (error) {
-        toast.error("Error fetching messages");
+      } catch (error:any) {
+        toast.error(error.response.data.message);
       } finally {
         setLoading(false);
       }

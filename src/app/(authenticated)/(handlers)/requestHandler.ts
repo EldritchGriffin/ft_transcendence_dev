@@ -292,9 +292,6 @@ export const postMuteUser = async (channel: any) => {
   }
 };
 
-
-
-
 export const fetchLeaderBoard = async () => {
   const url = `/leaderboard`;
 

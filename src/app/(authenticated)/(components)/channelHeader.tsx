@@ -63,9 +63,8 @@ const OwnerControls = (props: any) => {
       toast.success("Access changed");
       setPassword("");
       setConfirmPassword("");
-    } catch (error) {
-      console.log(error);
-      toast.error("Error changing access");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   };
   const handleChangeTitle = async () => {
@@ -85,8 +84,8 @@ const OwnerControls = (props: any) => {
     try {
       await postChangeTitle(data);
       toast.success("Title changed");
-    } catch (error) {
-      toast.error("Error changing title");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   };
   return (
@@ -211,8 +210,8 @@ const AdminControls = (props: any) => {
     try {
       await postNewAdmin(data);
       toast.success("User promoted");
-    } catch (error) {
-      toast.error("Error promoting user");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   };
   //TODO: add demote functionality
@@ -237,9 +236,8 @@ const AdminControls = (props: any) => {
     try {
       await postKickUser(data);
       toast.success("User kicked");
-    } catch (error) {
-      console.log(error);
-      toast.error("Error kicking user");
+    } catch (error:any) {
+      toast.error(error.response.data.message);
     }
   };
 
@@ -251,9 +249,8 @@ const AdminControls = (props: any) => {
     try {
       await postBanUser(data);
       toast.success("User banned");
-    } catch (error) {
-      console.log(error);
-      toast.error("Error banning user");
+    } catch (error:any) {
+      toast.error(error.response.data.message);
     }
   };
   const handleMute = (value: number) => {
@@ -441,8 +438,8 @@ const ChannelHeader = (props: any) => {
   const handleLeave = async () => {
     try {
       await postLeaveChannel(selectedChannel.id);
-    } catch (error) {
-      toast.error("Cannot leave a DM");
+    } catch (error:any) {
+      toast.error(error.response.data.message);
     }
   };
   useEffect(() => {
