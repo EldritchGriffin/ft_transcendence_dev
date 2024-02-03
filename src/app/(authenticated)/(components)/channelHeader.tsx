@@ -4,6 +4,7 @@ import {
   postKickUser,
   postLeaveChannel,
   postNewAdmin,
+  postUnbanUser,
 } from "../(handlers)/requestHandler";
 import { use, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -59,8 +60,9 @@ const OwnerControls = (props: any) => {
       };
     }
     try {
-      await postChmod(data);
+      const newChannel = await postChmod(data);
       toast.success("Access changed");
+      props.setSelectedChannel(newChannel);
       setPassword("");
       setConfirmPassword("");
     } catch (error: any) {
@@ -236,7 +238,7 @@ const AdminControls = (props: any) => {
     try {
       await postKickUser(data);
       toast.success("User kicked");
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     }
   };
@@ -249,7 +251,7 @@ const AdminControls = (props: any) => {
     try {
       await postBanUser(data);
       toast.success("User banned");
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     }
   };
@@ -334,6 +336,18 @@ const MemberList = (props: any) => {
   const [filteredMembers, setFilteredMembers] = useState<User[]>(
     channel.members
   );
+  const handleUnban = async (banned: string) => {
+    const data = {
+      channel: channel.id,
+      user: banned,
+    };
+    try {
+      await postUnbanUser(data);
+      toast.success("User unbanned");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    }
+  };
   const handleSearch = () => {
     const input = document.getElementById("MemberSearch") as HTMLInputElement;
     const value = input.value.toLowerCase();
@@ -357,6 +371,43 @@ const MemberList = (props: any) => {
         />
       </div>
       <div className="w-80 h-80 flex flex-col gap-4 overflow-scroll custom-scrollbar">
+        {userGrade !== "member" ? (
+          <div className="collapse bg-accent_red">
+            <input type="checkbox" />
+            <div className="collapse-title text-xl flex flex-row items-center">
+              <span className="text-white">Unban a user</span>
+              <SlArrowDown className="text-sm ml-auto" />
+            </div>
+            <div className="collapse-content flex gap-3 flex-col overflow-scroll custom-scrollbar">
+              {channel.bannedUsers.map((banned: string, index: number) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-row justify-between items-center"
+                  >
+                    <span className="text-white">{banned}</span>
+                    <button
+                      onClick={() => handleUnban(banned)}
+                      className="bg-white text-accent_red text-sm hover:text-red-300 p-1 m-1"
+                    >
+                      Unban
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
+        {channel.access === "Private" && userGrade !== "member" ? (
+          <div className="collapse bg-accent_red">
+            <input type="checkbox" />
+            <div className="collapse-title text-xl flex flex-row items-center">
+              <span className="text-white">Invite a user</span>
+              <SlArrowDown className="text-sm ml-auto" />
+            </div>
+            <div className="collapse-content"></div>
+          </div>
+        ) : null}
         {filteredMembers.map((member: User, index) =>
           member.intraLogin === user.intraLogin ? null : (
             <div
@@ -410,7 +461,12 @@ const SettingsModal = (props: any) => {
         </div>
         <div className="flex flex-row">
           <div>
-            {userGrade === "owner" ? <OwnerControls channel={channel} /> : null}
+            {userGrade === "owner" ? (
+              <OwnerControls
+                channel={channel}
+                setSelectedChannel={props.setSelectedChannel}
+              />
+            ) : null}
           </div>
           <div className="flex flex-col gap-3 h-96 w-80">
             <MemberList
@@ -438,7 +494,7 @@ const ChannelHeader = (props: any) => {
   const handleLeave = async () => {
     try {
       await postLeaveChannel(selectedChannel.id);
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     }
   };
@@ -532,6 +588,32 @@ const ChannelHeader = (props: any) => {
         }
       }
     );
+    socket.on(
+      "unban",
+      (message: { targetChannel: Channel; toUnban: string }) => {
+        if (
+          selectedChannel &&
+          message.targetChannel.id === selectedChannel.id
+        ) {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.targetChannel.id) {
+              return message.targetChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+          props.setSelectedChannel(message.targetChannel);
+        } else {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.targetChannel.id) {
+              return message.targetChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+        }
+      }
+    );
     return () => {
       socket.off("leftChannel");
       socket.off("changeTitle");
@@ -593,6 +675,7 @@ const ChannelHeader = (props: any) => {
             channels={channels}
             user={props.user}
             socket={socket}
+            setSelectedChannel={props.setSelectedChannel}
           />
         ) : null}
       </div>

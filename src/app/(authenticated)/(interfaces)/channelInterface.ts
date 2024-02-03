@@ -10,4 +10,5 @@ export interface Channel {
   access: string;
   type: string;
   ownerLogin: string;
+  bannedUsers: string[];
 }
