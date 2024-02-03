@@ -70,7 +70,7 @@ const ListProtectedChannels = (props: any) => {
       const newChannel = await postJoinChannel(data);
       props.setChannels((channels: Channel[]) => [...channels, newChannel]);
     } catch (error) {
-      toast.error("Wrong password");
+      toast.error("Invalid password");
     }
     props.toggleModal();
   };

@@ -1,6 +1,5 @@
 "use client";
-import Cookies from "js-cookie";
-import React, { Fragment, use, useEffect, useRef } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import { useState } from "react";
 import {
   AiOutlineMenu,
@@ -9,6 +8,7 @@ import {
   AiFillHome,
   AiFillNotification,
 } from "react-icons/ai";
+import Cookies from "js-cookie";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdLogout } from "react-icons/md";
 import { GiPingPongBat } from "react-icons/gi";

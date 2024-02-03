@@ -262,7 +262,7 @@ const AdminControls = (props: any) => {
       toMuteLogin: member.intraLogin,
       mutePeriod: value,
     };
-    socket.emit("mute", data, (payload:any) => {
+    socket.emit("mute", data, (payload: any) => {
       if (payload.error) {
         toast.error(payload.error);
       } else {
@@ -441,7 +441,6 @@ const ChannelHeader = (props: any) => {
   const handleLeave = async () => {
     try {
       await postLeaveChannel(selectedChannel.id);
-      props.setSelectedChannel(null);
     } catch (error) {
       toast.error("Cannot leave a DM");
     }
@@ -460,22 +459,86 @@ const ChannelHeader = (props: any) => {
       props.setSelectedChannel(newChannel);
       props.setChannels(newChannels);
     });
-    socket.on("leftChannel", (message: Channel) => {
-      //TODO tell yasser to add the user who left in the payload
-      const newChannels = channels.map((channel: Channel) => {
-        if (channel.id === message.id) {
-          const newMembers = channel.members.filter(
-            (member: User) => member.intraLogin !== message.ownerLogin
+    socket.on(
+      "leftChannel",
+      (message: { targetChannel: Channel; leavingUser: string }) => {
+        if (message.leavingUser === props.user.intraLogin) {
+          const newChannels = channels.filter(
+            (channel: Channel) => channel.id !== message.targetChannel.id
           );
-          return { ...channel, members: newMembers };
+          props.setChannels(newChannels);
+          props.setSelectedChannel(null);
+          setShowModal(false);
+        } else if (
+          selectedChannel &&
+          message.targetChannel.id === selectedChannel.id
+        ) {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.targetChannel.id) {
+              return message.targetChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+          props.setSelectedChannel(message.targetChannel);
+        } else {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.targetChannel.id) {
+              return message.targetChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
         }
-        return channel;
-      });
-      props.setChannels(newChannels);
-    });
+      }
+    );
+    socket.on(
+      "joinedChannel",
+      (message: { joinedChannel: Channel; newUser: User }) => {
+        if (message.newUser.intraLogin !== props.user.intraLogin) {
+          if (
+            selectedChannel &&
+            message.joinedChannel.id === selectedChannel.id
+          ) {
+            props.setSelectedChannel(message.joinedChannel);
+          }
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.joinedChannel.id) {
+              return message.joinedChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+        }
+      }
+    );
+    socket.on(
+      "newOwner",
+      (message: { currChannel: Channel; newOwner: string }) => {
+        if (selectedChannel && message.currChannel.id === selectedChannel.id) {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.currChannel.id) {
+              return message.currChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+          props.setSelectedChannel(message.currChannel);
+        } else {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.currChannel.id) {
+              return message.currChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+        }
+      }
+    );
     return () => {
       socket.off("leftChannel");
       socket.off("changeTitle");
+      socket.off("joinedChannel");
     };
   }, [selectedChannel]);
   if (selectedChannel === null)
@@ -490,22 +553,44 @@ const ChannelHeader = (props: any) => {
         <span className="text-white text-lg">{selectedChannel.title}</span>
       </div>
       <div className="flex flex-row gap-6 mx-10">
-        <button
-          onClick={() => handleLeave()}
-          className="text-white text-sm hover:text-accent_red"
-        >
-          Leave
-        </button>
         {selectedChannel.type == "Channel" ? (
-          <button
-            onClick={() => toggleModal()}
-            className="text-white text-sm hover:text-accent_red"
-          >
-            Settings
-          </button>
-        ) : null}
+          <>
+            <button
+              onClick={() => handleLeave()}
+              className="text-white text-sm hover:text-accent_red"
+            >
+              Leave
+            </button>
+            <button
+              onClick={() => toggleModal()}
+              className="text-white text-sm hover:text-accent_red"
+            >
+              Settings
+            </button>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => {
+                console.log("clicked on profile button");
+              }}
+              className="text-white text-sm hover:text-accent_red"
+            >
+              Profile
+            </button>
+            <button
+              onClick={() => {
+                console.log("clicked play button");
+              }}
+              className="text-white text-sm hover:text-accent_red"
+            >
+              <span className="text-white text-sm">Play</span>
+            </button>
+          </>
+        )}
         {showModal ? (
           <SettingsModal
+            key={selectedChannel.members.length}
             toggleModal={toggleModal}
             channel={selectedChannel}
             channels={channels}

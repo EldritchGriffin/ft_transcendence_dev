@@ -8,7 +8,7 @@ const Home = () => {
         <span className="text-[64px] text-accent_red">PongVerse</span>
         <span className="text-[19px] text-white">PaddleBattles</span>
         <div className="flex gap-5 mt-5">
-          <form method="get" action="http://localhost:3001/user/me">
+          <form method="get" action="http://localhost:3001/auth/signin">
             <button className="w-[110px] h-[40px] text-white text-[14px] bg-accent_red">
               Start
             </button>
@@ -32,13 +32,10 @@ const Home = () => {
 
 export default Home;
 
-
-
 // protection   || public_user_info.tsx || profile_user_info.tsx ============== test
-//  not found 
+//  not found
 //   uploaded image thats not a imgae , create a file and name it {something.jpeg}  , recheck the protections
-// nickname already set 
+// nickname already set
 // responses , other than forbiden
-
 
 // add the editnickname page when first login
