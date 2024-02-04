@@ -15,6 +15,9 @@ export const verifyName = (name: string) => {
   if (name[0] === " ") {
     throw new Error("Name cannot start with a space");
   }
+  if (name.length > 20) {
+    throw new Error("Name cannot be longer than 20 characters");
+  }
   if (name.match(/[^a-zA-Z0-9\s]/)) {
     throw new Error("Name cannot contain special characters");
   }

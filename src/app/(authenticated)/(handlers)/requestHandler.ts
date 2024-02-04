@@ -519,3 +519,20 @@ export const postInviteUser = async (data: any) => {
     throw error;
   }
 };
+
+export const postRemoveAdmin = async (channel: any) => {
+  const url = `/channel/removeAdmin`;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};

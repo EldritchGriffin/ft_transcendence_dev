@@ -14,8 +14,8 @@ const ChatBubble = (props: any) => {
   if (message.senderLogin === user.intraLogin) {
     return (
       <div className=" ml-auto bg-slate-300 rounded-lg shadow-lg  m-4 p-4 max-w-md w-[60%]">
-        <div className="flex">
-          <p className="text-gray-800 text-xs">{message.content}</p>
+        <div className="flex w-full ">
+          <p className="text-gray-800 text-xs break-all">{message.content}</p>
         </div>
       </div>
     );
@@ -35,7 +35,7 @@ const ChatBubble = (props: any) => {
         </button>
         <div className="flex">
           <div className="ml-6">
-            <p className="text-gray-800 text-xs">{message.content}</p>
+            <p className="text-gray-800 text-xs break-all">{message.content}</p>
           </div>
         </div>
       </div>

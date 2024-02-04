@@ -7,8 +7,9 @@ import {
   postLeaveChannel,
   postNewAdmin,
   postUnbanUser,
+  postRemoveAdmin,
 } from "../(handlers)/requestHandler";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { User } from "../(interfaces)/userInterface";
 import { SlArrowDown } from "react-icons/sl";
@@ -17,7 +18,6 @@ import { postChmod } from "../(handlers)/requestHandler";
 import { postChangeTitle } from "../(handlers)/requestHandler";
 import { verifyName, verifyPasswords } from "../(handlers)/inputHandlers";
 import { useRouter } from "next/navigation";
-import { channel } from "diagnostics_channel";
 
 const deduceGrade = (
   ownerLogin: string,
@@ -47,8 +47,8 @@ const OwnerControls = (props: any) => {
     if (value === "2") {
       try {
         verifyPasswords(password, confirmPassword);
-      } catch (error) {
-        toast.error("Invalid Password");
+      } catch (error:any) {
+        toast.error(error.message);
         return;
       }
       data = {
@@ -78,8 +78,8 @@ const OwnerControls = (props: any) => {
 
     try {
       verifyName(value);
-    } catch (error) {
-      toast.error("Invalid name");
+    } catch (error:any) {
+      toast.error(error.message);
       return;
     }
     const data = {
@@ -213,10 +213,10 @@ const AdminControls = (props: any) => {
       user: member.intraLogin,
     };
     try {
-      await postNewAdmin(data);
+      await postRemoveAdmin(data);
       toast.success("User demoted");
-    } catch (error) {
-      toast.error("Error demoting user");
+    } catch (error: any) {
+      toast.error(error.response.data.message);
     }
   };
   const handlePromote = async () => {
@@ -231,11 +231,10 @@ const AdminControls = (props: any) => {
       } catch (error: any) {
         toast.error(error.response.data.message);
       }
-      // } else {
-      // handleDemote();
+    } else {
+      handleDemote();
     }
   };
-  //TODO: add demote functionality
 
   const handleKick = async () => {
     const data = {
@@ -558,6 +557,7 @@ const ChannelHeader = (props: any) => {
     }
   };
   useEffect(() => {
+    if (props.selected !== 1) return;
     socket.on("changeTitle", (message: Channel) => {
       if (props.selected !== 1) return;
       const newChannels = channels.map((channel: Channel) => {
@@ -575,8 +575,10 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "leftChannel",
       (message: { targetChannel: Channel; leavingUser: string }) => {
+        console.log("left channel");
         if (props.selected !== 1) return;
         if (message.leavingUser === props.user.intraLogin) {
+          console.log("left channel0");
           const newChannels = channels.filter(
             (channel: Channel) => channel.id !== message.targetChannel.id
           );
@@ -587,6 +589,7 @@ const ChannelHeader = (props: any) => {
           selectedChannel &&
           message.targetChannel.id === selectedChannel.id
         ) {
+          console.log("left channel1");
           const newChannels = channels.map((channel: Channel) => {
             if (channel.id === message.targetChannel.id) {
               return message.targetChannel;
@@ -596,6 +599,7 @@ const ChannelHeader = (props: any) => {
           props.setChannels(newChannels);
           props.setSelectedChannel(message.targetChannel);
         } else {
+          console.log("left channel2");
           const newChannels = channels.map((channel: Channel) => {
             if (channel.id === message.targetChannel.id) {
               return message.targetChannel;
@@ -718,6 +722,34 @@ const ChannelHeader = (props: any) => {
         }
       }
     );
+    socket.on(
+      "removeAdmin",
+      (message: { targetChannel: Channel; toRemove: string }) => {
+        console.log(message.targetChannel);
+        if (props.selected !== 1) return;
+        if (
+          selectedChannel &&
+          message.targetChannel.id === selectedChannel.id
+        ) {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.targetChannel.id) {
+              return message.targetChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+          props.setSelectedChannel(message.targetChannel);
+        } else {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.targetChannel.id) {
+              return message.targetChannel;
+            }
+            return channel;
+          });
+          props.setChannels(newChannels);
+        }
+      }
+    );
 
     return () => {
       socket.off("leftChannel");
@@ -725,6 +757,8 @@ const ChannelHeader = (props: any) => {
       socket.off("joinedChannel");
       socket.off("newOwner");
       socket.off("unban");
+      socket.off("newAdmin");
+      socket.off("removeAdmin");
     };
   }, [selectedChannel]);
   if (selectedChannel === null)
