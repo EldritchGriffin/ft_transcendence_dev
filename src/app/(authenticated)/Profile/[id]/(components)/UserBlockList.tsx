@@ -14,20 +14,11 @@ const UserBlockList = (props: any) => {
   };
   const fetchGetDataBack = async () => {
     try {
-      // const response = await fetch("http://localhost:3001/user/blocked", {
-      //   method: "GET",
-      //   mode: "cors",
-      //   credentials: "include",
-      // });
-      // if (!response.ok)
-      //   throw new Error(
-      //     "An error occurred while attempting to update the new Nickname."
-      //   );
-      // const result = await response.json();
-      // setUser_data(result);
       const response = await fetchBlockedList();
       setUser_data(response);
-    } catch (error) {
+    } catch (error:any) {
+      if (error.response.status === 401)
+          window.location.replace("/");
     } finally {
       setloading(false);
     }
@@ -38,24 +29,14 @@ const UserBlockList = (props: any) => {
 
   const send_unblock = async (item: any) => {
     try {
-      // const usersurl =
-      //   "http://localhost:3001/user/unblockuser/" + item.intraLogin;
-      // const response = await fetch(usersurl, {
-      //   method: "POST",
-      //   mode: "cors",
-      //   credentials: "include",
-      // });
-      // if (!response.ok)
-      //   throw new Error(
-      //     "An error occurred while attempting to update the new Nickname."
-      //   );
       const response = await postunblockuser(item.intraLogin);
       setUser_data(response);
       toast.success("User UnBlocked successfully");
-
     } catch (error:any) {
       if (error?.response?.status === 403)
         toast.error("User Not Blocked !");
+      if (error.response.status === 401)
+         window.location.replace("/");
     }
   };
 

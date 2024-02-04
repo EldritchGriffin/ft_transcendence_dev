@@ -18,6 +18,9 @@ const FriendsTab = (props: any) => {
       }
     };
     fetchData();
+    return () => {
+      props.setChannels([]);
+    };
   }, []);
   if (loading) {
     return (

@@ -9,12 +9,9 @@ import {
   AiFillNotification,
 } from "react-icons/ai";
 import Cookies from "js-cookie";
-import { HiOutlineLogout } from "react-icons/hi";
 import { MdLogout } from "react-icons/md";
 import { GiPingPongBat } from "react-icons/gi";
-import axios from "axios";
-import { redirect, usePathname, useRouter } from "next/navigation";
-import { Cookie } from "next/font/google";
+import {  usePathname, useRouter } from "next/navigation";
 import Model2Fa from "./Model2Fa";
 import { toast } from "react-toastify";
 import { fetchCurrentUser, handlTFA, fetchAllUsers } from "../(handlers)/requestHandler";
@@ -82,7 +79,6 @@ const [data, setData] = useState( [{
 
   const fetchuser = async () => {
     try {
-
       const res = await fetchCurrentUser();
       settwofa(res.TFA);
       setCurrUser(res);
@@ -94,12 +90,10 @@ const [data, setData] = useState( [{
       //   settwofa(data.TFA);
       // } else {
       // }
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   const handeldesaible2fa = async () => {
     try {
-
       const res = await handlTFA();
       settwofa(false);
       // const response = await axios.get(
@@ -117,7 +111,6 @@ const [data, setData] = useState( [{
 
   const fetchserch = async () => {
     try {
-
       const res = await fetchAllUsers();
       setusers_data(res);
 
@@ -285,7 +278,11 @@ const [data, setData] = useState( [{
               <span className="oo text-sm md:text-2xl font-bold">
                 PongVerse
               </span>
-              <div tabIndex={0}  className="flex red flex-col space-y-10 " ref={searchRef}>
+              <div
+                tabIndex={0}
+                className="flex red flex-col space-y-10 "
+                ref={searchRef}
+              >
                 <input
                   type="text"
                   className="w-[120px] sm:w-auto outline-none bg-transparent text-white text-sm  border-b-2 border-white-500 placeholder-opacity-50 placeholder-white"
@@ -294,7 +291,10 @@ const [data, setData] = useState( [{
                   onFocus={showsearchfield}
                 />
                 {showsearch && users_data ? (
-                  <div tabIndex={0} className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar">
+                  <div
+                    tabIndex={0}
+                    className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar"
+                  >
                     {users_data.map((item: any, index: any) =>
                       item.intraLogin.includes(navsearch) ? (
                         <Navbar_search_list
@@ -365,49 +365,48 @@ const [data, setData] = useState( [{
             <div className="dropdown dropdown-end">
               <Notif socket={socket}   data={data} key={data.length}/>
             </div>
-          </div>
-          <div className="hidden md:flex justify-end items-center space-x-4  cursor-pointer ">
-            <div className="dropdown dropdown-end">
-              <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]"
-              >
-                <li>
-                  <a>
-                    <div>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          value=""
-                          className="sr-only peer"
-                          checked={twofa}
-                          onChange={() => {
-                            handlecheck();
-                          }}
-                        />
-                        <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-accent_red"></div>
-                        <span className="ms-3 text-lg font-medium  text-white dark:text-gray-300">
-                          Two Factor Authentication
-                        </span>
-                      </label>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a>
-                    <button
-                      className="w-fit h-fit  text-2xl gap-3 font-bold text-white items-center flex"
-                      onClick={handleLogoutClick}
-                    >
-                      <MdLogout size={50} className="oo" />
-                      Log out
-                    </button>
-                  </a>
-                </li>
-              </ul>
+            <div className="hidden md:flex justify-end items-center space-x-4  cursor-pointer ">
+              <div className="dropdown dropdown-end">
+                <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]"
+                >
+                  <li>
+                    <a>
+                      <div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            value=""
+                            className="sr-only peer"
+                            checked={twofa}
+                            onChange={() => {
+                              handlecheck();
+                            }}
+                          />
+                          <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-accent_red"></div>
+                          <span className="ms-3 text-lg font-medium  text-white dark:text-gray-300">
+                            Two Factor Authentication
+                          </span>
+                        </label>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <a>
+                      <button
+                        className="w-fit h-fit  text-2xl gap-3 font-bold text-white items-center flex"
+                        onClick={handleLogoutClick}
+                      >
+                        <MdLogout size={50} className="oo" />
+                        Log out
+                      </button>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
           </div>
           <div
             onClick={openNav}
@@ -487,6 +486,7 @@ const [data, setData] = useState( [{
               </button>
             </div>
           </div>
+        </div>
         </div>
       </nav>
       {/* {show2fa && <Model2Fa  OpenModel={show2fa} settwofa={settwofa} twofa={twofa}  CloseModel={()=> { toast.success("SALAM ana 9a7ba ") ,setshow2fa(false)}} /> } */}

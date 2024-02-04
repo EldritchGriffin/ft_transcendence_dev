@@ -70,19 +70,23 @@ const SelectNewFriend = (props: any) => {
 };
 
 const ChatSelector = (props: any) => {
-  const [selected, setSelected] = useState(0);
+  const selectedTab = props.selected;
+  const setSelected = props.setSelected;
   const handleSelect = (index: number) => {
     let selected;
     let unselected;
 
+    if (selectedTab === index) return;
     if (index === 0) {
       selected = "friends";
       unselected = "channels";
       props.onChannelSelect(null);
+      props.setChannels([]);
     } else {
       selected = "channels";
       unselected = "friends";
       props.onChannelSelect(null);
+      props.setChannels([]);
     }
 
     document.getElementById(selected)?.classList.remove("text-white");
@@ -94,6 +98,7 @@ const ChatSelector = (props: any) => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
     const searchTerm = event.target.value;
+    //TODO handle search in channels;
   };
 
   return (
@@ -119,7 +124,7 @@ const ChatSelector = (props: any) => {
           onChange={handleSearch}
         />
       </div>
-      {selected === 0 ? (
+      {selectedTab === 0 ? (
         <FriendsTab
           onChannelSelect={props.onChannelSelect}
           channels={props.channels}
@@ -133,7 +138,7 @@ const ChatSelector = (props: any) => {
         />
       )}
       <div>
-        {selected === 0 ? (
+        {selectedTab === 0 ? (
           <SelectNewFriend user={props.user} setChannels={props.setChannels} />
         ) : (
           <CreateChannel setChannels={props.setChannels} />

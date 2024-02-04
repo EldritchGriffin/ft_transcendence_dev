@@ -3,7 +3,9 @@ import React from "react";
 import { useEffect, useState,useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import OtpInput from 'react-otp-input';
 import { getImage, validTfa } from "../(handlers)/requestHandler";
+
 
 export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
   let current: number = 0;
@@ -11,6 +13,7 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
   const [activeinput, setActiveinput] = useState<number>(0);
   const code = value.join("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const [otp, setOtp] = useState('');
   const [image, setImage] = useState<any>();
   const handleonchange = ({target}: React.ChangeEvent<HTMLInputElement>) => {
     const otp = target.value;
@@ -43,6 +46,7 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
     index: number
     ) => {
       current = index;
+      console.log("value = ", value[0], "index = ", current)
       if (key === "Backspace" && value[current] === "") {
         setActiveinput(current - 1);
       }
@@ -73,8 +77,9 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
 
   const handleButtonClick = async () => {
     const requestData = {
-      code: code as string,
+      code: otp as string,
     };
+    console.log("******",requestData)
     try{
 
       const res = await validTfa(requestData);
@@ -103,7 +108,7 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
             >
                 X
             </button>
-            <div className="bg-white p-2 h-full rounded ">
+            <div className="bg-white p-2 h-full rounded">
             <div className="relative bck2 px-16 pt-10  flex justify-around pb-9 shadow-sm mx-auto w-[280px] sm:w-[600px] xl:w-[952px]">
                     <div className="flex  w-full flex-col space-y-8">
                     <div className="flex flex-col items-center justify-center text-center">
@@ -114,19 +119,16 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
                     </div>
                     <div>
                       <div className="flex flex-col space-y-16 ">
-                        <div className="flex flex-row items-center justify-between w-full ">
-                          {value.map((value, index) => (
-                            <input
-                              ref={index === activeinput ? inputRef : null}
-                              className="h-16 w-[20px] sm:h-[43px] sm:w-[50px] flex flex-col items-center justify-center text-center  outline-none border-b-4 border-black  text-black inpute_code text-sm lg:text-2xl"
-                              key={index}
-                              type="number"
-                              name="otp"
-                              onInput={(e) => oneDigit(e.target)}
-                              onChange={handleonchange}
-                              onKeyDown={(e) => handelOnkeydown(e,index)}
-                            />
-                          ))}
+                        <div className="flex flex-row  items-center justify-center w-full ">
+                        <OtpInput
+                          value={otp}
+                          onChange={setOtp}
+                          numInputs={6}
+                          containerStyle={"gap-4 md:gap-8 xl:gap-10"}
+                          inputStyle={'h-16 w-[20px] sm:h-[43px] sm:w-[50px] flex flex-col items-center justify-center text-center  outline-none border-b-2 border-black  text-black inpute_code text-sm lg:text-2xl'}
+                          renderSeparator={<span>&nbsp;</span>}
+                          renderInput={(props) => <input {...props} />}
+                        />
                         </div>
                         <div className="flex flex-col ">
                           <div className="flex justify-center">
@@ -147,3 +149,6 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
         </div>
   )
 }
+
+
+// className="h-16 w-[20px] sm:h-[43px] sm:w-[50px] flex flex-col items-center justify-center text-center  outline-none border-b-4 border-black  text-black inpute_code text-sm lg:text-2xl"

@@ -32,7 +32,9 @@ const PublicProfile = (params: any) => {
     // setusers_data(result);
     const result = await fetchCurrentUser();
     setusers_data(result);
-  } catch (error) {
+  } catch (error:any) {
+    if (error.response.status === 401)
+       window.location.replace("/");
     } finally {
       setloading(false);
     }

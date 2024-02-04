@@ -68,7 +68,7 @@ const ListProtectedChannels = (props: any) => {
     };
     try {
       const newChannel = await postJoinChannel(data);
-      props.setChannels((channels: Channel[]) => [...channels, newChannel]);
+      //changed here
     } catch (error) {
       toast.error("Invalid password");
     }
@@ -134,9 +134,8 @@ const ListPublicChannels = (props: any) => {
       const newChannel = await postJoinChannel({
         channel: channel.id.toString(),
       });
-      props.setChannels((channels: Channel[]) => [...channels, newChannel]);
       props.toggleModal();
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     }
   };

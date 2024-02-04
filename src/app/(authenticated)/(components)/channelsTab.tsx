@@ -17,7 +17,11 @@ const ChannelsTab = (props: any) => {
       }
     };
     fetchData();
+    return () => {
+      props.setChannels([]);
+    };
   }, []);
+  console.log(props.channels);
   if (loading) {
     return (
       <p className="flex text-white h-full justify-center items-center text-2xl">
