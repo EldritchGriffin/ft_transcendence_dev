@@ -58,6 +58,7 @@ const ChatPage = () => {
           user={user}
           selected={selected}
           setSelected={setSelected}
+          socket={socket}
         />
         <div className="flex-col h-full">
           {channels ? (

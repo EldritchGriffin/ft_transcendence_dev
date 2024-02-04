@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChannelsTab from "./channelsTab";
 import FriendsTab from "./friendsTab";
 import CreateChannelModal from "./createChannelModal";
 import JoinChannelModal from "./joinChannelModal";
 import NewFriendModal from "./newFriendModal";
+import { Socket } from "socket.io-client";
+import { Channel } from "../(interfaces)/channelInterface";
+import { User } from "../(interfaces)/userInterface";
 
 const CreateChannel = (props: any) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -70,6 +73,7 @@ const SelectNewFriend = (props: any) => {
 };
 
 const ChatSelector = (props: any) => {
+  const socket: Socket = props.socket;
   const selectedTab = props.selected;
   const setSelected = props.setSelected;
   const [filter, setFilter] = useState("");
@@ -101,7 +105,17 @@ const ChatSelector = (props: any) => {
     const searchTerm = event.target.value;
     setFilter(searchTerm);
   };
-
+  useEffect(() => {
+    if (selectedTab !== 0) return;
+    socket.on("startDM", (message: { joinedChannel: Channel }) => {
+      props.setChannels((prev: Channel[]) => {
+        return [...prev, message.joinedChannel];
+      });
+    });
+    return () => {
+      socket.off("startDM");
+    };
+  }, [props.channels, props.selected]);
   return (
     <div className="flex flex-col w-[200px] h-full bg-primary_blue">
       <div className="flex w-full h-10 mt-2 justify-center gap-5">

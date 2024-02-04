@@ -25,8 +25,7 @@ const NewFriendModal = (props: any) => {
     console.log(friend);
     try {
       const channel: Channel = await postNewDM(friend.intraLogin);
-      props.setChannels((channels: Channel[]) => [...channels, channel]);
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     }
     props.toggleModal();
