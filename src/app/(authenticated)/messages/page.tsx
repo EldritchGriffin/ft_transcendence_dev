@@ -41,7 +41,6 @@ const ChatPage = () => {
         newSocket.disconnect();
       };
     }
-    
   }, []);
   if (!user || !socket)
     return (
@@ -63,12 +62,11 @@ const ChatPage = () => {
         <div className="flex-col h-full">
           {channels ? (
             <ChannelHeader
-              key={selected}
               channel={selectedChannel}
               setSelectedChannel={setSelectedChannel}
               setChannels={setChannels}
               channels={channels}
-              user={user} 
+              user={user}
               socket={socket}
               selected={selected}
             />

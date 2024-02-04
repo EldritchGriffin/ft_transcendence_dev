@@ -47,7 +47,7 @@ const OwnerControls = (props: any) => {
     if (value === "2") {
       try {
         verifyPasswords(password, confirmPassword);
-      } catch (error:any) {
+      } catch (error: any) {
         toast.error(error.message);
         return;
       }
@@ -78,7 +78,7 @@ const OwnerControls = (props: any) => {
 
     try {
       verifyName(value);
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message);
       return;
     }
@@ -345,7 +345,6 @@ const MemberList = (props: any) => {
   );
 
   const handleInvite = async (invited: string) => {
-    console.log(channel);
     const data = {
       channel: channel.id.toString(),
       user: invited,
@@ -556,53 +555,58 @@ const ChannelHeader = (props: any) => {
       toast.error(error.response.data.message);
     }
   };
+  console.log(channels);
   useEffect(() => {
     if (props.selected !== 1) return;
     socket.on("changeTitle", (message: Channel) => {
-      if (props.selected !== 1) return;
-      const newChannels = channels.map((channel: Channel) => {
-        if (channel.id === message.id) {
-          return (message.ownerLogin = channel.ownerLogin), message;
-        }
-        return channel;
-      });
-      const newChannel = newChannels.find(
-        (channel: Channel) => channel.id === message.id
-      );
-      props.setSelectedChannel(newChannel);
-      props.setChannels(newChannels);
+      if (selectedChannel && message.id === selectedChannel.id)
+        props.setSelectedChannel(message);
+      if (channels.some((channel: Channel) => channel.id === message.id)) {
+        const newChannels = channels.map((channel: Channel) => {
+          if (channel.id === message.id) return message;
+          return channel;
+        });
+        props.setChannels(newChannels);
+      }
     });
     socket.on(
       "leftChannel",
       (message: { targetChannel: Channel; leavingUser: string }) => {
-        console.log("left channel");
-        if (props.selected !== 1) return;
         if (message.leavingUser === props.user.intraLogin) {
-          console.log("left channel0");
+          if (
+            selectedChannel &&
+            message.targetChannel.id === selectedChannel.id
+          ) {
+            props.setSelectedChannel(null);
+          }
           const newChannels = channels.filter(
             (channel: Channel) => channel.id !== message.targetChannel.id
           );
           props.setChannels(newChannels);
-          props.setSelectedChannel(null);
-          setShowModal(false);
         } else if (
           selectedChannel &&
           message.targetChannel.id === selectedChannel.id
         ) {
-          console.log("left channel1");
           const newChannels = channels.map((channel: Channel) => {
             if (channel.id === message.targetChannel.id) {
-              return message.targetChannel;
+              const newChannel = { ...channel };
+              newChannel.members = newChannel.members.filter(
+                (member: User) => member.intraLogin !== message.leavingUser
+              );
+              return newChannel;
             }
             return channel;
           });
-          props.setChannels(newChannels);
           props.setSelectedChannel(message.targetChannel);
+          props.setChannels(newChannels);
         } else {
-          console.log("left channel2");
           const newChannels = channels.map((channel: Channel) => {
             if (channel.id === message.targetChannel.id) {
-              return message.targetChannel;
+              const newChannel = { ...channel };
+              newChannel.members = newChannel.members.filter(
+                (member: User) => member.intraLogin !== message.leavingUser
+              );
+              return newChannel;
             }
             return channel;
           });
@@ -613,11 +617,13 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "joinedChannel",
       (message: { joinedChannel: Channel; newUser: User }) => {
-        if (props.selected !== 1) return;
-        if (
-          message.newUser.intraLogin === props.user.intraLogin &&
-          props.selected === 1
-        ) {
+        if (message.newUser.intraLogin === props.user.intraLogin) {
+          if (
+            selectedChannel &&
+            selectedChannel.id === message.joinedChannel.id
+          ) {
+            props.setSelectedChannel(message.joinedChannel);
+          }
           props.setChannels([...channels, message.joinedChannel]);
         } else if (
           selectedChannel &&
@@ -625,7 +631,9 @@ const ChannelHeader = (props: any) => {
         ) {
           const newChannels = channels.map((channel: Channel) => {
             if (channel.id === message.joinedChannel.id) {
-              return message.joinedChannel;
+              const newChannel = { ...channel };
+              newChannel.members.push(message.newUser);
+              return newChannel;
             }
             return channel;
           });
@@ -634,7 +642,9 @@ const ChannelHeader = (props: any) => {
         } else {
           const newChannels = channels.map((channel: Channel) => {
             if (channel.id === message.joinedChannel.id) {
-              return message.joinedChannel;
+              const newChannel = { ...channel };
+              newChannel.members.push(message.newUser);
+              return newChannel;
             }
             return channel;
           });
@@ -645,50 +655,36 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "newOwner",
       (message: { currChannel: Channel; newOwner: string }) => {
-        if (props.selected !== 1) return;
-        if (selectedChannel && message.currChannel.id === selectedChannel.id) {
-          const newChannels = channels.map((channel: Channel) => {
-            if (channel.id === message.currChannel.id) {
-              return message.currChannel;
-            }
-            return channel;
-          });
-          props.setChannels(newChannels);
-          props.setSelectedChannel(message.currChannel);
-        } else {
-          const newChannels = channels.map((channel: Channel) => {
-            if (channel.id === message.currChannel.id) {
-              return message.currChannel;
-            }
-            return channel;
-          });
-          props.setChannels(newChannels);
-        }
+        //TODO fix this when backend is fixed
+        //   if (selectedChannel && message.currChannel.id === selectedChannel.id)
+        //     props.setSelectedChannel(message.currChannel);
+        //   if (
+        //     channels.some(
+        //       (channel: Channel) => channel.id === message.currChannel.id
+        //     )
+        //   ) {
+        //     const newChannels = channels.map((channel: Channel) => {
+        //       if (channel.id === message.currChannel.id)
+        //         return message.currChannel;
+        //       return channel;
+        //     });
+        //     props.setChannels(newChannels);
+        //   }
       }
     );
     socket.on(
       "unban",
       (message: { targetChannel: Channel; toUnban: string }) => {
-        if (props.selected !== 1) return;
-        if (message.toUnban === props.user.intraLogin) {
-          return;
-        } else if (
-          selectedChannel &&
-          message.targetChannel.id === selectedChannel.id
+        if (selectedChannel && message.targetChannel.id === selectedChannel.id)
+          props.setSelectedChannel(message.targetChannel);
+        if (
+          channels.some(
+            (channel: Channel) => channel.id === message.targetChannel.id
+          )
         ) {
           const newChannels = channels.map((channel: Channel) => {
-            if (channel.id === message.targetChannel.id) {
+            if (channel.id === message.targetChannel.id)
               return message.targetChannel;
-            }
-            return channel;
-          });
-          props.setChannels(newChannels);
-          props.setSelectedChannel(message.targetChannel);
-        } else {
-          const newChannels = channels.map((channel: Channel) => {
-            if (channel.id === message.targetChannel.id) {
-              return message.targetChannel;
-            }
             return channel;
           });
           props.setChannels(newChannels);
@@ -698,24 +694,16 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "newAdmin",
       (message: { targetChannel: Channel; newAdmin: string }) => {
-        if (props.selected !== 1) return;
+        if (selectedChannel && message.targetChannel.id === selectedChannel.id)
+          props.setSelectedChannel(message.targetChannel);
         if (
-          selectedChannel &&
-          message.targetChannel.id === selectedChannel.id
+          channels.some(
+            (channel: Channel) => channel.id === message.targetChannel.id
+          )
         ) {
           const newChannels = channels.map((channel: Channel) => {
-            if (channel.id === message.targetChannel.id) {
+            if (channel.id === message.targetChannel.id)
               return message.targetChannel;
-            }
-            return channel;
-          });
-          props.setChannels(newChannels);
-          props.setSelectedChannel(message.targetChannel);
-        } else {
-          const newChannels = channels.map((channel: Channel) => {
-            if (channel.id === message.targetChannel.id) {
-              return message.targetChannel;
-            }
             return channel;
           });
           props.setChannels(newChannels);
@@ -725,25 +713,16 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "removeAdmin",
       (message: { targetChannel: Channel; toRemove: string }) => {
-        console.log(message.targetChannel);
-        if (props.selected !== 1) return;
+        if (selectedChannel && message.targetChannel.id === selectedChannel.id)
+          props.setSelectedChannel(message.targetChannel);
         if (
-          selectedChannel &&
-          message.targetChannel.id === selectedChannel.id
+          channels.some(
+            (channel: Channel) => channel.id === message.targetChannel.id
+          )
         ) {
           const newChannels = channels.map((channel: Channel) => {
-            if (channel.id === message.targetChannel.id) {
+            if (channel.id === message.targetChannel.id)
               return message.targetChannel;
-            }
-            return channel;
-          });
-          props.setChannels(newChannels);
-          props.setSelectedChannel(message.targetChannel);
-        } else {
-          const newChannels = channels.map((channel: Channel) => {
-            if (channel.id === message.targetChannel.id) {
-              return message.targetChannel;
-            }
             return channel;
           });
           props.setChannels(newChannels);
@@ -760,10 +739,8 @@ const ChannelHeader = (props: any) => {
       socket.off("newAdmin");
       socket.off("removeAdmin");
     };
-  }, [selectedChannel]);
+  }, [channels, selectedChannel]);
 
-
-  
   if (selectedChannel === null)
     return (
       <div className="flex w-[32rem] mb-3 h-[12%] justify-center items-center bg-primary_blue">
