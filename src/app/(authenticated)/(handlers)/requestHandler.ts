@@ -495,7 +495,43 @@ export const postUserAvatar = async (channel: any) => {
 
 
 export const handlTFA = async () => {
-  const url = `user/disable2fa`;
+  const url = `/user/disable2fa`;
+
+  try {
+    const response = await api.get(url);
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    }
+    else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+export const getImage = async () => {
+  const url = `/user/enable2fa`;
+
+  try {
+    const response = await api.get(url);
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    }
+    else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const validTfa = async (requestData : any) => {
+  const url = `/user/validate2fa`;
 
   try {
     const response = await api.get(url);

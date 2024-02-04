@@ -18,6 +18,9 @@ import { Cookie } from "next/font/google";
 import Model2Fa from "./Model2Fa";
 import { toast } from "react-toastify";
 import { fetchCurrentUser, handlTFA, fetchAllUsers } from "../(handlers)/requestHandler";
+import Notif from "../test/notif";
+import { io } from "socket.io-client";
+import { User } from "../(interfaces)/userInterface";
 
 const Navbar_search_list = (props: any) => {
   const router = useRouter();
@@ -58,6 +61,21 @@ export default function Navbar_compo() {
   const [show2fa, setshow2fa] = useState(false);
   const [twofa, settwofa] = useState(false);
   const checkpathname = usePathname();
+const [socket, setSocket] = useState<any>(null);
+const [currUser, setCurrUser] = useState<User | null>(null);
+
+const [data, setData] = useState( [{
+    sender : "anass",
+    action : "Friend Request",
+    reciever : "ayoub",
+  },
+  {
+    sender : "anass",
+    action : "Friend Request",
+    reciever : "ayoub",
+  },
+  ])
+
   const openNav = () => {
     setShow(!show);
   };
@@ -67,6 +85,7 @@ export default function Navbar_compo() {
 
       const res = await fetchCurrentUser();
       settwofa(res.TFA);
+      setCurrUser(res);
       // const response = await axios.get("http://localhost:3001/user/me", {
       //   withCredentials: true,
       // });
@@ -122,7 +141,97 @@ export default function Navbar_compo() {
   useEffect(() => {
     fetchserch();
     fetchuser();
-  }, []);
+    // if (!socket) {
+      const token = Cookies.get("token");
+      const newSocket = io("http://localhost:3001/channels", {
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setSocket(newSocket);
+      console.log("socket created");
+      newSocket.on("friendRequest", (_data: any) => {
+        console.log("----------------------------------------------------------------",currUser?.intraLogin, _data.sender)
+        if(_data.sender === currUser?.intraLogin) return;
+        console.log("===========>newSocket requested ",newSocket);
+        console.log("===========>newSocket ",_data);
+        _data.action = "Friend Request";
+          // Update state with the received data
+          const updatedData = [...data, _data];
+          setData(updatedData);
+          console.log("tahte the new data :", data);
+        });
+
+      newSocket.on("friendRequestCancelled", (_data: any) => {
+        console.log("===========>newSocket canncelled ",newSocket);
+        console.log("===========>newSocket ",_data);
+        _data.action = "Cancelled Request";
+          // Update state with the received data
+          const updatedData = [...data, _data];
+          setData(updatedData);
+          console.log("tahte the new data :", data);
+        });
+      newSocket.on("friendRejected", (_data: any) => {
+        console.log("===========>newSocket friendRejected ",newSocket);
+        console.log("===========>newSocket ",_data);
+        _data.action = "friendRejected Request";
+          // Update state with the received data
+          const updatedData = [...data, _data];
+          setData(updatedData);
+          console.log("tahte the new data :", data);
+        });
+      newSocket.on("friendAccepted", (_data: any) => {
+        console.log("===========>newSocket friendAccepted ",newSocket);
+        console.log("===========>newSocket ",_data);
+        _data.action = "friendAccepted Request";
+          // Update state with the received data
+          const updatedData = [...data, _data];
+          setData(updatedData);
+          console.log("tahte the new data :", data);
+        });
+      newSocket.on("friendRemoved", (_data: any) => {
+        console.log("===========>newSocket friendRemoved ",newSocket);
+        console.log("===========>newSocket ",_data);
+        _data.action = "friendRemoved Request";
+          // Update state with the received data
+          const updatedData = [...data, _data];
+          setData(updatedData);
+          console.log("tahte the new data :", data);
+        });
+      newSocket.on("userBlocked", (_data: any) => {
+        console.log("===========>newSocket blocked ",newSocket);
+        console.log("===========>newSocket ",_data);
+        _data.action = "Blocked Request";
+          // Update state with the received data
+          const updatedData = [...data, _data];
+          setData(updatedData);
+          console.log("tahte the new data :", data);
+        });
+      newSocket.on("userUnblocked", (_data: any) => {
+        console.log("===========>newSocket userUnblocked ",newSocket);
+        console.log("===========>newSocket ",_data);
+        _data.action = "userUnblocked Request";
+          // Update state with the received data
+          const updatedData = [...data, _data];
+          setData(updatedData);
+          console.log("tahte the new data :", data);
+        });
+
+
+      return () => {
+        newSocket.disconnect();
+        newSocket.off("friendRequest");
+        newSocket.off("friendRequestCancelled");
+        newSocket.off("friendRejected");
+        newSocket.off("friendAccepted");
+        newSocket.off("friendRemoved");
+        newSocket.off("userBlocked");
+        newSocket.off("userUnblocked");
+      };
+    // }
+  }, [data]);
+
+  console.log("zebi hada lah yan3el fadsfgadjksfhjkadhsfjklasfhadjksfhjkldsahfjkas :", socket);
 
   const handlenavsearch = (event: any) => {
     setnavsearch(event.target.value);
@@ -254,16 +363,7 @@ export default function Navbar_compo() {
           <div className="flex flex-row w-[300px] justify-between">
           <div className="hidden md:flex justify-end items-center space-x-4 cursor-pointer ">
             <div className="dropdown dropdown-end">
-              <AiFillNotification size={35} tabIndex={0} className="text-white" />
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]"
-              >
-                <li>
-                  <a>
-                  </a>
-                </li>
-              </ul>
+              <Notif socket={socket}   data={data} key={data.length}/>
             </div>
           </div>
           <div className="hidden md:flex justify-end items-center space-x-4  cursor-pointer ">

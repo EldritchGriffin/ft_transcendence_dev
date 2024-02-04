@@ -620,6 +620,9 @@ const ChannelHeader = (props: any) => {
       socket.off("joinedChannel");
     };
   }, [selectedChannel]);
+
+
+  
   if (selectedChannel === null)
     return (
       <div className="flex w-[32rem] mb-3 h-[12%] justify-center items-center bg-primary_blue">

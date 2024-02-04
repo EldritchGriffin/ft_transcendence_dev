@@ -40,6 +40,7 @@ const ChatPage = () => {
         newSocket.disconnect();
       };
     }
+    
   }, []);
   if (!user || !socket)
     return (
@@ -63,7 +64,7 @@ const ChatPage = () => {
               setSelectedChannel={setSelectedChannel}
               setChannels={setChannels}
               channels={channels}
-              user={user}
+              user={user} 
               socket={socket}
             />
           ) : null}

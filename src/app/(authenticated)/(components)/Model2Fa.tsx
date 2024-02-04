@@ -3,6 +3,7 @@ import React from "react";
 import { useEffect, useState,useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getImage, validTfa } from "../(handlers)/requestHandler";
 
 export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
   let current: number = 0;
@@ -53,11 +54,14 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
 
   const getimage = async () => {
     try {
-      const res = await axios.get(backendUrl2, { withCredentials: true });
-      if(res.status >= 200 && res.status < 300){
-        const data = await res.data;
-        setImage(data);
-      }
+
+      const res = await getImage();
+      setImage(res);
+      // const res = await axios.get(backendUrl2, { withCredentials: true });
+      // if(res.status >= 200 && res.status < 300){
+      //   const data = await res.data;
+      //   setImage(data);
+      // }
     } catch (error) {
       toast.error("Already enabled 2FA");
     }
@@ -72,15 +76,19 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
       code: code as string,
     };
     try{
-      const res = await  axios.post(backendUrl, requestData, { withCredentials: true });
-      if (res.status >= 200 && res.status < 300) {
-        toast.success("2FA enabled successfully");
-        settwofa(true);
-        CloseModel(false);
-      }
-      else{
-        toast.error("Invalid 2FA code");
-      }
+
+      const res = await validTfa(requestData);
+      settwofa(true);
+      CloseModel(false);
+      // const res = await  axios.post(backendUrl, requestData, { withCredentials: true });
+      // if (res.status >= 200 && res.status < 300) {
+      //   toast.success("2FA enabled successfully");
+      //   settwofa(true);
+      //   CloseModel(false);
+      // }
+      // else{
+      //   toast.error("Invalid 2FA code");
+      // }
     } catch (error) {
       toast.error("Invalid 2FA code");
     }
