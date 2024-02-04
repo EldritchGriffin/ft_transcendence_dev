@@ -167,7 +167,6 @@ const OwnerControls = (props: any) => {
   );
 };
 
-//TODO: check because it didnt work when the user wasnt an admin
 const UserControls = (props: any) => {
   const router = useRouter();
   const member: User = props.member;
@@ -544,6 +543,7 @@ const ChannelHeader = (props: any) => {
   const channels: Channel[] = props.channels;
   const [showModal, setShowModal] = useState(false);
   const socket: Socket = props.socket;
+  const router = useRouter();
   const toggleModal = () => {
     setShowModal(!showModal);
   };
@@ -778,7 +778,7 @@ const ChannelHeader = (props: any) => {
           <>
             <button
               onClick={() => {
-                console.log("clicked on profile button");
+                router.push(`/profile/${selectedChannel.title}`);
               }}
               className="text-white text-sm hover:text-accent_red"
             >
