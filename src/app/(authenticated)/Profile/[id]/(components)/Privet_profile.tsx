@@ -23,46 +23,23 @@ const PrivetProfile = (props: any) => {
   const fetchGetDataBack = async () => {
     try {
       const response = await fetchUserPublic(props.id);
-      // setisBlocked(response);
-      // toast.error("User existed successfuly !");
-
-      // const usersurl = "http://localhost:3001/user/" + props.id;
-      // const response = await fetch(usersurl, {
-      //   method: "GET",
-      //   mode: "cors",
-      //   credentials: "include",
-      // });
-      // if (!response.ok)
-      //   throw new Error(
-      //     "An error occurred while attempting to update the new Nickname."
-      //   );
-      // const result = await response.json();
       setusers_data(response);
-    } catch (error) {
-      // router.push("/not-found");
+    } catch (error:any) {
+      if (error.response.status === 401)
+        window.location.replace("/");
       toast.error("User existed !");
-
-      // if (er)
-      window.location.replace("/not-found");
+      router.push('/not-found')
     } finally {
       setloading(false);
     }
   };
   const fetchGetLeaderBoard = async () => {
     try {
-      // const response = await fetch("http://localhost:3001/leaderboard", {
-      //   method: "GET",
-      //   mode: "cors",
-      //   credentials: "include",
-      // });
-      // if (!response.ok)
-      //   throw new Error(
-      //     "An error occurred while attempting to update the new Nickname."
-      //   );
-      // const result = await response.json();
       const result = await fetchLeaderBoard();
       setleader_board(result);
-    } catch (error) {
+    } catch (error:any) {
+      if (error.response.status === 401)
+        window.location.replace("/");
     }
   };
   useEffect(() => {

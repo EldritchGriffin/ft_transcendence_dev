@@ -13,6 +13,10 @@ const EditProfile = () => {
       try {
         const user = await fetchCurrentUser();
         setUser(user);
+      }
+      catch (error:any) {
+        if (error.response.status === 401)
+          window.location.replace("/");
       } finally {
         setLoading(false);
       }
