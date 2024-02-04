@@ -72,6 +72,7 @@ const SelectNewFriend = (props: any) => {
 const ChatSelector = (props: any) => {
   const selectedTab = props.selected;
   const setSelected = props.setSelected;
+  const [filter, setFilter] = useState("");
   const handleSelect = (index: number) => {
     let selected;
     let unselected;
@@ -98,7 +99,7 @@ const ChatSelector = (props: any) => {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
     const searchTerm = event.target.value;
-    //TODO handle search in channels;
+    setFilter(searchTerm);
   };
 
   return (
@@ -129,12 +130,14 @@ const ChatSelector = (props: any) => {
           onChannelSelect={props.onChannelSelect}
           channels={props.channels}
           setChannels={props.setChannels}
+          filter={filter}
         />
       ) : (
         <ChannelsTab
           onChannelSelect={props.onChannelSelect}
           channels={props.channels}
           setChannels={props.setChannels}
+          filter={filter}
         />
       )}
       <div>

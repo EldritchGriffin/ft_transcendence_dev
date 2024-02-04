@@ -4,6 +4,9 @@ import { Channel } from "../(interfaces)/channelInterface";
 
 const ChannelsTab = (props: any) => {
   const [loading, setLoading] = useState(true);
+  const filtered = props.channels?.filter((channel: Channel) =>
+    channel.title.toLowerCase().includes(props.filter.toLowerCase())
+  );
   const handleSelect = (channel: Channel) => {
     props.onChannelSelect(channel);
   };
@@ -31,7 +34,7 @@ const ChannelsTab = (props: any) => {
   return (
     <div className="h-full overflow-scroll custom-scrollbar">
       <div className="flex flex-col gap-2">
-        {props.channels.map((channel: Channel, index: any) => (
+        {filtered.map((channel: Channel, index: any) => (
           <button
             onClick={() => handleSelect(channel)}
             key={index}

@@ -3,8 +3,11 @@ import { fetchUserDms } from "../(handlers)/requestHandler";
 import { Channel } from "../(interfaces)/channelInterface";
 
 const FriendsTab = (props: any) => {
-  const friends = props.channels;
+  const friends: Channel[] = props.channels;
   const [loading, setLoading] = useState(true);
+  const filtered = friends?.filter((friend: Channel) =>
+    friend.title.toLowerCase().includes(props.filter.toLowerCase())
+  );
   const handleSelect = (channel: Channel) => {
     props.onChannelSelect(channel);
   };
@@ -32,7 +35,7 @@ const FriendsTab = (props: any) => {
   return (
     <div className="h-full overflow-scroll custom-scrollbar">
       <div className="flex flex-col gap-2">
-        {friends.map((friend: Channel, index: number) => (
+        {filtered.map((friend: Channel, index: number) => (
           <button
             onClick={() => handleSelect(friend)}
             key={index}
