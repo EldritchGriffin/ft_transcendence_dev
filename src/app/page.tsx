@@ -45,3 +45,5 @@ export default Home;
 
 
 // open the image >>  the file blabla on the desktop  || when i post it on the backend it gets updatedo n the database
+// use intralogin instead of nickname becuase of the issues it causes
+// double check 401 responses

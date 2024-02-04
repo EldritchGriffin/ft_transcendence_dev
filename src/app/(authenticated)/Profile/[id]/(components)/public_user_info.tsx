@@ -19,29 +19,19 @@ const Publicuserinfo_block_unblock = (props: any) => {
   if (!isBlocked) {
     const send_block = async () => {
       try {
-        // const usersurl =
-        //   "http://localhost:3001/user/blockuser/" + user_data.intraLogin;
-        // const response = await fetch(usersurl, {
-        //   method: "POST",
-        //   mode: "cors",
-        //   credentials: "include",
-        // });
-        // if (!response.ok)
-        //   throw new Error(
-        //     "An error occurred while attempting to update the new Nickname."
-        //   );
         const response = await postblockuser(user_data.intraLogin);
-        // setisBlocked(response);
-        toast.error("User Blocked successfuly !");
+        toast.success("User Blocked successfuly !");
+        setisBlocked(true);
       } catch (error:any) {
-        // console.error("Error posting data:", error);
+        if (error.response.status === 401)
+          window.location.replace("/");
         if (error?.response?.status === 403)
           toast.error("User Not Blocked !");
+          props.setstricted(true);
       }
     };
     const block_unblock_user = () => {
       send_block();
-      setisBlocked(true);
     };
     return (
       <button
@@ -55,30 +45,20 @@ const Publicuserinfo_block_unblock = (props: any) => {
   } else {
     const send_unblock = async () => {
       try {
-        // const usersurl =
-        //   "http://localhost:3001/user/unblockuser/" + user_data.intraLogin;
-        // const response = await fetch(usersurl, {
-        //   method: "POST",
-        //   mode: "cors",
-        //   credentials: "include",
-        // });
-        // if (!response.ok)
-        //   throw new Error(
-        //     "An error occurred while attempting to update the new Nickname."
-        //   );
         const response = await postunblockuser(user_data.intraLogin);
-        // setUser_data(response);
         toast.success("User UnBlocked successfully");
-  
+        setisBlocked(false);
       } catch (error:any) {
+        if (error.response.status === 401)
+          window.location.replace("/");
         if (error?.response?.status === 403)
           toast.error("User Not Blocked !");
-        // console.error("Error posting data:", error);
+          props.setstricted(true);
+
       }
     };
     const block_unblock_user = () => {
       send_unblock();
-      setisBlocked(false);
     };
     return (
       <button
@@ -123,31 +103,23 @@ const Publicuserinfo_add_remove_cancel = ( props:any ) => {
   
   const send_remove = async () => {
     try {
-      // const usersurl = "http://localhost:3001/user/removefriend/" + user_data.intraLogin;
-      // const response = await fetch(usersurl, {
-      //   method: 'POST',
-      //   mode: 'cors',
-      //   credentials : 'include',
-      // })
-      // // if (!response.ok)
-      // //   throw new Error("An error occurred while attempting to update the new Nickname.");
-      // // if(response.status === 403)
-      //   // console.error("wa fin a charika l3ama :D");
-      // console.log("a sidi rak dkholti l field dyal Remove");
       const response = await postremovefriend(user_data.intraLogin);
-      // setUser_data(response);
       toast.success("User Removed successfully");
+      setbuttonstate("Add");
 
     } catch (error:any) {
+      if (error.response.status === 401)
+         window.location.replace("/");
       if (error?.response?.status === 403)
         toast.error("User Not Friend !");
-      // console.error('Error posting data:', error);
+      props.setstrictedadd(true);
+        // props.setstricted(true);
+
     }
   }
   
   const remove_user = () => {
     send_remove();
-  setbuttonstate("Add");
 
   }
   return (
@@ -165,31 +137,24 @@ else if(buttonstate === "Cancel")
 
   const send_cancel = async () => {
     try {
-      // const usersurl = "http://localhost:3001/user/cancelfriend/" + user_data.intraLogin;
-      // const response = await fetch(usersurl, {
-      //   method: 'POST',
-      //   mode: 'cors',
-      //   credentials : 'include',
-      // })
-      // if (!response.ok) throw new Error("An error occurred while attempting to update the new Nickname.");
-      // if(response.status === 403)
-      // console.error("wa fin a charika l3ama :D");
-      // console.log("a sidi rak dkholti l field dyal Cancel");
-
       const response = await postcancelfriend(user_data.intraLogin);
-      // setUser_data(response);
       toast.success("User Canceled successfully");
+    setbuttonstate("Add");
 
     } catch (error:any) {
+      if (error.response.status === 401)
+        window.location.replace("/");
       if (error?.response?.status === 403)
         toast.error("User Not Waiting For Invite !");
-      // console.error('Error posting data:', error);
+        // props.setstricted(true);
+      props.setstrictedadd(true);
+
+
     }
   }
   
   const cancel_user = () => {
     send_cancel();
-    setbuttonstate("Add");
 
   }
   
@@ -208,24 +173,23 @@ else if(buttonstate === "Accept")
 
   const send_accept = async () => {
     try {
-      // const usersurl = "http://localhost:3001/user/acceptfriend/" + user_data.intraLogin;
-      // const response = await fetch(usersurl, {
-      //   method: 'POST',
-      //   mode: 'cors',
-      //   credentials : 'include',
-      // })
       const response = await postacceptfriend(user_data.intraLogin);
-      // setUser_data(response);
       toast.success("User Accept successfully");
+    setbuttonstate("Remove");
+
     } catch (error:any) {
+      if (error.response.status === 401)
+        window.location.replace("/");
       if (error?.response?.status === 403)
         toast.error("User has nothing to Accept !");
+        // props.setstricted(true);
+        props.setstrictedadd(true);
+
     }
   }
   
   const cancel_user = () => {
     send_accept();
-    setbuttonstate("Remove");
 
   }
   
@@ -239,32 +203,25 @@ else if(buttonstate === "Accept")
     </button>
   );
   }
-
   else {
 
  
     const send_add = async () => {
       try {
-        // const usersurl = "http://localhost:3001/user/addfriend/" + user_data.intraLogin;
-
-        // const response = await fetch(usersurl, {
-        //   method: 'POST',
-        //   mode: 'cors',
-        //   credentials : 'include',
-        // })
-        // if (!response.ok) throw  response;
-
         const response = await postaddfriend(user_data.intraLogin);
-        // setUser_data(response);
         toast.success("User Add successfully");
+        setbuttonstate("Cancel");
       } catch (error:any) {
+        if (error.response.status === 401)
+        window.location.replace("/");
         if (error?.response?.status === 403)
           toast.error("User Can't be Add !");
+        // setbuttonstate("Accept");
+      props.setstrictedadd(true);
       }
     }
     const add_user = () => {
       send_add();
-      setbuttonstate("Cancel");
 
     }
   return (
@@ -283,7 +240,12 @@ else if(buttonstate === "Accept")
 const Publicuserinfo = (props: any) => {
   console.log("salam starting Public user info :", props);
   const user_data = props.users_data;
+  const [strictedadd, setstrictedadd] = useState(false);
+  const [stricted, setstricted] = useState(props.connected_user.blockedOf?.filter(
+    (item: any) => item.intraLogin === user_data.intraLogin
+  ).length);
 
+  console.log(" strictedadd value :", strictedadd, "stricted value :", stricted)
   return (
     <div className="flex flex-col w-full sm:w-[464px]">
       <a className="text-white truncate ">PROFILE</a>
@@ -304,16 +266,41 @@ const Publicuserinfo = (props: any) => {
         <div className="w-[full] h-[full] flex justify-center space-x-6">
           {user_data &&
           <> <div className="w-fit h-fit">
-            <Publicuserinfo_add_remove_cancel
+            {
+             stricted ||  strictedadd ? 
+              <button
+              className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white opacity-40 " 
+            >
+              {" "}
+              Add{" "}
+            </button>
+              :
+              <Publicuserinfo_add_remove_cancel
               users_data={user_data}
               connected_user={props.connected_user}
-            />
+              setstrictedadd={setstrictedadd}
+              />
+             }
+
           </div>
           <div className="w-fit h-fit">
+          {
+              stricted ? 
+              <button
+              className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white opacity-40"
+            >
+              {" "}
+              Block{" "}
+            </button>
+              :
+
             <Publicuserinfo_block_unblock
               users_data={user_data}
               connected_user={props.connected_user}
+              setstricted={setstricted}
             />
+          }
+
           </div></>}
         </div>
       </div>

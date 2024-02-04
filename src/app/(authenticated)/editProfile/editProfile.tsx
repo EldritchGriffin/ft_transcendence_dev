@@ -38,7 +38,9 @@ export default  function EditNickname( props:any ) {
           setName(true)
           // }).catch((error)=>{
         }
-        catch(error){
+        catch(error:any){
+          if (error.response.status === 401)
+            window.location.replace("/");
           toast.error("Invalid NickName ");
         }
   };
@@ -54,7 +56,7 @@ export default  function EditNickname( props:any ) {
     if (files && files.type !== "image/jpeg")
     {
       imgflag = 1;
-                  toast.error("image type error");
+      toast.error("image type error");
       return 1;
     } 
    else if (files && files.size > 5 * 10 **6)  
@@ -85,8 +87,10 @@ export default  function EditNickname( props:any ) {
             const res =   await postUserAvatar(setavatar);
               setRes(true);
             }
-            catch(error){
-              toast.error("invalide Image");
+            catch(error:any){
+              if (error.response.status === 401)
+                window.location.replace("/");
+              toast.error("invalid Image");
               setRes(true);
         }
       }

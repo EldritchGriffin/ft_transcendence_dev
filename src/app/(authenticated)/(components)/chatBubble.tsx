@@ -21,7 +21,7 @@ const ChatBubble = (props: any) => {
     );
   } else
     return (
-      <div className="bg-white rounded-lg shadow-lg  mr-auto m-4 p-4 max-w-md w-[60%]">
+      <div className="bg-white rounded-lg shadow-lg  mr-auto m-4 p-4 max-w-md w-[60%] red">
         <button
           onClick={() => handleUsernameClick()}
           className="flex gap-3 items-center"

@@ -72,6 +72,8 @@ export default function Model({Open, onClose}:any) {
       })
       .catch((error) => {
         // console.log("l7waa")
+        if (error.response.status === 401)
+           window.location.replace("/");
         console.error("Error:", error);
       });
     }, []);
@@ -88,6 +90,8 @@ export default function Model({Open, onClose}:any) {
         // console.log(res.data);
       })
       .catch((error) => {
+        if (error.response.status === 401)
+          window.location.replace("/");
         console.error("Error:", error);
       })
       .finally(() => {
