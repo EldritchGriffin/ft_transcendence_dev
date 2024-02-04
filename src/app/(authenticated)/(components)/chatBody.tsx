@@ -36,7 +36,7 @@ const ChatBody = (props: any) => {
       try {
         const messages = await fetchChannelMessages(channel.id.toString());
         setMessages(messages);
-      } catch (error:any) {
+      } catch (error: any) {
         toast.error(error.response.data.message);
       } finally {
         setLoading(false);
@@ -82,7 +82,7 @@ const ChatBody = (props: any) => {
             No messages yet!
           </div>
         ) : (
-          messages.map((message: any, index: number) => (
+          messages?.map((message: any, index: number) => (
             <ChatBubble key={index} user={user} message={message} />
           ))
         )}

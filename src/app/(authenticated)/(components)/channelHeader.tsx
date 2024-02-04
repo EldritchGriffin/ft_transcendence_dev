@@ -555,7 +555,6 @@ const ChannelHeader = (props: any) => {
       toast.error(error.response.data.message);
     }
   };
-  console.log(channels);
   useEffect(() => {
     if (props.selected !== 1) return;
     socket.on("changeTitle", (message: Channel) => {
@@ -654,22 +653,29 @@ const ChannelHeader = (props: any) => {
     );
     socket.on(
       "newOwner",
-      (message: { currChannel: Channel; newOwner: string }) => {
-        //TODO fix this when backend is fixed
-        //   if (selectedChannel && message.currChannel.id === selectedChannel.id)
-        //     props.setSelectedChannel(message.currChannel);
-        //   if (
-        //     channels.some(
-        //       (channel: Channel) => channel.id === message.currChannel.id
-        //     )
-        //   ) {
-        //     const newChannels = channels.map((channel: Channel) => {
-        //       if (channel.id === message.currChannel.id)
-        //         return message.currChannel;
-        //       return channel;
-        //     });
-        //     props.setChannels(newChannels);
-        //   }
+      (message: { createdChannel: Channel; newOwner: string }) => {
+        console.log(message.createdChannel);
+        if (
+          selectedChannel &&
+          message.createdChannel.id === selectedChannel.id
+        ) {
+          props.setSelectedChannel(message.createdChannel);
+          console.log("selected channel updated");
+        }
+        if (
+          channels.some(
+            (channel: Channel) => channel.id === message.createdChannel.id
+          )
+        ) {
+          const newChannels = channels.map((channel: Channel) => {
+            if (channel.id === message.createdChannel.id)
+              return message.createdChannel;
+            return channel;
+          });
+          console.log(message.createdChannel);
+          props.setChannels(newChannels);
+          console.log("channels updated");
+        }
       }
     );
     socket.on(
