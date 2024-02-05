@@ -756,20 +756,20 @@ const ChannelHeader = (props: any) => {
   return (
     <div className="flex flex-row w-full mb-3 h-[100px] justify-between items-center bg-primary_blue">
       <div className="flex flex-row mx-10">
-        <span className="text-white text-lg">{selectedChannel.title}</span>
+        <span className="text-white text-4xl">{selectedChannel.title}</span>
       </div>
       <div className="flex flex-row gap-6 mx-10">
         {selectedChannel.type == "Channel" ? (
           <>
             <button
               onClick={() => handleLeave()}
-              className="text-white text-sm hover:text-accent_red"
+              className="text-white text-xl hover:text-accent_red"
             >
               Leave
             </button>
             <button
               onClick={() => toggleModal()}
-              className="text-white text-sm hover:text-accent_red"
+              className="text-white text-xl hover:text-accent_red"
             >
               Settings
             </button>
@@ -780,7 +780,7 @@ const ChannelHeader = (props: any) => {
               onClick={() => {
                 router.push(`/profile/${selectedChannel.title}`);
               }}
-              className="text-white text-sm hover:text-accent_red"
+              className="text-white text-lg hover:text-accent_red"
             >
               Profile
             </button>
@@ -790,7 +790,7 @@ const ChannelHeader = (props: any) => {
               }}
               className="text-white text-sm hover:text-accent_red"
             >
-              <span className="text-white text-sm">Play</span>
+              <span className="text-white text-lg">Play</span>
             </button>
           </>
         )}

@@ -21,15 +21,15 @@ const CreateChannel = (props: any) => {
     <div className="flex">
       <button
         onClick={() => toggleCreateModal()}
-        className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300"
+        className=" bg-accent_red flex w-full h-12 justify-center items-center text-white hover:bg-red-300"
       >
-        <span className="text-sm">Create</span>
+        <span className="text-lg">Create</span>
       </button>
       <button
         onClick={() => toggleJoinModal()}
-        className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300"
+        className=" bg-accent_red flex w-full h-12 justify-center items-center text-white hover:bg-red-300"
       >
-        <span className="text-sm">Join</span>
+        <span className="text-lg">Join</span>
       </button>
       {showCreateModal ? (
         <CreateChannelModal
@@ -57,9 +57,9 @@ const SelectNewFriend = (props: any) => {
     <div>
       <button
         onClick={() => toggleModal()}
-        className=" bg-accent_red flex w-full h-8 justify-center items-center text-white hover:bg-red-300"
+        className=" bg-accent_red flex w-full h-12 justify-center items-center text-white hover:bg-red-300"
       >
-        <span className="text-sm">New Chat</span>
+        <span className="text-lg">New Chat</span>
       </button>
       {showModal ? (
         <NewFriendModal
@@ -117,8 +117,8 @@ const ChatSelector = (props: any) => {
     };
   }, [props.channels, props.selected]);
   return (
-    <div className="flex r flex-col w-[500px] h-full bg-primary_blue">
-      <div className="flex red w-full h-10 mt-2 justify-evenly">
+    <div className="flex space-y-5 flex-col w-[500px] h-full bg-primary_blue">
+      <div className="flex  w-full h-10 mt-2 justify-evenly">
         <button onClick={() => handleSelect(0)}>
           <span id="friends" className="text-accent_red text-2xl">
             Friends
@@ -135,7 +135,7 @@ const ChatSelector = (props: any) => {
           id="search"
           type="text"
           placeholder="Search"
-          className="my-5 text-white text-[10px] bg-transparent border-b focus:outline-none"
+          className="my-5 text-white text-lg bg-transparent border-b focus:outline-none"
           onChange={handleSearch}
         />
       </div>

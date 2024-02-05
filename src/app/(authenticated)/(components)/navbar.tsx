@@ -333,7 +333,7 @@ export default function Navbar_compo() {
               </div>
             </div>
           </div>
-          <div className="hidden md:flex ">
+          <div className="hidden  md:flex ">
             <div className="flex items-center lg:space-x-16 space-x-7">
               <div
                 className="flex   p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
@@ -383,7 +383,7 @@ export default function Navbar_compo() {
               </div>
             </div>
           </div>
-          <div className="flex flex-row w-[300px] justify-between">
+          <div className="flex flex-row w-[300px] justify-end">
             <div className="hidden md:flex justify-end items-center space-x-4 cursor-pointer ">
               <div className="dropdown dropdown-end">
                 <Notif

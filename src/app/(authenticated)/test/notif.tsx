@@ -7,6 +7,7 @@ import { fetchCurrentUser } from '../(handlers)/requestHandler';
 import Cookies from "js-cookie";
 import { Socket } from 'socket.io-client/debug';
 import { useRouter } from 'next/navigation';
+import { BiSolidNotification } from 'react-icons/bi';
 export default function Notif(props:any) {
   const router = useRouter();
   const user_data = props.data;
@@ -18,7 +19,6 @@ const handleRemoveItem = (idToRemove: any) => {
   router.push(`/profile/${props.data.filter((item:any) => item.id === idToRemove.id)[0].sender.intraLogin}`);
   props.setData(updatedArray);
 };
-console.log("list of notif :", props.data);
 // useEffect(() => {
 //   const fetchData = async () => {
 //     try {
@@ -32,7 +32,7 @@ console.log("list of notif :", props.data);
   return (
 
   <div className="">
-    <AiFillNotification size={35} tabIndex={0} className="text-white" />
+    <BiSolidNotification size={35} tabIndex={0} className="text-white" />
     <ul
       tabIndex={0}
       className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box overflow-y-auto custom-scrollbar h-[350px] w-[350px]"

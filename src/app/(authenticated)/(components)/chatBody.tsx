@@ -72,13 +72,13 @@ const ChatBody = (props: any) => {
     );
   }
   return (
-    <div className="flex h-[85%] flex-col bg-primary_blue">
+    <div className="flex h-[747px] flex-col bg-primary_blue">
       <div
         id="messages"
         className="h-full overflow-y-scroll overflow-x-hidden custom-scrollbar"
       >
         {messages.length === 0 ? (
-          <div className="flex text-white h-[85%] justify-center items-center text-2xl bg-primary_blue">
+          <div className="flex text-white h-[747px] justify-center items-center text-2xl bg-primary_blue">
             No messages yet!
           </div>
         ) : (
@@ -91,7 +91,7 @@ const ChatBody = (props: any) => {
         <input
           id="message"
           type="text"
-          className=" border-b-2 bg-transparent w-full h-full px-4 text-white focus:outline-none"
+          className=" border-b-2 bg-transparent w-full h-full px-4 text-white focus:outline-none text-xl placeholder:text-white placeholder:opacity-50"
           placeholder="Type a message..."
           autoComplete="off"
           onKeyDown={(e) => {
