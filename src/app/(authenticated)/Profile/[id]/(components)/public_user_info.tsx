@@ -1,3 +1,4 @@
+import { useSocket } from "@/app/(authenticated)/(contexts)/socketContext";
 import { postacceptfriend, postaddfriend, postblockuser, postcancelfriend, postremovefriend, postunblockuser } from "@/app/(authenticated)/(handlers)/requestHandler";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -247,24 +248,84 @@ else if(buttonstate === "Accept")
 }
 }
 
+const getStatus = (status:any, pregame:any) => {
+  if (!pregame){
+    if (status === "online") {
+      return (      <span className="inline-flex items-center absolute bottom-[-8px] bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+      <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+              Online
+    </span>);
+
+    }
+    else if (status === "offline") {
+      return (      <span className="inline-flex items-center absolute bottom-[-8px] bg-slate-400 text-slate-50 text-xs font-medium px-2.5 py-0.5 rounded-full ">
+      <span className="w-2 h-2 me-1 bg-white rounded-full"></span>
+              Offline
+    </span>);
+    }
+}
+else {
+  return ( <span className="inline-flex items-center absolute bottom-[-8px] bg-orange-600 text-orange-100 text-xs font-medium px-2.5 py-0.5 rounded-full ">
+  <span className="w-2 h-2 me-1 bg-orange-400 rounded-full"></span>
+          Ingame
+</span>);
+}
+}
+
 const Publicuserinfo = (props: any) => {
-  console.log("salam starting Public user info :", props);
+  const [status, setStatus] = useState(props.users_data.status);
+  const [pregame, setpregame] = useState(false);
   const user_data = props.users_data;
+  const socket = useSocket();
   const [strictedadd, setstrictedadd] = useState(false);
   const [stricted, setstricted] = useState(props.connected_user.blockedOf?.filter(
     (item: any) => item.intraLogin === user_data.intraLogin
   ).length);
 
-  console.log(" strictedadd value :", strictedadd, "stricted value :", stricted)
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("online", (user) => {
+        // console.log("online", user);
+        setStatus("online");
+      });
+      socket.on("offline", (user) => {
+        setStatus("offline");
+        // console.log("offline", user);
+      });
+      socket.on("offgame", (user) => {
+        setpregame(true);
+      });
+      socket.on("ingame", (user) => {
+        setpregame(false);
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off("online");
+        socket.off("offline");
+        socket.off("offgame");
+        socket.off("ingame");
+      }
+    }
+  }, []);
+
+
+
+
   return (
     <div className="flex flex-col w-full sm:w-[464px]">
       <a className="text-white truncate ">PROFILE</a>
       <div className=" w-full h-[380px]  sm:w-[464px]    bg-primary_blue flex flex-col items-center space-y-5 pt-8 pb-8">
+      <div className="h-fit w-fit border border-accent_red relative flex justify-center">
         <img
           src={user_data?.avatarLink || ''}
           alt=""
           className="h-32 w-32 sm:h-[174px] sm:w-[174px] border-4 br "
         />
+          {getStatus(status, pregame)}
+    </div>
         <span className="h-full w-full text-4xl sm:w-[140px] sm:h-[41px] text-center text-white">
           {" "}
           {user_data?.intraLogin || ''}{" "}

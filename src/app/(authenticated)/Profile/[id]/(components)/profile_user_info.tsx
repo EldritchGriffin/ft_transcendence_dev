@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
+import { useSocket } from "@/app/(authenticated)/(contexts)/socketContext";
 
 
 const ProfileUserInfo = (props: any) => {
   const user_data = props.users_data;
   const router = useRouter();
+  const socket = useSocket();
 
   const updateNickname = () => {
     const next_rout = "/editProfile";
     router.push(next_rout);
   }
+
+
+
+
+
   return (
     <div className="flex flex-col w-full sm:w-[464px]">
       <span className="text-white truncate ">PROFILE</span>
@@ -19,7 +26,7 @@ const ProfileUserInfo = (props: any) => {
           src={user_data?.avatarLink}
           alt=""
           draggable="false"
-          className="h-32 w-32 sm:h-[174px]   sm:w-[174px] border-4 br "
+          className="h-32 w-32 sm:h-[174px] sm:w-[174px] border-4 br "
         />
         )}
      { user_data?.intraLogin && (

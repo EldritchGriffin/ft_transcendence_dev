@@ -12,6 +12,12 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
   const [otp, setOtp] = useState('');
   const [image, setImage] = useState<any>();
 
+  const hadlEntry = (e:any) => {
+    if (e.key === "Enter") {
+      handleButtonClick();
+    }
+  }
+
   const getimage = async () => {
     try {
 
@@ -65,7 +71,7 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
                 X
             </button>
             <div className="bg-white p-2 h-full rounded">
-            <div className="relative bck2 px-16 pt-10  flex justify-around pb-9 shadow-sm mx-auto w-[280px] sm:w-[600px] xl:w-[952px]">
+              <div className="relative bck2 px-16 pt-10  flex justify-around pb-9 shadow-sm mx-auto w-[280px] sm:w-[600px] xl:w-[952px]">
                     <div className="flex  w-full flex-col space-y-8">
                     <div className="flex flex-col items-center justify-center text-center">
                       <div className="font-bold text-2xl flex flex-col space-y-5 text-black justify-center items-center">

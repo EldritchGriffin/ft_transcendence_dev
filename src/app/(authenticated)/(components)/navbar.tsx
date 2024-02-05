@@ -70,6 +70,17 @@ export default function Navbar_compo() {
     setShow(!show);
   };
 
+  const statnav = () => {
+    if (checkpathname === "/messages") {
+      setnavactive(2);
+    } else if (checkpathname === "/user/me") {
+      setnavactive(3);
+    } else if ((checkpathname === "/pregame") || (checkpathname === "/game")) {
+      setnavactive(4);
+    }
+  }
+
+
   const fetchuser = async () => {
     try {
       const res = await fetchCurrentUser();
@@ -105,6 +116,7 @@ export default function Navbar_compo() {
   };
 
   useEffect(() => {
+    statnav();
     fetchserch();
     fetchuser();
 
@@ -277,6 +289,7 @@ export default function Navbar_compo() {
       ) {
         hidesearchfield();
       }
+
     };
 
     // Add event listener to document on mount
@@ -298,12 +311,12 @@ export default function Navbar_compo() {
         <div className="flex justify-between items-center h-full w-full px-4 2xl:px-9">
           <div className="flex items-center space-x-4">
             <div className="relative flex md:gap-8 lg:gap-16 items-center space-x-4">
-              <span className="oo text-sm md:text-2xl font-bold">
+              <span className="oo text-sm md:text-2xl font-bold select-none">
                 PongVerse
               </span>
               <div
                 tabIndex={0}
-                className="flex red flex-col space-y-10 "
+                className="flex flex-col space-y-10 "
                 ref={searchRef}
               >
                 <input
@@ -347,7 +360,7 @@ export default function Navbar_compo() {
                 }}
               >
                 <AiOutlineComment size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">
+                <a className="text-white text-sm lg:text-lg font-bold select-none">
                   Messages
                 </a>
               </div>
@@ -363,7 +376,7 @@ export default function Navbar_compo() {
                 }}
               >
                 <AiOutlineIdcard size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">
+                <a className="text-white text-sm lg:text-lg font-bold select-none">
                   Profile
                 </a>
               </div>
@@ -379,7 +392,7 @@ export default function Navbar_compo() {
                 }}
               >
                 <GiPingPongBat size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">Game</a>
+                <a className="text-white text-sm lg:text-lg font-bold select-none ">Game</a>
               </div>
             </div>
           </div>
@@ -455,12 +468,6 @@ export default function Navbar_compo() {
               }
             >
               <div className="flex flex-col space-y-10 mt-10">
-                <div className="flex">
-                  <AiFillHome size={25} className="text-white mr-4" />
-                  <a className="text-white text-sm lg:text-lg font-bold">
-                    Home
-                  </a>
-                </div>
                 <div
                   className="flex cursor-pointer"
                   onClick={() => {

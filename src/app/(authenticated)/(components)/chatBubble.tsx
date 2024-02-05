@@ -29,9 +29,10 @@ const ChatBubble = (props: any) => {
           <img
             src={message.sender.avatarLink}
             alt="Profile Picture"
-            className="w-8 h-8 rounded-full mb-2"
+            className="w-16 h-16 rounded-full mb-2"
+            draggable="false"
           />
-          <span className="text-accent_red">{message.senderLogin}</span>
+          <span className="text-accent_red text-xl">{message.senderLogin}</span>
         </button>
         <div className="flex">
           <div className="ml-6">
