@@ -1,7 +1,9 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
+  const router = useRouter();
   return (
     <div className="flex gap-10 justify-center h-screen items-center">
       <div className="flex flex-col">
@@ -13,7 +15,11 @@ const Home = () => {
               Start
             </button>
           </form>
-          <button className="w-[110px] h-[40px] text-white text-[14px] bg-primary_blue">
+          <button className="w-[110px] h-[40px] text-white text-[14px] bg-primary_blue"
+            onClick={() => {
+              router.push("/aboutus");
+            }}
+          >
             About us
           </button>
         </div>

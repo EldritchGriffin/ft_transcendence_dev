@@ -251,7 +251,7 @@ else if(buttonstate === "Accept")
 const getStatus = (status:any, pregame:any) => {
   if (!pregame){
     if (status === "online") {
-      return (      <span className="inline-flex items-center absolute bottom-[-8px] bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+      return (      <span className="inline-flex items-center absolute bottom-[-8px] bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
       <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
               Online
     </span>);
@@ -286,18 +286,20 @@ const Publicuserinfo = (props: any) => {
   useEffect(() => {
     if (socket) {
       socket.on("online", (user) => {
-        // console.log("online", user);
-        setStatus("online");
+        if(user === user_data.intraLogin)
+         setStatus("online");
       });
       socket.on("offline", (user) => {
-        setStatus("offline");
-        // console.log("offline", user);
+        if(user === user_data.intraLogin)
+         setStatus("offline");
       });
       socket.on("offgame", (user) => {
-        setpregame(true);
+        if(user === user_data.intraLogin)
+          setpregame(true);
       });
       socket.on("ingame", (user) => {
-        setpregame(false);
+        if(user === user_data.intraLogin)
+          setpregame(false);
       });
     }
 
