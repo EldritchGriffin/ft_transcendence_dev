@@ -6,6 +6,7 @@ import { fetchCurrentUser } from "../(handlers)/requestHandler";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { User } from "../(interfaces)/userInterface";
+import { useSearchParams } from "next/navigation";
 
 let p1score = 0;
 let p2score = 0;
@@ -174,6 +175,8 @@ function initPixi() {
 
 const PixiComponent = () => {
   const [user, setUser] = useState<User | null>(null);
+  const mode = useSearchParams().get("mode");
+  console.log(mode);
   let socket: Socket | null = null;
   const token = Cookies.get("token");
   if (user && token) {

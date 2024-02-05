@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import { Press_Start_2P } from "next/font/google";
 import "../../globals.css";
-
-const Font = Press_Start_2P({
-  subsets: ["latin"],
-  weight: "400",
-});
 
 export const metadata: Metadata = {
   title: "NewGame",
@@ -17,5 +11,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className={Font.className + " bg-darkblue"}>{children}</div>;
+  return <div className={" bg-darkblue"}>{children}</div>;
 }

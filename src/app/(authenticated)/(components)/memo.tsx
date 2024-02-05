@@ -62,13 +62,3 @@ export const Ft_memo = (props: any) => {
     </>
   ) : null;
 };
-
-// export const Ft_memo = () => {
-
-//     return
-//     (
-//         <>
-
-//         </>
-//     );
-// }
