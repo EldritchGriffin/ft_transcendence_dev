@@ -749,12 +749,12 @@ const ChannelHeader = (props: any) => {
 
   if (selectedChannel === null)
     return (
-      <div className="flex w-[32rem] mb-3 h-[12%] justify-center items-center bg-primary_blue">
-        <span className="text-white text-lg">Select a chat</span>
+      <div className="flex w-full mb-3 h-[100px] justify-center items-center bg-primary_blue">
+        <span className="text-white text-2xl">Select a chat</span>
       </div>
     );
   return (
-    <div className="flex flex-row w-[32rem] mb-3 h-[12%] justify-between items-center bg-primary_blue">
+    <div className="flex flex-row w-full mb-3 h-[100px] justify-between items-center bg-primary_blue">
       <div className="flex flex-row mx-10">
         <span className="text-white text-lg">{selectedChannel.title}</span>
       </div>

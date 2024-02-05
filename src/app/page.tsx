@@ -31,26 +31,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
-// when first login in case refused to inter a NickName , and when to the URL and made 3000/user/me , he is pushed to the profile , whitout having a NickName , think to block him or automaticly make NickName his intralogin
-
-// try {                  update the requests to show the backend message on the toast
-//   const newChannel = await postChmod(data);
-//   toast.success("Access changed");
-//   props.setSelectedChannel(newChannel);
-//   setPassword("");
-//   setConfirmPassword("");
-// } catch (error: any) {
-//   toast.error(error.response.data.message);
-// }
-
-
-
-//any route except editProfile and /user/me should be redirected to editProfile if nickname == null || undefined
-// /setupNickName
-
-
-
-
-//handle unique nickname response 

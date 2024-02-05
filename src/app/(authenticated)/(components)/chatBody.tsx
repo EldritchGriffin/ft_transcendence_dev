@@ -59,14 +59,14 @@ const ChatBody = (props: any) => {
   }, [messages]);
   if (!channel) {
     return (
-      <div className="flex text-white h-[85%] justify-center items-center text-2xl bg-primary_blue">
+      <div className="flex text-white h-[747px]  justify-center items-center text-5xl bg-primary_blue">
         Select a channel to start chatting!
       </div>
     );
   }
   if (loading || !messages || !user) {
     return (
-      <div className="flex text-white h-[85%] justify-center items-center text-2xl bg-primary_blue">
+      <div className="flex text-white h-[747px] justify-center items-center text-2xl bg-primary_blue">
         Loading...
       </div>
     );

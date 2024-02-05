@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, useRef } from "react";
 import ProfilePage from "../../user/me/page";
 import PrivetProfile from "./(components)/Privet_profile";

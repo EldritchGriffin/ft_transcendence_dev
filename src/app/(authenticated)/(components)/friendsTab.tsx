@@ -41,7 +41,7 @@ const FriendsTab = (props: any) => {
             key={index}
             className="flex flex-row justify-start items-center text-left gap-2 w-full h-10 px-5 text-white hover:bg-cyan-600"
           >
-            <span className="text-sm">{friend.title}</span>
+            <span className="text-xl">{friend.title}</span>
           </button>
         ))}
       </div>

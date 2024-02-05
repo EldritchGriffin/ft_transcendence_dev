@@ -49,8 +49,8 @@ const ChatPage = () => {
       </div>
     );
   return (
-    <div className="flex h-screen justify-center items-center">
-      <div className="flex flex-row gap-5 h-[430px]">
+    <div className="flex  h-screen justify-center items-center">
+      <div className="flex   w-[1500px]  flex-row gap-5 h-[860px]">
         <ChatSelector
           onChannelSelect={handleSelectChannel}
           channels={channels}
@@ -60,7 +60,7 @@ const ChatPage = () => {
           setSelected={setSelected}
           socket={socket}
         />
-        <div className="flex-col h-full">
+        <div className="flex-col w-full h-[860px]">
           {channels ? (
             <ChannelHeader
               channel={selectedChannel}

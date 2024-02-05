@@ -41,7 +41,7 @@ const Stats = (props: any) => {
     }, 20);
     return () => clearInterval(interval); // Clear the interval on component unmount
   }, []);
-
+  console.log("ana samaka ana samaka");
   const circularProgressStyle = {
     background: `conic-gradient(#F25F5C ${stat * 3.6}deg, #ededed 0deg)`,
   };

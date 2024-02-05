@@ -117,15 +117,15 @@ const ChatSelector = (props: any) => {
     };
   }, [props.channels, props.selected]);
   return (
-    <div className="flex flex-col w-[200px] h-full bg-primary_blue">
-      <div className="flex w-full h-10 mt-2 justify-center gap-5">
+    <div className="flex r flex-col w-[500px] h-full bg-primary_blue">
+      <div className="flex red w-full h-10 mt-2 justify-evenly">
         <button onClick={() => handleSelect(0)}>
-          <span id="friends" className="text-accent_red text-sm">
+          <span id="friends" className="text-accent_red text-2xl">
             Friends
           </span>
         </button>
         <button onClick={() => handleSelect(1)}>
-          <span id="channels" className="text-white text-sm">
+          <span id="channels" className="text-white text-2xl">
             Channels
           </span>
         </button>

@@ -40,7 +40,7 @@ const ChannelsTab = (props: any) => {
             key={index}
             className="flex flex-row text-left justify-start items-center gap-2 w-full h-10 px-5 text-white hover:bg-cyan-600"
           >
-            <span className="text-sm">{channel.title}</span>
+            <span className="text-xl">{channel.title}</span>
           </button>
         ))}
       </div>
