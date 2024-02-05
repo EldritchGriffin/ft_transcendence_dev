@@ -8,13 +8,14 @@ import ChatBody from "../(components)/chatBody";
 import { io } from "socket.io-client";
 import Cookies from "js-cookie";
 import { fetchCurrentUser } from "../(handlers)/requestHandler";
+import { useSocket } from "../(contexts)/socketContext";
 
 const ChatPage = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [socket, setSocket] = useState<any>(null);
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const [channels, setChannels] = useState<Channel[] | null>(null);
   const [selected, setSelected] = useState(0);
+  const socket = useSocket();
   const handleSelectChannel = (channel: Channel) => {
     setSelectedChannel(channel);
   };
@@ -29,18 +30,6 @@ const ChatPage = () => {
       }
     };
     fetchData();
-    if (!socket) {
-      const token = Cookies.get("token");
-      const newSocket = io("http://localhost:3001/channels", {
-        extraHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSocket(newSocket);
-      return () => {
-        newSocket.disconnect();
-      };
-    }
   }, []);
   if (!user || !socket)
     return (

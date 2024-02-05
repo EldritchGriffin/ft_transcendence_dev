@@ -1,24 +1,27 @@
 "use client";
-import React, { Fragment, useEffect, useMemo, useRef } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import { useState } from "react";
 import {
   AiOutlineMenu,
   AiOutlineComment,
   AiOutlineIdcard,
   AiFillHome,
-  AiFillNotification,
 } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { MdLogout } from "react-icons/md";
 import { GiPingPongBat } from "react-icons/gi";
-import {  usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Model2Fa from "./Model2Fa";
 import { toast } from "react-toastify";
-import { fetchCurrentUser, handlTFA, fetchAllUsers } from "../(handlers)/requestHandler";
+import {
+  fetchCurrentUser,
+  handlTFA,
+  fetchAllUsers,
+} from "../(handlers)/requestHandler";
 import Notif from "../test/notif";
-import { io } from "socket.io-client";
 import { User } from "../(interfaces)/userInterface";
 import { notif_element } from "../(interfaces)/channelInterface";
+import { useSocket } from "../(contexts)/socketContext";
 
 const Navbar_search_list = (props: any) => {
   const router = useRouter();
@@ -59,10 +62,10 @@ export default function Navbar_compo() {
   const [show2fa, setshow2fa] = useState(false);
   const [twofa, settwofa] = useState(false);
   const checkpathname = usePathname();
-const [socket, setSocket] = useState<any>(null);
-const [currUser, setCurrUser] = useState<User | null>(null);
-const [data, setData] = useState<notif_element[]>([]);
-const [notif_counter, setnotif_counter] = useState(0);
+  const socket = useSocket();
+  const [currUser, setCurrUser] = useState<User | null>(null);
+  const [data, setData] = useState<notif_element[]>([]);
+  const [notif_counter, setnotif_counter] = useState(0);
   const openNav = () => {
     setShow(!show);
   };
@@ -77,7 +80,7 @@ const [notif_counter, setnotif_counter] = useState(0);
   const handeldesaible2fa = async () => {
     try {
       const res = await handlTFA();
-        toast.success("Two Factor Authentication Disabled");
+      toast.success("Two Factor Authentication Disabled");
       settwofa(false);
     } catch (error) {
       toast.error("Error Disabling Two Factor Authentication");
@@ -97,171 +100,153 @@ const [notif_counter, setnotif_counter] = useState(0);
     Cookies.remove("token", { path: "/" });
     window.location.href = "/";
   };
-  const handlenotifclick = (item:any) => {
-    if (item.action === "Add")
-    router.push('profile/'+ item.intralogin);
+  const handlenotifclick = (item: any) => {
+    if (item.action === "Add") router.push("profile/" + item.intralogin);
   };
-
 
   useEffect(() => {
     fetchserch();
     fetchuser();
 
-    const token = Cookies.get("token");
-    const newSocket = io("http://localhost:3001/channels", {
-      extraHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
+    socket.on("friendRequest", (_data: notif_element) => {
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      setnotif_counter(notif_counter + 1);
+      setData((Data) => [
+        ...Data,
+        {
+          id: notif_counter,
+          action: "friendRequest",
+          receiver: _data.receiver,
+          sender: {
+            avatarLink: _data.sender.avatarLink,
+            intraLogin: _data.sender.intraLogin,
+            nickname: _data.sender.nickname,
+          },
+        },
+      ]);
+      toast.success(`${_data.sender.intraLogin} Friend Requested`);
     });
-    setSocket(newSocket);
-      newSocket.on("friendRequest", (_data: notif_element) => {
-        if(_data.sender.intraLogin === currUser?.intraLogin) return;
-        setnotif_counter(notif_counter + 1);
-        setData((Data) => [
-          ...Data,
-          {
-            id: notif_counter,
-            action: 'friendRequest',
-            receiver: _data.receiver,
-            sender: {
-              avatarLink: _data.sender.avatarLink,
-              intraLogin: _data.sender.intraLogin,
-              nickname: _data.sender.nickname,
-            },
+
+    socket.on("friendRequestCancelled", (_data: notif_element) => {
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      setnotif_counter(notif_counter + 1);
+      setData((Data) => [
+        ...Data,
+        {
+          id: notif_counter,
+          action: "friendRequestCancelled",
+          receiver: _data.receiver,
+          sender: {
+            avatarLink: _data.sender.avatarLink,
+            intraLogin: _data.sender.intraLogin,
+            nickname: _data.sender.nickname,
           },
-        ]);
-        toast.success(`${_data.sender.intraLogin} Friend Requested`);
-        });
-
-      newSocket.on("friendRequestCancelled", (_data: notif_element) => {
-        if(_data.sender.intraLogin === currUser?.intraLogin) return;
-        setnotif_counter(notif_counter + 1);
-        setData((Data) => [
-          ...Data,
-          {
-            id: notif_counter,
-            action: 'friendRequestCancelled',
-            receiver: _data.receiver,
-            sender: {
-              avatarLink: _data.sender.avatarLink,
-              intraLogin: _data.sender.intraLogin,
-              nickname: _data.sender.nickname,
-            },
+        },
+      ]);
+      toast.error(`${_data.sender.intraLogin} Cancelled Requested Friend`);
+    });
+    socket.on("friendRejected", (_data: notif_element) => {
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      setnotif_counter(notif_counter + 1);
+      setData((Data) => [
+        ...Data,
+        {
+          id: notif_counter,
+          action: "friendRejected",
+          receiver: _data.receiver,
+          sender: {
+            avatarLink: _data.sender.avatarLink,
+            intraLogin: _data.sender.intraLogin,
+            nickname: _data.sender.nickname,
           },
-        ]);
-        toast.error(`${_data.sender.intraLogin} Cancelled Requested Friend`);
-
-        });
-      newSocket.on("friendRejected", (_data: notif_element) => {
-        if(_data.sender.intraLogin === currUser?.intraLogin) return;
-        setnotif_counter(notif_counter + 1);
-        setData((Data) => [
-          ...Data,
-          {
-            id: notif_counter,
-            action: 'friendRejected',
-            receiver: _data.receiver,
-            sender: {
-              avatarLink: _data.sender.avatarLink,
-              intraLogin: _data.sender.intraLogin,
-              nickname: _data.sender.nickname,
-            },
+        },
+      ]);
+      toast.error(`${_data.sender.intraLogin} Rejected Requested Friend`);
+    });
+    socket.on("friendAccepted", (_data: notif_element) => {
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      setnotif_counter(notif_counter + 1);
+      setData((Data) => [
+        ...Data,
+        {
+          id: notif_counter,
+          action: "friendAccepted",
+          receiver: _data.receiver,
+          sender: {
+            avatarLink: _data.sender.avatarLink,
+            intraLogin: _data.sender.intraLogin,
+            nickname: _data.sender.nickname,
           },
-        ]);
-        toast.error(`${_data.sender.intraLogin} Rejected Requested Friend`);
-
-        });
-      newSocket.on("friendAccepted", (_data: notif_element) => {
-        if(_data.sender.intraLogin === currUser?.intraLogin) return;
-        setnotif_counter(notif_counter + 1);
-        setData((Data) => [
-          ...Data,
-          {
-            id: notif_counter,
-            action: 'friendAccepted',
-            receiver: _data.receiver,
-            sender: {
-              avatarLink: _data.sender.avatarLink,
-              intraLogin: _data.sender.intraLogin,
-              nickname: _data.sender.nickname,
-            },
+        },
+      ]);
+      toast.success(`${_data.sender.intraLogin} Accepted Requested Friend`);
+    });
+    socket.on("friendRemoved", (_data: notif_element) => {
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      setnotif_counter(notif_counter + 1);
+      setData((Data) => [
+        ...Data,
+        {
+          id: notif_counter,
+          action: "friendRemoved",
+          receiver: _data.receiver,
+          sender: {
+            avatarLink: _data.sender.avatarLink,
+            intraLogin: _data.sender.intraLogin,
+            nickname: _data.sender.nickname,
           },
-        ]);
-        toast.success(`${_data.sender.intraLogin} Accepted Requested Friend`);
-
-        });
-      newSocket.on("friendRemoved", (_data: notif_element) => {
-        if(_data.sender.intraLogin === currUser?.intraLogin) return;
-        setnotif_counter(notif_counter + 1);
-        setData((Data) => [
-          ...Data,
-          {
-            id: notif_counter,
-            action: 'friendRemoved',
-            receiver: _data.receiver,
-            sender: {
-              avatarLink: _data.sender.avatarLink,
-              intraLogin: _data.sender.intraLogin,
-              nickname: _data.sender.nickname,
-            },
+        },
+      ]);
+      toast.error(`${_data.sender.intraLogin} Removed From Friend`);
+    });
+    socket.on("userBlocked", (_data: notif_element) => {
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      setnotif_counter(notif_counter + 1);
+      setData((Data) => [
+        ...Data,
+        {
+          id: notif_counter,
+          action: "userBlocked",
+          receiver: _data.receiver,
+          sender: {
+            avatarLink: _data.sender.avatarLink,
+            intraLogin: _data.sender.intraLogin,
+            nickname: _data.sender.nickname,
           },
-        ]);
-        toast.error(`${_data.sender.intraLogin} Removed From Friend`);
-
-        });
-      newSocket.on("userBlocked", (_data: notif_element) => {
-        if(_data.sender.intraLogin === currUser?.intraLogin) return;
-        setnotif_counter(notif_counter + 1);
-        setData((Data) => [
-          ...Data,
-          {
-            id: notif_counter,
-            action: 'userBlocked',
-            receiver: _data.receiver,
-            sender: {
-              avatarLink: _data.sender.avatarLink,
-              intraLogin: _data.sender.intraLogin,
-              nickname: _data.sender.nickname,
-            },
+        },
+      ]);
+      toast.error(`${_data.sender.intraLogin} Blocked You`);
+    });
+    socket.on("userUnblocked", (_data: notif_element) => {
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      setnotif_counter(notif_counter + 1);
+      setData((Data) => [
+        ...Data,
+        {
+          id: notif_counter,
+          action: "userUnblocked",
+          receiver: _data.receiver,
+          sender: {
+            avatarLink: _data.sender.avatarLink,
+            intraLogin: _data.sender.intraLogin,
+            nickname: _data.sender.nickname,
           },
-        ]);
-        toast.error(`${_data.sender.intraLogin} Blocked You`);
+        },
+      ]);
+      toast.success(`${_data.sender.intraLogin} UnBlocked You`);
+    });
 
-        });
-      newSocket.on("userUnblocked", (_data: notif_element) => {
-        if(_data.sender.intraLogin === currUser?.intraLogin) return;
-        setnotif_counter(notif_counter + 1);
-        setData((Data) => [
-          ...Data,
-          {
-            id: notif_counter,
-            action: 'userUnblocked',
-            receiver: _data.receiver,
-            sender: {
-              avatarLink: _data.sender.avatarLink,
-              intraLogin: _data.sender.intraLogin,
-              nickname: _data.sender.nickname,
-            },
-          },
-        ]);
-        toast.success(`${_data.sender.intraLogin} UnBlocked You`);
-        });
-
-
-      return () => {
-        newSocket.disconnect();
-        newSocket.off("friendRequest");
-        newSocket.off("friendRequestCancelled");
-        newSocket.off("friendRejected");
-        newSocket.off("friendAccepted");
-        newSocket.off("friendRemoved");
-        newSocket.off("userBlocked");
-        newSocket.off("userUnblocked");
-      };
+    return () => {
+      socket.off("friendRequest");
+      socket.off("friendRequestCancelled");
+      socket.off("friendRejected");
+      socket.off("friendAccepted");
+      socket.off("friendRemoved");
+      socket.off("userBlocked");
+      socket.off("userUnblocked");
+    };
     // }
   }, [data]);
-
-
 
   const handlenavsearch = (event: any) => {
     setnavsearch(event.target.value);
@@ -307,105 +292,115 @@ const [notif_counter, setnotif_counter] = useState(0);
     return null;
   }
 
-      return(
-        <Fragment>
-        <nav className=" fixed w-full h-16 z-10 shadow-xl bg-primary_blue ">
-          <div className="flex justify-between items-center h-full w-full px-4 2xl:px-9">
-            <div className="flex items-center space-x-4">
-              <div className="relative flex md:gap-8 lg:gap-16 items-center space-x-4">
-                <span className="oo text-sm md:text-2xl font-bold">
-                  PongVerse
-                </span>
-                <div
-                  tabIndex={0}
-                  className="flex red flex-col space-y-10 "
-                  ref={searchRef}
-                >
-                  <input
-                    type="text"
-                    className="w-[120px] sm:w-auto outline-none bg-transparent text-white text-sm  border-b-2 border-white-500 placeholder-opacity-50 placeholder-white"
-                    placeholder="Search"
-                    onChange={handlenavsearch}
-                    onFocus={showsearchfield}
-                  />
-                  {showsearch && users_data ? (
-                    <div
-                      tabIndex={0}
-                      className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar"
-                    >
-                      {users_data.map((item: any, index: any) =>
-                        item.intraLogin.includes(navsearch) ? (
-                          <Navbar_search_list
-                            item={item}
-                            index={index}
-                            key={index}
-                            setshowsearch={setshowsearch}
-                          />
-                        ) : null
-                      )}
-                    </div>
-                  ) : null}
-                </div>
+  return (
+    <Fragment>
+      <nav className=" fixed w-full h-16 z-10 shadow-xl bg-primary_blue ">
+        <div className="flex justify-between items-center h-full w-full px-4 2xl:px-9">
+          <div className="flex items-center space-x-4">
+            <div className="relative flex md:gap-8 lg:gap-16 items-center space-x-4">
+              <span className="oo text-sm md:text-2xl font-bold">
+                PongVerse
+              </span>
+              <div
+                tabIndex={0}
+                className="flex red flex-col space-y-10 "
+                ref={searchRef}
+              >
+                <input
+                  type="text"
+                  className="w-[120px] sm:w-auto outline-none bg-transparent text-white text-sm  border-b-2 border-white-500 placeholder-opacity-50 placeholder-white"
+                  placeholder="Search"
+                  onChange={handlenavsearch}
+                  onFocus={showsearchfield}
+                />
+                {showsearch && users_data ? (
+                  <div
+                    tabIndex={0}
+                    className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar"
+                  >
+                    {users_data.map((item: any, index: any) =>
+                      item.intraLogin.includes(navsearch) ? (
+                        <Navbar_search_list
+                          item={item}
+                          index={index}
+                          key={index}
+                          setshowsearch={setshowsearch}
+                        />
+                      ) : null
+                    )}
+                  </div>
+                ) : null}
               </div>
             </div>
-            <div className="hidden md:flex ">
-              <div className="flex items-center lg:space-x-16 space-x-7">
-                <div
-                  className="flex   p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
-                  style={{
-                    borderBottom: navactive === 2 ? "2px solid white" : "none",
-                    marginTop: navactive === 2 ? "15px" : "0",
-                  }}
-                  onClick={() => {
-                    setnavactive(2);
-                    router.push("/messages");
-                  }}
-                >
-                  <AiOutlineComment size={25} className="text-white mr-4" />
-                  <a className="text-white text-sm lg:text-lg font-bold">
-                    Messages
-                  </a>
-                </div>
-                <div
-                  className="flex  p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
-                  style={{
-                    borderBottom: navactive === 3 ? "2px solid white" : "none",
-                    marginTop: navactive === 3 ? "15px" : "0",
-                  }}
-                  onClick={() => {
-                    setnavactive(3);
-                    router.push("/user/me");
-                  }}
-                >
-                  <AiOutlineIdcard size={25} className="text-white mr-4" />
-                  <a className="text-white text-sm lg:text-lg font-bold">
-                    Profile
-                  </a>
-                </div>
-                <div
-                  className="flex  p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
-                  style={{
-                    borderBottom: navactive === 4 ? "2px solid white" : "none",
-                    marginTop: navactive === 4 ? "15px" : "0",
-                  }}
-                  onClick={() => {
-                    setnavactive(4);
-                    router.push("/pregame");
-                  }}
-                >
-                  <GiPingPongBat size={25} className="text-white mr-4" />
-                  <a className="text-white text-sm lg:text-lg font-bold">Game</a>
-                </div>
+          </div>
+          <div className="hidden md:flex ">
+            <div className="flex items-center lg:space-x-16 space-x-7">
+              <div
+                className="flex   p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
+                style={{
+                  borderBottom: navactive === 2 ? "2px solid white" : "none",
+                  marginTop: navactive === 2 ? "15px" : "0",
+                }}
+                onClick={() => {
+                  setnavactive(2);
+                  router.push("/messages");
+                }}
+              >
+                <AiOutlineComment size={25} className="text-white mr-4" />
+                <a className="text-white text-sm lg:text-lg font-bold">
+                  Messages
+                </a>
+              </div>
+              <div
+                className="flex  p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
+                style={{
+                  borderBottom: navactive === 3 ? "2px solid white" : "none",
+                  marginTop: navactive === 3 ? "15px" : "0",
+                }}
+                onClick={() => {
+                  setnavactive(3);
+                  router.push("/user/me");
+                }}
+              >
+                <AiOutlineIdcard size={25} className="text-white mr-4" />
+                <a className="text-white text-sm lg:text-lg font-bold">
+                  Profile
+                </a>
+              </div>
+              <div
+                className="flex  p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
+                style={{
+                  borderBottom: navactive === 4 ? "2px solid white" : "none",
+                  marginTop: navactive === 4 ? "15px" : "0",
+                }}
+                onClick={() => {
+                  setnavactive(4);
+                  router.push("/pregame");
+                }}
+              >
+                <GiPingPongBat size={25} className="text-white mr-4" />
+                <a className="text-white text-sm lg:text-lg font-bold">Game</a>
               </div>
             </div>
-            <div className="flex flex-row w-[300px] justify-between">
+          </div>
+          <div className="flex flex-row w-[300px] justify-between">
             <div className="hidden md:flex justify-end items-center space-x-4 cursor-pointer ">
               <div className="dropdown dropdown-end">
-                <Notif socket={socket}  handlenotifclick={handlenotifclick} data={data} setData={setData} key={data?.length}/>
+                <Notif
+                  socket={socket}
+                  handlenotifclick={handlenotifclick}
+                  data={data}
+                  setData={setData}
+                  key={data?.length}
+                />
               </div>
               <div className="hidden md:flex justify-end items-center space-x-4  cursor-pointer ">
                 <div className="dropdown dropdown-end">
-                  <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
+                  <AiOutlineMenu
+                    size={35}
+                    tabIndex={0}
+                    className="text-white"
+                  />
                   <ul
                     tabIndex={0}
                     className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]"
@@ -462,7 +457,9 @@ const [notif_counter, setnotif_counter] = useState(0);
               <div className="flex flex-col space-y-10 mt-10">
                 <div className="flex">
                   <AiFillHome size={25} className="text-white mr-4" />
-                  <a className="text-white text-sm lg:text-lg font-bold">Home</a>
+                  <a className="text-white text-sm lg:text-lg font-bold">
+                    Home
+                  </a>
                 </div>
                 <div
                   className="flex cursor-pointer"
@@ -496,7 +493,9 @@ const [notif_counter, setnotif_counter] = useState(0);
                   }}
                 >
                   <GiPingPongBat size={25} className="text-white mr-4" />
-                  <a className="text-white text-sm lg:text-lg font-bold">Game</a>
+                  <a className="text-white text-sm lg:text-lg font-bold">
+                    Game
+                  </a>
                 </div>
                 <div className="flex">
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -525,30 +524,27 @@ const [notif_counter, setnotif_counter] = useState(0);
               </div>
             </div>
           </div>
-          </div>
-        </nav>
-        {/* {show2fa && <Model2Fa  OpenModel={show2fa} settwofa={settwofa} twofa={twofa}  CloseModel={()=> { toast.success("SALAM ana 9a7ba ") ,setshow2fa(false)}} /> } */}
-        {show2fa && (
-          <Model2Fa
-            OpenModel={show2fa}
-            settwofa={settwofa}
-            CloseModel={setshow2fa} /*takhwira hnaya 3andak tnsa */
-          />
-        )}
-      </Fragment>
-      )
-    }
-  // },[checkpathname,currUser])
-  
-    
-  // console.log(` current data hya hadi a m3alem :  `, currUser , `   hada hwa l pathname li hna fih   ${checkpathname}  hada hwa nickname am3alem   ${currUser?.nickname}`);
-    
+        </div>
+      </nav>
+      {/* {show2fa && <Model2Fa  OpenModel={show2fa} settwofa={settwofa} twofa={twofa}  CloseModel={()=> { toast.success("SALAM ana 9a7ba ") ,setshow2fa(false)}} /> } */}
+      {show2fa && (
+        <Model2Fa
+          OpenModel={show2fa}
+          settwofa={settwofa}
+          CloseModel={setshow2fa} /*takhwira hnaya 3andak tnsa */
+        />
+      )}
+    </Fragment>
+  );
+}
+// },[checkpathname,currUser])
 
+// console.log(` current data hya hadi a m3alem :  `, currUser , `   hada hwa l pathname li hna fih   ${checkpathname}  hada hwa nickname am3alem   ${currUser?.nickname}`);
 
-  //  return(
-       
-  //     <>
-  //     {currUser && mstafa}
-  //     </>
-  // );
+//  return(
+
+//     <>
+//     {currUser && mstafa}
+//     </>
+// );
 // }

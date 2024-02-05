@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import * as PIXI from "pixi.js";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import { Press_Start_2P } from "next/font/google";
 import { fetchCurrentUser } from "../(handlers)/requestHandler";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { User } from "../(interfaces)/userInterface";
 
 let p1score = 0;
 let p2score = 0;
@@ -170,126 +172,119 @@ function initPixi() {
   };
 }
 
-async function getUser() {
-  const user = await fetchCurrentUser().then((res) => res);
-  return user;
-}
-
-const runGame = async (isMounted: boolean) => {
-  if (!isMounted) return;
-
-  try {
+const PixiComponent = () => {
+  const [user, setUser] = useState<User | null>(null);
+  let socket: Socket | null = null;
+  const token = Cookies.get("token");
+  if (user && token) {
+  }
+  useEffect(() => {
+    if (user) return;
+    const fetchData = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        setUser(user);
+      } catch (error) {
+        toast.error("An error occured, please try again later1");
+      }
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    if (!socket && user && token) {
+      socket = io("http://localhost:3001/game", {
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+        query: { Username: user.intraLogin },
+      });
+    }
+    if (!user || !socket) return;
     const pixi = initPixi();
     const assets = initAssets(pixi.App);
-    const user = await getUser();
-    let game: Game;
-    const token = Cookies.get("token");
+    try {
+      let game: Game;
 
-    const socket = io("http://localhost:3001/game", {
-      query: { Username: user.intraLogin },
-      extraHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    socket.on("WaitingForOpponent", (data) => {
-      console.log("waiting for opponent");
-      pixi.App.stage.addChild(assets.Waiting);
-    });
-
-    socket.on("gameReady", (data) => {
-      console.log("game ready");
-      gamestarted = true;
-      game = data;
-      pixi.App.stage.removeChild(assets.Waiting);
-      stageAssets(pixi.App, assets);
-    });
-    socket.on("gameUpdate", (data) => {
-      console.log("update received");
-      game = data;
-      assets.Ball.x = game.ballPosition.x;
-      assets.Ball.y = game.ballPosition.y;
-      assets.Paddle1.y = game.player1.position.y;
-      assets.Paddle2.y = game.player2.position.y;
-      assets.Score1.text = game.player1.score.toString();
-      assets.Score2.text = game.player2.score.toString();
-    });
-    socket.on("gameWin", (data) => {
-      if (data === user.intraLogin) {
-        console.log("game win");
-        gamestarted = false;
-        assets.Score1.text = game.player1.score.toString();
-        assets.Score2.text = game.player2.score.toString();
-        const winText = new PIXI.Text("You win !", textStyle);
-        winText.anchor.set(0.5);
-        winText.x = pixi.App.screen.width / 2;
-        winText.y = pixi.App.screen.height / 2;
-        winText.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-        pixi.App.stage.addChild(winText);
-        pixi.App.stage.removeChild(assets.Ball);
-        pixi.App.stage.removeChild(assets.halfline);
-      } else {
-        console.log("game lose");
-        gamestarted = false;
-        assets.Score1.text = game.player1.score.toString();
-        assets.Score2.text = game.player2.score.toString();
-        const loseText = new PIXI.Text("You lose !", textStyle);
-        loseText.anchor.set(0.5);
-        loseText.x = pixi.App.screen.width / 2;
-        loseText.y = pixi.App.screen.height / 2;
-        loseText.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-        pixi.App.stage.addChild(loseText);
-        pixi.App.stage.removeChild(assets.Ball);
-        pixi.App.stage.removeChild(assets.halfline);
-      }
-    });
-    socket.on("gameFinished", (data) => {
-      console.log("game finish");
-      gamestarted = false;
-      socket.disconnect();
-      pixi.App.destroy();
-      window.location.replace("/pregame");
-    });
-    pixi.App.stage.on("pointermove", (e) => {
-      if (!gamestarted) return;
-      socket.emit("move", {
-        gameId: game.gameId,
-        username: user.intraLogin,
-        position: {
-          x: e.global.x,
-          y: e.global.y,
-        },
+      socket.on("WaitingForOpponent", (data) => {
+        console.log("waiting for opponent");
+        pixi.App.stage.addChild(assets.Waiting);
       });
-    });
-    pixi.App.ticker.add((delta) => {
-      if (!gamestarted) return;
-    });
-    return () => {
-      console.log("game unmounted");
-      socket.disconnect();
-      pixi.App.destroy();
-    };
-  } catch (error) {
-    console.error("Error fetching user:", error);
-  }
-  return () => {};
-};
 
-const PixiComponent = () => {
-  let isMounted = false;
-  useEffect(() => {
-    console.log("game mounted");
-    let clean: (() => void) | undefined;
-    runGame(isMounted).then((cleanFn) => {
-      clean = cleanFn;
-    });
-    isMounted = true;
+      socket.on("gameReady", (data) => {
+        console.log("game ready");
+        gamestarted = true;
+        game = data;
+        pixi.App.stage.removeChild(assets.Waiting);
+        stageAssets(pixi.App, assets);
+      });
+      socket.on("gameUpdate", (data) => {
+        console.log("update received");
+        game = data;
+        assets.Ball.x = game.ballPosition.x;
+        assets.Ball.y = game.ballPosition.y;
+        assets.Paddle1.y = game.player1.position.y;
+        assets.Paddle2.y = game.player2.position.y;
+        assets.Score1.text = game.player1.score.toString();
+        assets.Score2.text = game.player2.score.toString();
+      });
+      socket.on("gameWin", (data) => {
+        if (data === user.intraLogin) {
+          console.log("game win");
+          gamestarted = false;
+          assets.Score1.text = game.player1.score.toString();
+          assets.Score2.text = game.player2.score.toString();
+          const winText = new PIXI.Text("You win !", textStyle);
+          winText.anchor.set(0.5);
+          winText.x = pixi.App.screen.width / 2;
+          winText.y = pixi.App.screen.height / 2;
+          winText.blendMode = PIXI.BLEND_MODES.MULTIPLY;
+          pixi.App.stage.addChild(winText);
+          pixi.App.stage.removeChild(assets.Ball);
+          pixi.App.stage.removeChild(assets.halfline);
+        } else {
+          console.log("game lose");
+          gamestarted = false;
+          assets.Score1.text = game.player1.score.toString();
+          assets.Score2.text = game.player2.score.toString();
+          const loseText = new PIXI.Text("You lose !", textStyle);
+          loseText.anchor.set(0.5);
+          loseText.x = pixi.App.screen.width / 2;
+          loseText.y = pixi.App.screen.height / 2;
+          loseText.blendMode = PIXI.BLEND_MODES.MULTIPLY;
+          pixi.App.stage.addChild(loseText);
+          pixi.App.stage.removeChild(assets.Ball);
+          pixi.App.stage.removeChild(assets.halfline);
+        }
+      });
+      socket.on("gameFinished", (data) => {
+        console.log("game finish");
+        gamestarted = false;
+        socket.disconnect();
+        pixi.App.destroy();
+        window.location.replace("/pregame"); //TODO REPLACE THIS WITH next/navigation
+      });
+      pixi.App.stage.on("pointermove", (e) => {
+        if (!gamestarted) return;
+        socket.emit("move", {
+          gameId: game.gameId,
+          username: user.intraLogin,
+          position: {
+            x: e.global.x,
+            y: e.global.y,
+          },
+        });
+      });
+      pixi.App.ticker.add((delta) => {
+        if (!gamestarted) return;
+      });
+    } catch (error) {
+      toast.error("An error occured, please try again later0");
+    }
     return () => {
-      if (clean) {
-        clean();
-      }
+      pixi.App.destroy();
+      socket.disconnect();
     };
-  }, []);
+  }, [user]);
 
   return <div id="pixi-container" className="box-shadow"></div>;
 };
