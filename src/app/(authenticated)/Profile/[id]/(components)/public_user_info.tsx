@@ -23,10 +23,12 @@ const Publicuserinfo_block_unblock = (props: any) => {
         toast.success("User Blocked successfuly !");
         setisBlocked(true);
       } catch (error:any) {
+    toast.error(error.response.data.message);
+
         if (error.response.status === 401)
           window.location.replace("/");
-        if (error?.response?.status === 403)
-          toast.error("User Not Blocked !");
+        // if (error?.response?.status === 403)
+        //   toast.error("User Not Blocked !");
           props.setstricted(true);
       }
     };
@@ -49,10 +51,12 @@ const Publicuserinfo_block_unblock = (props: any) => {
         toast.success("User UnBlocked successfully");
         setisBlocked(false);
       } catch (error:any) {
+    toast.error(error.response.data.message);
+
         if (error.response.status === 401)
           window.location.replace("/");
-        if (error?.response?.status === 403)
-          toast.error("User Not Blocked !");
+        // if (error?.response?.status === 403)
+        //   toast.error("User Not Blocked !");
           props.setstricted(true);
 
       }
@@ -142,10 +146,12 @@ else if(buttonstate === "Cancel")
     setbuttonstate("Add");
 
     } catch (error:any) {
+    toast.error(error.response.data.message);
+
       if (error.response.status === 401)
         window.location.replace("/");
-      if (error?.response?.status === 403)
-        toast.error("User Not Waiting For Invite !");
+      // if (error?.response?.status === 403)
+      //   toast.error("User Not Waiting For Invite !");
         // props.setstricted(true);
       props.setstrictedadd(true);
 
@@ -178,10 +184,12 @@ else if(buttonstate === "Accept")
     setbuttonstate("Remove");
 
     } catch (error:any) {
+    toast.error(error.response.data.message);
+
       if (error.response.status === 401)
         window.location.replace("/");
-      if (error?.response?.status === 403)
-        toast.error("User has nothing to Accept !");
+      // if (error?.response?.status === 403)
+      //   toast.error("User has nothing to Accept !");
         // props.setstricted(true);
         props.setstrictedadd(true);
 
@@ -212,10 +220,12 @@ else if(buttonstate === "Accept")
         toast.success("User Add successfully");
         setbuttonstate("Cancel");
       } catch (error:any) {
+    toast.error(error.response.data.message);
+
         if (error.response.status === 401)
         window.location.replace("/");
-        if (error?.response?.status === 403)
-          toast.error("User Can't be Add !");
+        // if (error?.response?.status === 403)
+        //   toast.error("User Can't be Add !");
         // setbuttonstate("Accept");
       props.setstrictedadd(true);
       }

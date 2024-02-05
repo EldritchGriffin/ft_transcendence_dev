@@ -9,6 +9,7 @@ import Stats from "../../profile/[id]/(components)/stats";
 import Leadrboard from "../../profile/[id]/(components)/board";
 import Achievements from "../../achive/Achievements";
 import { fetchCurrentUser, fetchLeaderBoard } from "../../(handlers)/requestHandler";
+import { toast } from "react-toastify";
 // import Navbar_compo from '/testing/page';
 
 const ProfilePage = (props: any) => {
@@ -21,7 +22,7 @@ const ProfilePage = (props: any) => {
       const result = await fetchCurrentUser();
       setusers_data(result);
     } catch (error:any) {
-      console.log("a sidi hada hwa lerror li raj3 lik ", error.response.status);
+      toast.error(error.response.data.message);
       if (error.response.status === 401)
         window.location.replace("/");
 
@@ -34,6 +35,7 @@ const ProfilePage = (props: any) => {
       const result = await fetchLeaderBoard();
       setleader_board(result);
     } catch (error:any) {
+      toast.error(error.response.data.message);
       if (error.response.status === 401)
        window.location.replace("/");
     }

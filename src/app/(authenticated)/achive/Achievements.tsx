@@ -20,7 +20,6 @@ function select_achievements(data:any)
 
 const Achievements = (props:any) => {
   const the_history_match = props.matchHistory;
-  const [achiv_index, setachiv_index] = useState(0);
   const [achivements, setachivements] = useState<any>(null);
   useEffect(() => {
    const achivement = select_achievements(the_history_match);

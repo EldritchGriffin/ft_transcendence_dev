@@ -6,7 +6,7 @@ import React, { useEffect, useState, useRef } from 'react';
 // import HashLoader from "react-spinners/ClipLoader";
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { fetchUsernickname, postUserAvatar } from '../(handlers)/requestHandler';
+import { fetchUsernickname, postUserAvatar } from './requestHandler';
 
 export default  function EditNickname( props:any ) {
   const router = useRouter();

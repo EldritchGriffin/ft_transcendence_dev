@@ -10,29 +10,17 @@ import { fetchCurrentUser } from "../../(handlers)/requestHandler";
 const PublicProfile = (params: any) => {
   const router = useRouter();
   const [users_data, setusers_data] = useState<any>(null);
-  const [leader_board, setleader_board] = useState<any>();
+  // const [leader_board, setleader_board] = useState<any>();
   const [loading, setloading] = useState(true);
-  const linkRef = useRef<HTMLAnchorElement>(null);
+  // const linkRef = useRef<HTMLAnchorElement>(null);
 
   var profiletype = false;
   const fetchGetDataBack = async () => {
     try {
-    //   const response = await fetch("http://localhost:3001/user/me", {
-    //     method: "GET",
-    //     mode: "cors",
-    //     credentials: "include",
-    //   });
-    //   if (response.status === 404)
-    //     toast.error("rani sekrana bl 404 privat profile");
-    //   if (!response.ok)
-    //   throw new Error(
-    // "An error occurred while attempting to update the new Nickname."
-    // );
-    // const result = await response.json();
-    // setusers_data(result);
     const result = await fetchCurrentUser();
     setusers_data(result);
   } catch (error:any) {
+    toast.error(error.response.data.message);
     if (error.response.status === 401)
        window.location.replace("/");
     } finally {

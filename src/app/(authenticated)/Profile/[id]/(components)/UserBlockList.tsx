@@ -17,6 +17,8 @@ const UserBlockList = (props: any) => {
       const response = await fetchBlockedList();
       setUser_data(response);
     } catch (error:any) {
+    toast.error(error.response.data.message);
+
       if (error.response.status === 401)
           window.location.replace("/");
     } finally {
@@ -30,11 +32,12 @@ const UserBlockList = (props: any) => {
   const send_unblock = async (item: any) => {
     try {
       const response = await postunblockuser(item.intraLogin);
-      setUser_data(response);
       toast.success("User UnBlocked successfully");
     } catch (error:any) {
-      if (error?.response?.status === 403)
-        toast.error("User Not Blocked !");
+    toast.error(error.response.data.message);
+
+      // if (error?.response?.status === 403)
+      //   toast.error("User Not Blocked !");
       if (error.response.status === 401)
          window.location.replace("/");
     }
