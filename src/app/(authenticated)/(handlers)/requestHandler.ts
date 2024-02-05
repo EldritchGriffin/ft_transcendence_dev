@@ -529,7 +529,7 @@ export const validTfa = async (requestData : any) => {
   const url = `/user/validate2fa`;
 
   try {
-    const response = await api.get(url);
+    const response = await api.post(url, requestData);
     if (response.status >= 200 && response.status < 300) {
       const data = await response.data;
       return data;

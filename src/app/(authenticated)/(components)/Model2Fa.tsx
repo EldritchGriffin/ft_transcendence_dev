@@ -8,53 +8,9 @@ import { getImage, validTfa } from "../(handlers)/requestHandler";
 
 
 export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
-  let current: number = 0;
-  const [value, setValue] = useState<string[]>(Array(6).fill(""));
-  const [activeinput, setActiveinput] = useState<number>(0);
-  const code = value.join("");
-  const inputRef = useRef<HTMLInputElement>(null);
+
   const [otp, setOtp] = useState('');
   const [image, setImage] = useState<any>();
-  const handleonchange = ({target}: React.ChangeEvent<HTMLInputElement>) => {
-    const otp = target.value;
-    setValue((prev) => {
-      const prevValue = [...prev];
-      prevValue[current] = otp;
-      return prevValue;
-    });
-    if (!otp) {
-      setActiveinput(current - 1);
-    } else {
-      setActiveinput(current + 1);
-    }
-  };
-  
-  const oneDigit = (Input: any) => {
-    {
-      if (Input.value.length > 1) {
-        Input.value = Input.value.slice(0, 1);
-      }
-    }
-  }
-  useEffect(() => {
-    inputRef.current?.focus();
-
-  }, [activeinput]);
-  
-  const handelOnkeydown = (
-    {key}: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-    ) => {
-      current = index;
-      console.log("value = ", value[0], "index = ", current)
-      if (key === "Backspace" && value[current] === "") {
-        setActiveinput(current - 1);
-      }
-  };
-
-  const backendUrl = "http://localhost:3001/user/validate2fa";
-
-  const backendUrl2 = "http://localhost:3001/user/enable2fa";
 
   const getimage = async () => {
     try {
@@ -80,14 +36,14 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
       code: otp as string,
     };
     console.log("******",requestData)
-    try{
 
+    try{      
       const res = await validTfa(requestData);
+        toast.success("2FA enabled successfully");
       settwofa(true);
       CloseModel(false);
       // const res = await  axios.post(backendUrl, requestData, { withCredentials: true });
       // if (res.status >= 200 && res.status < 300) {
-      //   toast.success("2FA enabled successfully");
       //   settwofa(true);
       //   CloseModel(false);
       // }
@@ -124,6 +80,7 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
                           value={otp}
                           onChange={setOtp}
                           numInputs={6}
+                          // containerStyle={"gap-4 md:gap-8 xl:gap-10"}
                           containerStyle={"gap-4 md:gap-8 xl:gap-10"}
                           inputStyle={'h-16 w-[20px] sm:h-[43px] sm:w-[50px] flex flex-col items-center justify-center text-center  outline-none border-b-2 border-black  text-black inpute_code text-sm lg:text-2xl'}
                           renderSeparator={<span>&nbsp;</span>}

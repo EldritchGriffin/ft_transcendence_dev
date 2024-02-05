@@ -95,13 +95,13 @@ const [data, setData] = useState( [{
   const handeldesaible2fa = async () => {
     try {
       const res = await handlTFA();
+        toast.success("Two Factor Authentication Disabled");
       settwofa(false);
       // const response = await axios.get(
       //   "http://localhost:3001/user/disable2fa",
       //   { withCredentials: true }
       // );
       // if (response.status >= 200 && response.status < 300) {
-      //   toast.success("Two Factor Authentication Disabled");
       //   settwofa(false);
       // }
     } catch (error) {
@@ -128,9 +128,10 @@ const [data, setData] = useState( [{
   };
 
   const handleLogoutClick = () => {
-    Cookies.remove("token");
+    Cookies.remove("token", { path: "/" });
     window.location.href = "/";
   };
+
   useEffect(() => {
     fetchserch();
     fetchuser();
@@ -145,7 +146,7 @@ const [data, setData] = useState( [{
       console.log("socket created");
       newSocket.on("friendRequest", (_data: any) => {
         console.log("----------------------------------------------------------------",currUser?.intraLogin, _data.sender)
-        if(_data.sender === currUser?.intraLogin) return;
+        if(_data.sender.intraLogin === currUser?.intraLogin) return;
         console.log("===========>newSocket requested ",newSocket);
         console.log("===========>newSocket ",_data);
         _data.action = "Friend Request";
@@ -360,12 +361,12 @@ const [data, setData] = useState( [{
               </div>
             </div>
           </div>
-          <div className="flex flex-row w-[300px] justify-between">
+          <div className="flex flex-row w-[300px] justify-end">
           <div className="hidden md:flex justify-end items-center space-x-4 cursor-pointer ">
             <div className="dropdown dropdown-end">
               <Notif socket={socket}   data={data} key={data.length}/>
             </div>
-            <div className="hidden md:flex justify-end items-center space-x-4  cursor-pointer ">
+            <div className="hidden  md:flex justify-end items-center space-x-4  cursor-pointer ">
               <div className="dropdown dropdown-end">
                 <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
                 <ul
