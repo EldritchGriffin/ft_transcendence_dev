@@ -1,20 +1,8 @@
-// import React from 'react'
-
-// export default function Model() {
-//   return (
-//     <div className='fixed inset-0 bg-opacity-25 backdrop-blur-md z-10 flex justify-center items-center'>
-//       <div className="w-[600px] flex flex-col">
-//         <div className='bg-white flex flex-col justify-center items-center'>Model</div>
-//       </div>
-//     </div>
-//   )
-// }
-
-
 "use client";
 import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function Model({Open, onClose}:any) {
   let current: number = 0;
@@ -70,11 +58,11 @@ export default function Model({Open, onClose}:any) {
         // console.log("anass image",res.data);
         setImage(res.data);
       })
-      .catch((error) => {
+      .catch((error:any) => {
         // console.log("l7waa")
+      toast.error(error.response.data.message);
         if (error.response.status === 401)
            window.location.replace("/");
-        console.error("Error:", error);
       });
     }, []);
     
@@ -89,10 +77,11 @@ export default function Model({Open, onClose}:any) {
       .then((res) => {
         // console.log(res.data);
       })
-      .catch((error) => {
+      .catch((error:any) => {
+      toast.error(error.response.data.message);
+
         if (error.response.status === 401)
           window.location.replace("/");
-        console.error("Error:", error);
       })
       .finally(() => {
         setValue(Array(6).fill(""));

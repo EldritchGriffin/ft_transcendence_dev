@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useEffect, useRef } from "react";
+import React, { Fragment, useEffect, useMemo, useRef } from "react";
 import { useState } from "react";
 import {
   AiOutlineMenu,
@@ -18,6 +18,7 @@ import { fetchCurrentUser, handlTFA, fetchAllUsers } from "../(handlers)/request
 import Notif from "../test/notif";
 import { io } from "socket.io-client";
 import { User } from "../(interfaces)/userInterface";
+import { notif_element } from "../(interfaces)/channelInterface";
 
 const Navbar_search_list = (props: any) => {
   const router = useRouter();
@@ -60,19 +61,8 @@ export default function Navbar_compo() {
   const checkpathname = usePathname();
 const [socket, setSocket] = useState<any>(null);
 const [currUser, setCurrUser] = useState<User | null>(null);
-
-const [data, setData] = useState( [{
-    sender : "anass",
-    action : "Friend Request",
-    reciever : "ayoub",
-  },
-  {
-    sender : "anass",
-    action : "Friend Request",
-    reciever : "ayoub",
-  },
-  ])
-
+const [data, setData] = useState<notif_element[]>([]);
+const [notif_counter, setnotif_counter] = useState(0);
   const openNav = () => {
     setShow(!show);
   };
@@ -82,14 +72,6 @@ const [data, setData] = useState( [{
       const res = await fetchCurrentUser();
       settwofa(res.TFA);
       setCurrUser(res);
-      // const response = await axios.get("http://localhost:3001/user/me", {
-      //   withCredentials: true,
-      // });
-      // if (response.status >= 200 && response.status < 300) {
-      //   const data = await response.data;
-      //   settwofa(data.TFA);
-      // } else {
-      // }
     } catch (error) {}
   };
   const handeldesaible2fa = async () => {
@@ -97,13 +79,6 @@ const [data, setData] = useState( [{
       const res = await handlTFA();
         toast.success("Two Factor Authentication Disabled");
       settwofa(false);
-      // const response = await axios.get(
-      //   "http://localhost:3001/user/disable2fa",
-      //   { withCredentials: true }
-      // );
-      // if (response.status >= 200 && response.status < 300) {
-      //   settwofa(false);
-      // }
     } catch (error) {
       toast.error("Error Disabling Two Factor Authentication");
     }
@@ -113,15 +88,6 @@ const [data, setData] = useState( [{
     try {
       const res = await fetchAllUsers();
       setusers_data(res);
-
-      // const response = await axios.get("http://localhost:3001/user/all", {
-      //   withCredentials: true,
-      // });
-      // if (response.status >= 200 && response.status < 300) {
-      //   const data = await response.data;
-      //   setusers_data(data);
-      // } else {
-      // }
     } catch (error) {
       console.log("error");
     }
@@ -131,84 +97,154 @@ const [data, setData] = useState( [{
     Cookies.remove("token", { path: "/" });
     window.location.href = "/";
   };
+  const handlenotifclick = (item:any) => {
+    if (item.action === "Add")
+    router.push('profile/'+ item.intralogin);
+  };
+
 
   useEffect(() => {
     fetchserch();
     fetchuser();
-    // if (!socket) {
-      const token = Cookies.get("token");
-      const newSocket = io("http://localhost:3001/channels", {
-        extraHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSocket(newSocket);
-      console.log("socket created");
-      newSocket.on("friendRequest", (_data: any) => {
-        console.log("----------------------------------------------------------------",currUser?.intraLogin, _data.sender)
+
+    const token = Cookies.get("token");
+    const newSocket = io("http://localhost:3001/channels", {
+      extraHeaders: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setSocket(newSocket);
+      newSocket.on("friendRequest", (_data: notif_element) => {
         if(_data.sender.intraLogin === currUser?.intraLogin) return;
-        console.log("===========>newSocket requested ",newSocket);
-        console.log("===========>newSocket ",_data);
-        _data.action = "Friend Request";
-          // Update state with the received data
-          const updatedData = [...data, _data];
-          setData(updatedData);
-          console.log("tahte the new data :", data);
+        setnotif_counter(notif_counter + 1);
+        setData((Data) => [
+          ...Data,
+          {
+            id: notif_counter,
+            action: 'friendRequest',
+            receiver: _data.receiver,
+            sender: {
+              avatarLink: _data.sender.avatarLink,
+              intraLogin: _data.sender.intraLogin,
+              nickname: _data.sender.nickname,
+            },
+          },
+        ]);
+        toast.success(`${_data.sender.intraLogin} Friend Requested`);
         });
 
-      newSocket.on("friendRequestCancelled", (_data: any) => {
-        console.log("===========>newSocket canncelled ",newSocket);
-        console.log("===========>newSocket ",_data);
-        _data.action = "Cancelled Request";
-          // Update state with the received data
-          const updatedData = [...data, _data];
-          setData(updatedData);
-          console.log("tahte the new data :", data);
+      newSocket.on("friendRequestCancelled", (_data: notif_element) => {
+        if(_data.sender.intraLogin === currUser?.intraLogin) return;
+        setnotif_counter(notif_counter + 1);
+        setData((Data) => [
+          ...Data,
+          {
+            id: notif_counter,
+            action: 'friendRequestCancelled',
+            receiver: _data.receiver,
+            sender: {
+              avatarLink: _data.sender.avatarLink,
+              intraLogin: _data.sender.intraLogin,
+              nickname: _data.sender.nickname,
+            },
+          },
+        ]);
+        toast.error(`${_data.sender.intraLogin} Cancelled Requested Friend`);
+
         });
-      newSocket.on("friendRejected", (_data: any) => {
-        console.log("===========>newSocket friendRejected ",newSocket);
-        console.log("===========>newSocket ",_data);
-        _data.action = "friendRejected Request";
-          // Update state with the received data
-          const updatedData = [...data, _data];
-          setData(updatedData);
-          console.log("tahte the new data :", data);
+      newSocket.on("friendRejected", (_data: notif_element) => {
+        if(_data.sender.intraLogin === currUser?.intraLogin) return;
+        setnotif_counter(notif_counter + 1);
+        setData((Data) => [
+          ...Data,
+          {
+            id: notif_counter,
+            action: 'friendRejected',
+            receiver: _data.receiver,
+            sender: {
+              avatarLink: _data.sender.avatarLink,
+              intraLogin: _data.sender.intraLogin,
+              nickname: _data.sender.nickname,
+            },
+          },
+        ]);
+        toast.error(`${_data.sender.intraLogin} Rejected Requested Friend`);
+
         });
-      newSocket.on("friendAccepted", (_data: any) => {
-        console.log("===========>newSocket friendAccepted ",newSocket);
-        console.log("===========>newSocket ",_data);
-        _data.action = "friendAccepted Request";
-          // Update state with the received data
-          const updatedData = [...data, _data];
-          setData(updatedData);
-          console.log("tahte the new data :", data);
+      newSocket.on("friendAccepted", (_data: notif_element) => {
+        if(_data.sender.intraLogin === currUser?.intraLogin) return;
+        setnotif_counter(notif_counter + 1);
+        setData((Data) => [
+          ...Data,
+          {
+            id: notif_counter,
+            action: 'friendAccepted',
+            receiver: _data.receiver,
+            sender: {
+              avatarLink: _data.sender.avatarLink,
+              intraLogin: _data.sender.intraLogin,
+              nickname: _data.sender.nickname,
+            },
+          },
+        ]);
+        toast.success(`${_data.sender.intraLogin} Accepted Requested Friend`);
+
         });
-      newSocket.on("friendRemoved", (_data: any) => {
-        console.log("===========>newSocket friendRemoved ",newSocket);
-        console.log("===========>newSocket ",_data);
-        _data.action = "friendRemoved Request";
-          // Update state with the received data
-          const updatedData = [...data, _data];
-          setData(updatedData);
-          console.log("tahte the new data :", data);
+      newSocket.on("friendRemoved", (_data: notif_element) => {
+        if(_data.sender.intraLogin === currUser?.intraLogin) return;
+        setnotif_counter(notif_counter + 1);
+        setData((Data) => [
+          ...Data,
+          {
+            id: notif_counter,
+            action: 'friendRemoved',
+            receiver: _data.receiver,
+            sender: {
+              avatarLink: _data.sender.avatarLink,
+              intraLogin: _data.sender.intraLogin,
+              nickname: _data.sender.nickname,
+            },
+          },
+        ]);
+        toast.error(`${_data.sender.intraLogin} Removed From Friend`);
+
         });
-      newSocket.on("userBlocked", (_data: any) => {
-        console.log("===========>newSocket blocked ",newSocket);
-        console.log("===========>newSocket ",_data);
-        _data.action = "Blocked Request";
-          // Update state with the received data
-          const updatedData = [...data, _data];
-          setData(updatedData);
-          console.log("tahte the new data :", data);
+      newSocket.on("userBlocked", (_data: notif_element) => {
+        if(_data.sender.intraLogin === currUser?.intraLogin) return;
+        setnotif_counter(notif_counter + 1);
+        setData((Data) => [
+          ...Data,
+          {
+            id: notif_counter,
+            action: 'userBlocked',
+            receiver: _data.receiver,
+            sender: {
+              avatarLink: _data.sender.avatarLink,
+              intraLogin: _data.sender.intraLogin,
+              nickname: _data.sender.nickname,
+            },
+          },
+        ]);
+        toast.error(`${_data.sender.intraLogin} Blocked You`);
+
         });
-      newSocket.on("userUnblocked", (_data: any) => {
-        console.log("===========>newSocket userUnblocked ",newSocket);
-        console.log("===========>newSocket ",_data);
-        _data.action = "userUnblocked Request";
-          // Update state with the received data
-          const updatedData = [...data, _data];
-          setData(updatedData);
-          console.log("tahte the new data :", data);
+      newSocket.on("userUnblocked", (_data: notif_element) => {
+        if(_data.sender.intraLogin === currUser?.intraLogin) return;
+        setnotif_counter(notif_counter + 1);
+        setData((Data) => [
+          ...Data,
+          {
+            id: notif_counter,
+            action: 'userUnblocked',
+            receiver: _data.receiver,
+            sender: {
+              avatarLink: _data.sender.avatarLink,
+              intraLogin: _data.sender.intraLogin,
+              nickname: _data.sender.nickname,
+            },
+          },
+        ]);
+        toast.success(`${_data.sender.intraLogin} UnBlocked You`);
         });
 
 
@@ -225,7 +261,7 @@ const [data, setData] = useState( [{
     // }
   }, [data]);
 
-  console.log("zebi hada lah yan3el fadsfgadjksfhjkadhsfjklasfhadjksfhjkldsahfjkas :", socket);
+
 
   const handlenavsearch = (event: any) => {
     setnavsearch(event.target.value);
@@ -270,234 +306,249 @@ const [data, setData] = useState( [{
   if (checkpathname === "/twoFactorAuth") {
     return null;
   }
-  return (
-    <Fragment>
-      <nav className=" fixed w-full h-16 z-10 shadow-xl bg-primary_blue ">
-        <div className="flex justify-between items-center h-full w-full px-4 2xl:px-9">
-          <div className="flex items-center space-x-4">
-            <div className="relative flex md:gap-8 lg:gap-16 items-center space-x-4">
-              <span className="oo text-sm md:text-2xl font-bold">
-                PongVerse
-              </span>
-              <div
-                tabIndex={0}
-                className="flex red flex-col space-y-10 "
-                ref={searchRef}
-              >
-                <input
-                  type="text"
-                  className="w-[120px] sm:w-auto outline-none bg-transparent text-white text-sm  border-b-2 border-white-500 placeholder-opacity-50 placeholder-white"
-                  placeholder="Search"
-                  onChange={handlenavsearch}
-                  onFocus={showsearchfield}
-                />
-                {showsearch && users_data ? (
-                  <div
-                    tabIndex={0}
-                    className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar"
-                  >
-                    {users_data.map((item: any, index: any) =>
-                      item.intraLogin.includes(navsearch) ? (
-                        <Navbar_search_list
-                          item={item}
-                          index={index}
-                          key={index}
-                          setshowsearch={setshowsearch}
-                        />
-                      ) : null
-                    )}
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          </div>
-          <div className="hidden md:flex ">
-            <div className="flex items-center lg:space-x-16 space-x-7">
-              <div
-                className="flex   p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
-                style={{
-                  borderBottom: navactive === 2 ? "2px solid white" : "none",
-                  marginTop: navactive === 2 ? "15px" : "0",
-                }}
-                onClick={() => {
-                  setnavactive(2);
-                  router.push("/messages");
-                }}
-              >
-                <AiOutlineComment size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">
-                  Messages
-                </a>
-              </div>
-              <div
-                className="flex  p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
-                style={{
-                  borderBottom: navactive === 3 ? "2px solid white" : "none",
-                  marginTop: navactive === 3 ? "15px" : "0",
-                }}
-                onClick={() => {
-                  setnavactive(3);
-                  router.push("/user/me");
-                }}
-              >
-                <AiOutlineIdcard size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">
-                  Profile
-                </a>
-              </div>
-              <div
-                className="flex  p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
-                style={{
-                  borderBottom: navactive === 4 ? "2px solid white" : "none",
-                  marginTop: navactive === 4 ? "15px" : "0",
-                }}
-                onClick={() => {
-                  setnavactive(4);
-                  router.push("/pregame");
-                }}
-              >
-                <GiPingPongBat size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">Game</a>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-row w-[300px] justify-end">
-          <div className="hidden md:flex justify-end items-center space-x-4 cursor-pointer ">
-            <div className="dropdown dropdown-end">
-              <Notif socket={socket}   data={data} key={data.length}/>
-            </div>
-            <div className="hidden  md:flex justify-end items-center space-x-4  cursor-pointer ">
-              <div className="dropdown dropdown-end">
-                <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
-                <ul
+
+      return(
+        <Fragment>
+        <nav className=" fixed w-full h-16 z-10 shadow-xl bg-primary_blue ">
+          <div className="flex justify-between items-center h-full w-full px-4 2xl:px-9">
+            <div className="flex items-center space-x-4">
+              <div className="relative flex md:gap-8 lg:gap-16 items-center space-x-4">
+                <span className="oo text-sm md:text-2xl font-bold">
+                  PongVerse
+                </span>
+                <div
                   tabIndex={0}
-                  className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]"
+                  className="flex red flex-col space-y-10 "
+                  ref={searchRef}
                 >
-                  <li>
-                    <a>
-                      <div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            checked={twofa}
-                            onChange={() => {
-                              handlecheck();
-                            }}
-                          />
-                          <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-accent_red"></div>
-                          <span className="ms-3 text-lg font-medium  text-white dark:text-gray-300">
-                            Two Factor Authentication
-                          </span>
-                        </label>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <button
-                        className="w-fit h-fit  text-2xl gap-3 font-bold text-white items-center flex"
-                        onClick={handleLogoutClick}
-                      >
-                        <MdLogout size={50} className="oo" />
-                        Log out
-                      </button>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div
-            onClick={openNav}
-            className="text-white text-3xl cursor-pointer md:hidden"
-          >
-            <AiOutlineMenu size={35} />
-          </div>
-          <div
-            className={
-              show
-                ? "fixed top-16 left-0 md:hidden w-[65%] h-screen bg-primary_blue ease-in p-10 duration-500 z-50"
-                : "fixed left-[-100%] top-16 h-screen p-10 ease-in duration-500"
-            }
-          >
-            <div className="flex flex-col space-y-10 mt-10">
-              <div className="flex">
-                <AiFillHome size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">Home</a>
-              </div>
-              <div
-                className="flex cursor-pointer"
-                onClick={() => {
-                  setnavactive(2);
-                  router.push("/messages");
-                }}
-              >
-                <AiOutlineComment size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">
-                  Messages
-                </a>
-              </div>
-              <div
-                className="flex cursor-pointer"
-                onClick={() => {
-                  setnavactive(3);
-                  router.push("/user/me");
-                }}
-              >
-                <AiOutlineIdcard size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">
-                  Profile
-                </a>
-              </div>
-              <div
-                className="flex cursor-pointer"
-                onClick={() => {
-                  setnavactive(4);
-                  router.push("/pregame");
-                }}
-              >
-                <GiPingPongBat size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold">Game</a>
-              </div>
-              <div className="flex">
-                <label className="relative inline-flex items-center cursor-pointer">
                   <input
-                    type="checkbox"
-                    className="toggle"
-                    checked={twofa}
-                    onChange={() => {
-                      handlecheck();
-                    }}
+                    type="text"
+                    className="w-[120px] sm:w-auto outline-none bg-transparent text-white text-sm  border-b-2 border-white-500 placeholder-opacity-50 placeholder-white"
+                    placeholder="Search"
+                    onChange={handlenavsearch}
+                    onFocus={showsearchfield}
                   />
-                  <span className="ms-3 text-xs   text-white dark:text-gray-300">
-                    Two Factor Authentication
-                  </span>
-                </label>
+                  {showsearch && users_data ? (
+                    <div
+                      tabIndex={0}
+                      className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar"
+                    >
+                      {users_data.map((item: any, index: any) =>
+                        item.intraLogin.includes(navsearch) ? (
+                          <Navbar_search_list
+                            item={item}
+                            index={index}
+                            key={index}
+                            setshowsearch={setshowsearch}
+                          />
+                        ) : null
+                      )}
+                    </div>
+                  ) : null}
+                </div>
               </div>
             </div>
-            <div className="flex items-center pt-10  space-x-4">
-              <button
-                className="w-fit h-fit   text-2xl gap-3 font-bold text-white"
-                onClick={handleLogoutClick}
-              >
-                {/* Log out */}
-                <MdLogout size={50} className="oo" />
-              </button>
+            <div className="hidden md:flex ">
+              <div className="flex items-center lg:space-x-16 space-x-7">
+                <div
+                  className="flex   p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
+                  style={{
+                    borderBottom: navactive === 2 ? "2px solid white" : "none",
+                    marginTop: navactive === 2 ? "15px" : "0",
+                  }}
+                  onClick={() => {
+                    setnavactive(2);
+                    router.push("/messages");
+                  }}
+                >
+                  <AiOutlineComment size={25} className="text-white mr-4" />
+                  <a className="text-white text-sm lg:text-lg font-bold">
+                    Messages
+                  </a>
+                </div>
+                <div
+                  className="flex  p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
+                  style={{
+                    borderBottom: navactive === 3 ? "2px solid white" : "none",
+                    marginTop: navactive === 3 ? "15px" : "0",
+                  }}
+                  onClick={() => {
+                    setnavactive(3);
+                    router.push("/user/me");
+                  }}
+                >
+                  <AiOutlineIdcard size={25} className="text-white mr-4" />
+                  <a className="text-white text-sm lg:text-lg font-bold">
+                    Profile
+                  </a>
+                </div>
+                <div
+                  className="flex  p-2  duration-200 hover:-translate-y-0.5 cursor-pointer"
+                  style={{
+                    borderBottom: navactive === 4 ? "2px solid white" : "none",
+                    marginTop: navactive === 4 ? "15px" : "0",
+                  }}
+                  onClick={() => {
+                    setnavactive(4);
+                    router.push("/pregame");
+                  }}
+                >
+                  <GiPingPongBat size={25} className="text-white mr-4" />
+                  <a className="text-white text-sm lg:text-lg font-bold">Game</a>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-row w-[300px] justify-between">
+            <div className="hidden md:flex justify-end items-center space-x-4 cursor-pointer ">
+              <div className="dropdown dropdown-end">
+                <Notif socket={socket}  handlenotifclick={handlenotifclick} data={data} setData={setData} key={data?.length}/>
+              </div>
+              <div className="hidden md:flex justify-end items-center space-x-4  cursor-pointer ">
+                <div className="dropdown dropdown-end">
+                  <AiOutlineMenu size={35} tabIndex={0} className="text-white" />
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box w-[350px]"
+                  >
+                    <li>
+                      <a>
+                        <div>
+                          <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                              type="checkbox"
+                              value=""
+                              className="sr-only peer"
+                              checked={twofa}
+                              onChange={() => {
+                                handlecheck();
+                              }}
+                            />
+                            <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-accent_red"></div>
+                            <span className="ms-3 text-lg font-medium  text-white dark:text-gray-300">
+                              Two Factor Authentication
+                            </span>
+                          </label>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <button
+                          className="w-fit h-fit  text-2xl gap-3 font-bold text-white items-center flex"
+                          onClick={handleLogoutClick}
+                        >
+                          <MdLogout size={50} className="oo" />
+                          Log out
+                        </button>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div
+              onClick={openNav}
+              className="text-white text-3xl cursor-pointer md:hidden"
+            >
+              <AiOutlineMenu size={35} />
+            </div>
+            <div
+              className={
+                show
+                  ? "fixed top-16 left-0 md:hidden w-[65%] h-screen bg-primary_blue ease-in p-10 duration-500 z-50"
+                  : "fixed left-[-100%] top-16 h-screen p-10 ease-in duration-500"
+              }
+            >
+              <div className="flex flex-col space-y-10 mt-10">
+                <div className="flex">
+                  <AiFillHome size={25} className="text-white mr-4" />
+                  <a className="text-white text-sm lg:text-lg font-bold">Home</a>
+                </div>
+                <div
+                  className="flex cursor-pointer"
+                  onClick={() => {
+                    setnavactive(2);
+                    router.push("/messages");
+                  }}
+                >
+                  <AiOutlineComment size={25} className="text-white mr-4" />
+                  <a className="text-white text-sm lg:text-lg font-bold">
+                    Messages
+                  </a>
+                </div>
+                <div
+                  className="flex cursor-pointer"
+                  onClick={() => {
+                    setnavactive(3);
+                    router.push("/user/me");
+                  }}
+                >
+                  <AiOutlineIdcard size={25} className="text-white mr-4" />
+                  <a className="text-white text-sm lg:text-lg font-bold">
+                    Profile
+                  </a>
+                </div>
+                <div
+                  className="flex cursor-pointer"
+                  onClick={() => {
+                    setnavactive(4);
+                    router.push("/pregame");
+                  }}
+                >
+                  <GiPingPongBat size={25} className="text-white mr-4" />
+                  <a className="text-white text-sm lg:text-lg font-bold">Game</a>
+                </div>
+                <div className="flex">
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="toggle"
+                      checked={twofa}
+                      onChange={() => {
+                        handlecheck();
+                      }}
+                    />
+                    <span className="ms-3 text-xs   text-white dark:text-gray-300">
+                      Two Factor Authentication
+                    </span>
+                  </label>
+                </div>
+              </div>
+              <div className="flex items-center pt-10  space-x-4">
+                <button
+                  className="w-fit h-fit   text-2xl gap-3 font-bold text-white"
+                  onClick={handleLogoutClick}
+                >
+                  {/* Log out */}
+                  <MdLogout size={50} className="oo" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        </div>
-      </nav>
-      {/* {show2fa && <Model2Fa  OpenModel={show2fa} settwofa={settwofa} twofa={twofa}  CloseModel={()=> { toast.success("SALAM ana 9a7ba ") ,setshow2fa(false)}} /> } */}
-      {show2fa && (
-        <Model2Fa
-          OpenModel={show2fa}
-          settwofa={settwofa}
-          CloseModel={setshow2fa} /*takhwira hnaya 3andak tnsa */
-        />
-      )}
-    </Fragment>
-  );
-}
+          </div>
+        </nav>
+        {/* {show2fa && <Model2Fa  OpenModel={show2fa} settwofa={settwofa} twofa={twofa}  CloseModel={()=> { toast.success("SALAM ana 9a7ba ") ,setshow2fa(false)}} /> } */}
+        {show2fa && (
+          <Model2Fa
+            OpenModel={show2fa}
+            settwofa={settwofa}
+            CloseModel={setshow2fa} /*takhwira hnaya 3andak tnsa */
+          />
+        )}
+      </Fragment>
+      )
+    }
+  // },[checkpathname,currUser])
+  
+    
+  // console.log(` current data hya hadi a m3alem :  `, currUser , `   hada hwa l pathname li hna fih   ${checkpathname}  hada hwa nickname am3alem   ${currUser?.nickname}`);
+    
+
+
+  //  return(
+       
+  //     <>
+  //     {currUser && mstafa}
+  //     </>
+  // );
+// }

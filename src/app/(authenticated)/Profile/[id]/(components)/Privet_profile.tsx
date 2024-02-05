@@ -25,9 +25,11 @@ const PrivetProfile = (props: any) => {
       const response = await fetchUserPublic(props.id);
       setusers_data(response);
     } catch (error:any) {
+    toast.error(error.response.data.message);
+
       if (error.response.status === 401)
         window.location.replace("/");
-      toast.error("User existed !");
+      // toast.error("User existed !");
       router.push('/not-found')
     } finally {
       setloading(false);
@@ -38,6 +40,8 @@ const PrivetProfile = (props: any) => {
       const result = await fetchLeaderBoard();
       setleader_board(result);
     } catch (error:any) {
+    toast.error(error.response.data.message);
+
       if (error.response.status === 401)
         window.location.replace("/");
     }
@@ -66,7 +70,7 @@ const PrivetProfile = (props: any) => {
           {leader_board && <Leadrboard result={leader_board} />}
         </div>
       </div>
-      <div className="w-full h-[825px] sm:w-[468px] md:w-[468px] flex flex-col  test:order-1 pt-5 space-y-5">
+      <div className="w-full  h-[825px] sm:w-[468px] md:w-[468px] flex flex-col  test:order-1 pt-5 space-y-5">
         <div className="w-full  h-full sm:w-[468px]  md:w-full shadow-xl">
           {users_data && <Mhistory result={users_data} />}
         </div>

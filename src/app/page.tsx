@@ -32,18 +32,25 @@ const Home = () => {
 
 export default Home;
 
-// protection   || public_user_info.tsx || profile_user_info.tsx ============== test
-//  not found
-//   uploaded image thats not a imgae , create a file and name it {something.jpeg}  , recheck the protections
-// nickname already set
-// responses , other than forbiden
-
-// add the editnickname page when first login
-
 
 // when first login in case refused to inter a NickName , and when to the URL and made 3000/user/me , he is pushed to the profile , whitout having a NickName , think to block him or automaticly make NickName his intralogin
 
+// try {                  update the requests to show the backend message on the toast
+//   const newChannel = await postChmod(data);
+//   toast.success("Access changed");
+//   props.setSelectedChannel(newChannel);
+//   setPassword("");
+//   setConfirmPassword("");
+// } catch (error: any) {
+//   toast.error(error.response.data.message);
+// }
 
-// open the image >>  the file blabla on the desktop  || when i post it on the backend it gets updatedo n the database
-// use intralogin instead of nickname becuase of the issues it causes
-// double check 401 responses
+
+
+//any route except editProfile and /user/me should be redirected to editProfile if nickname == null || undefined
+// /setupNickName
+
+
+
+
+//handle unique nickname response 

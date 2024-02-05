@@ -5,6 +5,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "../globals.css";
+import { Ft_memo } from "./(components)/memo";
 
 const Font = Lilita_One({
   subsets: ["latin"],
@@ -23,8 +24,7 @@ export default function RootLayout({
 }) {
   return (
       <div  className={Font.className + " bg-bg_gray"}>
-        <Navbar_compo />
-        {children}
+        <Ft_memo children={children}/>
         <ToastContainer
           position="top-right"
           autoClose={2000}
