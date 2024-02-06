@@ -4,38 +4,38 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import OTPInput from "react-otp-input";
+import { fetchCurrentUser } from "../(handlers)/requestHandler";
 
 export default function TwoFactor() {
-  const [value, setValue] = useState<string[]>(Array(6).fill(""));
-  const [activeinput, setActiveinput] = useState<number>(0);
-  const [redirect, setRedirect] = useState<boolean>(false);
-  const code = value.join("");
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [otp, setOtp] = useState('');
   const router = useRouter();
-  const handleonchange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const otp = e.target.value;
-    setValue((prev) => {
-      const prevValue = [...prev];
-      prevValue[index] = otp;
-      return prevValue;
-    });
-    if (otp !== "") {
-      setActiveinput(index + 1);
-    } else if (otp === "") {
-      setActiveinput(index - 1);
-    }
-  };
+  const [user, setUser] = useState();
+  const [valid, setValid] = useState(false);
+
   useEffect(() => {
-    inputRef.current?.focus();
-  }, [activeinput]);
+      const fetchData = async () => {
+        try {
+          const res = await fetchCurrentUser();
+          setUser(res);
+        } catch (error:any) {
+        toast.error(error.response.data.message);
+        }
+      };
+      if (!user)
+        fetchData();             
+      // console.log("*******************",user.TFA);
+      else if (!user.TFA)
+        router.push("/user/me");
+      else
+        setValid(true);
+  }
+  , [user]);
 
   const backendUrl = "http://localhost:3001/auth/signinTFA";
   const handleButtonClick = async () => {
     const requestData = {
-      code: code as string,
+      code: otp as string,
     };
     console.log(requestData);
     try{
@@ -50,6 +50,7 @@ export default function TwoFactor() {
       toast.error("Invalid code");
     }
   };
+  if (!valid) return null;
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden py-12">
       <div className="flex justify-center">
@@ -64,20 +65,18 @@ export default function TwoFactor() {
           </div>
           <div>
             <div className="flex flex-col space-y-16 ">
-              <div className="flex flex-row  items-center justify-between w-full ">
-                {/* <input type="number"
-                  onChange={(e) => setValue(e.target.value.split(""))} 
-                /> */}
-                {value.map((value, index) => (
-                  <input
-                    ref={index === activeinput ? inputRef : null}
-                    className="h-16 w-[20px] sm:h-[43px] sm:w-[50px] flex flex-col items-center justify-center text-center  outline-none border-b-4 border-white  text-white  text-sm lg:text-2xl bg-primary_blue"
-                    key={index}
-                    name="otp"
-                    onChange={(e) => handleonchange(e, index)}
-                  />
-                ))}
-              </div>
+            <div className="flex flex-row  items-center justify-center w-full ">
+            <OTPInput
+              value={otp}
+              onChange={setOtp}
+              numInputs={6}
+              // containerStyle={"gap-4 md:gap-8 xl:gap-10"}
+              containerStyle={"gap-4 md:gap-8 xl:gap-10"}
+              inputStyle={'h-16 w-[20px] sm:h-[43px] sm:w-[50px] flex flex-col items-center justify-center text-center  outline-none bg-primary_blue border-b-2 border-white  text-white inpute_code text-sm lg:text-2xl'}
+              renderSeparator={<span>&nbsp;</span>}
+              renderInput={(props) => <input {...props} />}
+            />
+            </div>
               <div className="flex flex-col ">
                 <div className="flex justify-center">
                   <button

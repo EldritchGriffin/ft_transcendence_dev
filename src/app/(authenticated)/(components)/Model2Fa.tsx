@@ -41,7 +41,6 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
     const requestData = {
       code: otp as string,
     };
-    console.log("******",requestData)
 
     try{      
       const res = await validTfa(requestData);
