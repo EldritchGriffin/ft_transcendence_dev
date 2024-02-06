@@ -11,5 +11,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className={" bg-darkblue"}>{children}</div>;
+  return <div>{children}</div>;
 }

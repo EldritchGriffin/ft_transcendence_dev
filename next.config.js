@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
-
+const nextConfig = {};
 
 module.exports = {
-    reactStrictMode: false,
-  }
+  images: {
+    domains: ["cdn.intra.42.fr"],
+  },
+  reactStrictMode: false,
+};

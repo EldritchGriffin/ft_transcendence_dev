@@ -6,7 +6,7 @@ import { fetchCurrentUser } from "../(handlers)/requestHandler";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { User } from "../(interfaces)/userInterface";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 let p1score = 0;
 let p2score = 0;
@@ -174,9 +174,11 @@ function initPixi() {
 }
 
 const PixiComponent = () => {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const mode = useSearchParams().get("mode");
-  console.log(mode);
+  const invited = useSearchParams().get("invite");
+  const gameId = useSearchParams().get("id");
   let socket: Socket | null = null;
   const token = Cookies.get("token");
   if (user && token) {
@@ -199,7 +201,10 @@ const PixiComponent = () => {
         extraHeaders: {
           Authorization: `Bearer ${token}`,
         },
-        query: { Username: user.intraLogin },
+      });
+      socket.on("error", (error) => {
+        toast.error(error);
+        router.push("/pregame");
       });
     }
     if (!user || !socket) return;
@@ -207,7 +212,11 @@ const PixiComponent = () => {
     const assets = initAssets(pixi.App);
     try {
       let game: Game;
-
+      socket.emit("joinGame", {
+        gameId: gameId,
+        mode: mode,
+        expectedPlayer: invited,
+      });
       socket.on("WaitingForOpponent", (data) => {
         console.log("waiting for opponent");
         pixi.App.stage.addChild(assets.Waiting);
@@ -262,13 +271,13 @@ const PixiComponent = () => {
       socket.on("gameFinished", (data) => {
         console.log("game finish");
         gamestarted = false;
-        socket.disconnect();
+        socket?.disconnect();
         pixi.App.destroy();
         window.location.replace("/pregame"); //TODO REPLACE THIS WITH next/navigation
       });
       pixi.App.stage.on("pointermove", (e) => {
         if (!gamestarted) return;
-        socket.emit("move", {
+        socket?.emit("move", {
           gameId: game.gameId,
           username: user.intraLogin,
           position: {
@@ -284,8 +293,15 @@ const PixiComponent = () => {
       toast.error("An error occured, please try again later0");
     }
     return () => {
+      socket?.off("gameReady");
+      socket?.off("gameUpdate");
+      socket?.off("gameWin");
+      socket?.off("gameFinished");
+      socket?.off("WaitingForOpponent");
+      socket?.off("error");
+      socket?.off("disconnect");
       pixi.App.destroy();
-      socket.disconnect();
+      socket?.disconnect();
     };
   }, [user]);
 

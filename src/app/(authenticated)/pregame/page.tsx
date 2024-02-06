@@ -1,12 +1,85 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { User } from "../(interfaces)/userInterface";
+import { fetchCurrentUser } from "../(handlers)/requestHandler";
+import Image from "next/image";
+import Model from "../profile/[id]/(components)/test";
+
+const InviteToGameModal = (props: any) => {
+  const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
+
+  const inviteUser = (expected: string) => {
+    router.push(`/game?mode=${props.gameMode}&invite=${expected}`);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        setUser(user);
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+      }
+    };
+    fetchData();
+    return () => {
+      setUser(null);
+    };
+  }, []);
+  if (!user) return null;
+  return (
+    <div className="flex justify-center items-center fixed inset-0  backdrop-blur-sm">
+      <div className="bg-white rounded-lg flex flex-col w-[40rem] h-[40rem] gap-4 p-7">
+        <div className="flex flex-row justify-between items-center">
+          <h1 className="text-5xl text-black">Play a Game</h1>
+          <button onClick={() => props.toggleModal()} className="text-3xl mb-4">
+            &times;
+          </button>
+        </div>
+        <span className="text-accent_red text-2xl">Invite a Friend</span>
+        <div className="flex flex-col gap-4 mt-10 overflow-scroll custom-scrollbar">
+          {user.friends.map((friend, index) => {
+            return (
+              <div
+                key={index}
+                className="flex flex-row items-center justify-between bg-slate-100 p-5 rounded-lg"
+              >
+                <div className="flex flex-row items-center gap-10">
+                  <Image
+                    src={friend.avatarLink ? friend.avatarLink : "/user.png"}
+                    alt="user image"
+                    width={50}
+                    height={50}
+                    className="rounded-full w-auto"
+                  />
+                  <span className="text-2xl">{friend.nickname}</span>
+                </div>
+                <button
+                  onClick={() => inviteUser(friend.intraLogin)}
+                  className="bg-accent_red w-20 h-10 text-white"
+                >
+                  <span>Invite</span>
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Pregame = () => {
   const [gameMode, setGameMode] = useState<string>("");
+  const [showModal, setShowModal] = useState<boolean>(false);
   const router = useRouter();
 
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
   const handleGameMode = (mode: string) => {
     const active = document.getElementById(mode);
     const buttons = document.querySelectorAll("button");
@@ -30,6 +103,13 @@ const Pregame = () => {
       toast.error("Please choose a game mode");
     } else {
       router.push(`/game?mode=${gameMode}`);
+    }
+  };
+  const handleInviteButton = () => {
+    if (gameMode === "") {
+      toast.error("Please choose a game mode");
+    } else {
+      toggleModal();
     }
   };
   return (
@@ -71,11 +151,15 @@ const Pregame = () => {
           <button
             id="1"
             className="bg-accent_red h-16 hover:bg-red-300 w-full text-white"
+            onClick={() => handleInviteButton()}
           >
             <span className=" text-3xl">Invite friend</span>
           </button>
         </div>
       </div>
+      {showModal && (
+        <InviteToGameModal toggleModal={toggleModal} gameMode={gameMode} />
+      )}
     </div>
   );
 };
