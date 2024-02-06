@@ -1,5 +1,5 @@
 import { useSocket } from "@/app/(authenticated)/(contexts)/socketContext";
-import { postacceptfriend, postaddfriend, postblockuser, postcancelfriend, postremovefriend, postunblockuser } from "@/app/(authenticated)/(handlers)/requestHandler";
+import { postacceptfriend, postaddfriend, postblockuser, postcancelfriend, postrejectfriend, postremovefriend, postunblockuser } from "@/app/(authenticated)/(handlers)/requestHandler";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -21,7 +21,6 @@ const Publicuserinfo_block_unblock = (props: any) => {
     const send_block = async () => {
       try {
         const response = await postblockuser(user_data.intraLogin);
-        toast.success("User Blocked successfuly !");
         setisBlocked(true);
       } catch (error:any) {
     toast.error(error.response.data.message);
@@ -49,7 +48,6 @@ const Publicuserinfo_block_unblock = (props: any) => {
     const send_unblock = async () => {
       try {
         const response = await postunblockuser(user_data.intraLogin);
-        toast.success("User UnBlocked successfully");
         setisBlocked(false);
       } catch (error:any) {
     toast.error(error.response.data.message);
@@ -94,22 +92,68 @@ function knowstheuserrelationship(data:any, users_name:string) {
 
 
 const Publicuserinfo_add_remove_cancel = ( props:any ) => {
-
+  const socket = useSocket();
+  const [reject_option, setreject_option] = useState(false);
   const [buttonstate, setbuttonstate] = useState<string>("Add");
   const user_data = props?.users_data;
   useEffect(() => {
     var relationship = knowstheuserrelationship(props?.connected_user, props?.users_data?.intraLogin);
     setbuttonstate(relationship);
+    if (socket) {
+      socket.on("friendRequestNotif", (user) => {
+        // if(user === user_data.intraLogin)
+          setbuttonstate("Accept");
+          setreject_option(true);
+        //  setStatus("online");
+      });
+      socket.on("friendRemovedNotif", (user) => {
+        // if(user === user_data.intraLogin)
+          setbuttonstate("Add");
+        //  setStatus("online");
+        // setreject_option(false);
 
+      });
+      socket.on("friendAcceptedNotif", (user) => {
+        // if(user === user_data.intraLogin)
+          setbuttonstate("Remove");
+          setreject_option(false);
+
+        //  setStatus("online");
+      });
+      socket.on("friendRejectedNotif", (user) => {
+        // if(user === user_data.intraLogin)
+          setbuttonstate("Add");
+          setreject_option(false);
+
+        //  setStatus("online");
+      });
+      socket.on("friendRequestCancelledNotif", (user) => {
+        // if(user === user_data.intraLogin)
+          setbuttonstate("Add");
+          // setreject_option(false);
+        //  setStatus("online");
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off("friendRequestNotif");
+        socket.off("friendRemovedNotif");
+        socket.off("friendAcceptedNotif");
+        socket.off("friendRejectedNotif");
+        socket.off("friendRequestCancelledNotif");
+      }
+    }
   }, []);
-  
+
+
+
   if (buttonstate === "Remove")
 {
   
   const send_remove = async () => {
     try {
       const response = await postremovefriend(user_data.intraLogin);
-      toast.success("User Removed successfully");
       setbuttonstate("Add");
 
     } catch (error:any) {
@@ -118,7 +162,6 @@ const Publicuserinfo_add_remove_cancel = ( props:any ) => {
       if (error?.response?.status === 403)
         toast.error("User Not Friend !");
       props.setstrictedadd(true);
-        // props.setstricted(true);
 
     }
   }
@@ -143,7 +186,6 @@ else if(buttonstate === "Cancel")
   const send_cancel = async () => {
     try {
       const response = await postcancelfriend(user_data.intraLogin);
-      toast.success("User Canceled successfully");
     setbuttonstate("Add");
 
     } catch (error:any) {
@@ -151,9 +193,6 @@ else if(buttonstate === "Cancel")
 
       if (error.response.status === 401)
         window.location.replace("/");
-      // if (error?.response?.status === 403)
-      //   toast.error("User Not Waiting For Invite !");
-        // props.setstricted(true);
       props.setstrictedadd(true);
 
 
@@ -181,17 +220,14 @@ else if(buttonstate === "Accept")
   const send_accept = async () => {
     try {
       const response = await postacceptfriend(user_data.intraLogin);
-      toast.success("User Accept successfully");
     setbuttonstate("Remove");
+    setreject_option(false);
 
     } catch (error:any) {
     toast.error(error.response.data.message);
 
       if (error.response.status === 401)
         window.location.replace("/");
-      // if (error?.response?.status === 403)
-      //   toast.error("User has nothing to Accept !");
-        // props.setstricted(true);
         props.setstrictedadd(true);
 
     }
@@ -201,15 +237,45 @@ else if(buttonstate === "Accept")
     send_accept();
 
   }
-  
+    
+  const Reject_Invite = async () => {
+    try {
+      const response = await postrejectfriend(user_data.intraLogin);
+      setreject_option(false);
+      setbuttonstate("Add");
+    } catch (error:any) {
+    toast.error(error.response.data.message);
+    setbuttonstate("Remove");
+
+    setreject_option(false);
+      if (error.response.status === 401)
+      window.location.replace("/");
+    props.setstrictedadd(true);
+    }
+  }
   return (
+    <>
     <button
       className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white"
       onClick={cancel_user}
-    >
+      >
       {" "}
       {buttonstate}{" "}
     </button>
+    {reject_option ?
+            <div className="">
+          <button
+              className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white"
+              onClick={Reject_Invite}
+            >
+              {" "}
+              Reject{" "}
+            </button>
+          </div>
+          :
+          null
+          }
+      </>
   );
   }
   else {
@@ -218,16 +284,12 @@ else if(buttonstate === "Accept")
     const send_add = async () => {
       try {
         const response = await postaddfriend(user_data.intraLogin);
-        toast.success("User Add successfully");
         setbuttonstate("Cancel");
       } catch (error:any) {
     toast.error(error.response.data.message);
 
         if (error.response.status === 401)
         window.location.replace("/");
-        // if (error?.response?.status === 403)
-        //   toast.error("User Can't be Add !");
-        // setbuttonstate("Accept");
       props.setstrictedadd(true);
       }
     }
@@ -315,7 +377,6 @@ const Publicuserinfo = (props: any) => {
 
 
 
-
   return (
     <div className="flex flex-col w-full sm:w-[464px]">
       <a className="text-white truncate ">PROFILE</a>
@@ -336,9 +397,10 @@ const Publicuserinfo = (props: any) => {
           {" "}
           {user_data?.nickname || ''}{" "}
         </span>
-        <div className="w-[full] h-[full] flex justify-center space-x-6">
+        <div className="w-[full] h-[full] flex flex-row justify-center space-x-6">
           {user_data &&
-          <> <div className="w-fit h-fit">
+          <> 
+          <div className="w-fit h-fit flex flex-row space-x-6">
             {
              stricted ||  strictedadd ? 
               <button

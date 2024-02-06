@@ -121,7 +121,8 @@ export default function Navbar_compo() {
     fetchuser();
 
     socket.on("friendRequest", (_data: notif_element) => {
-      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      if (_data.sender.intraLogin === currUser?.intraLogin) 
+        return;
       setnotif_counter(notif_counter + 1);
       setData((Data) => [
         ...Data,
@@ -137,10 +138,13 @@ export default function Navbar_compo() {
         },
       ]);
       toast.success(`${_data.sender.intraLogin} Friend Requested`);
+      // if (checkpathname === `/profile/${_data.receiver}`)
+      //   toast.success("a sidi rak sifti l had khona");
     });
 
     socket.on("friendRequestCancelled", (_data: notif_element) => {
-      if (_data.sender.intraLogin === currUser?.intraLogin) return;
+      if (_data.sender.intraLogin === currUser?.intraLogin)
+        return;
       setnotif_counter(notif_counter + 1);
       setData((Data) => [
         ...Data,
@@ -211,42 +215,42 @@ export default function Navbar_compo() {
       ]);
       toast.error(`${_data.sender.intraLogin} Removed From Friend`);
     });
-    socket.on("userBlocked", (_data: notif_element) => {
-      if (_data.sender.intraLogin === currUser?.intraLogin) return;
-      setnotif_counter(notif_counter + 1);
-      setData((Data) => [
-        ...Data,
-        {
-          id: notif_counter,
-          action: "userBlocked",
-          receiver: _data.receiver,
-          sender: {
-            avatarLink: _data.sender.avatarLink,
-            intraLogin: _data.sender.intraLogin,
-            nickname: _data.sender.nickname,
-          },
-        },
-      ]);
-      toast.error(`${_data.sender.intraLogin} Blocked You`);
-    });
-    socket.on("userUnblocked", (_data: notif_element) => {
-      if (_data.sender.intraLogin === currUser?.intraLogin) return;
-      setnotif_counter(notif_counter + 1);
-      setData((Data) => [
-        ...Data,
-        {
-          id: notif_counter,
-          action: "userUnblocked",
-          receiver: _data.receiver,
-          sender: {
-            avatarLink: _data.sender.avatarLink,
-            intraLogin: _data.sender.intraLogin,
-            nickname: _data.sender.nickname,
-          },
-        },
-      ]);
-      toast.success(`${_data.sender.intraLogin} UnBlocked You`);
-    });
+    // socket.on("userBlocked", (_data: notif_element) => {
+    //   if (_data.sender.intraLogin === currUser?.intraLogin) return;
+    //   setnotif_counter(notif_counter + 1);
+    //   setData((Data) => [
+    //     ...Data,
+    //     {
+    //       id: notif_counter,
+    //       action: "userBlocked",
+    //       receiver: _data.receiver,
+    //       sender: {
+    //         avatarLink: _data.sender.avatarLink,
+    //         intraLogin: _data.sender.intraLogin,
+    //         nickname: _data.sender.nickname,
+    //       },
+    //     },
+    //   ]);
+    //   toast.error(`${_data.sender.intraLogin} Blocked You`);
+    // });
+    // socket.on("userUnblocked", (_data: notif_element) => {
+    //   if (_data.sender.intraLogin === currUser?.intraLogin) return;
+    //   setnotif_counter(notif_counter + 1);
+    //   setData((Data) => [
+    //     ...Data,
+    //     {
+    //       id: notif_counter,
+    //       action: "userUnblocked",
+    //       receiver: _data.receiver,
+    //       sender: {
+    //         avatarLink: _data.sender.avatarLink,
+    //         intraLogin: _data.sender.intraLogin,
+    //         nickname: _data.sender.nickname,
+    //       },
+    //     },
+    //   ]);
+    //   toast.success(`${_data.sender.intraLogin} UnBlocked You`);
+    // });
 
     return () => {
       socket.off("friendRequest");
@@ -254,8 +258,8 @@ export default function Navbar_compo() {
       socket.off("friendRejected");
       socket.off("friendAccepted");
       socket.off("friendRemoved");
-      socket.off("userBlocked");
-      socket.off("userUnblocked");
+      // socket.off("userBlocked");
+      // socket.off("userUnblocked");
     };
     // }
   }, [data]);

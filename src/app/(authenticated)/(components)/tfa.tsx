@@ -40,11 +40,13 @@ export default function TwoFactor() {
     console.log(requestData);
     try{
      const res =  await axios.post(backendUrl, requestData, { withCredentials: true })
+     console.log(res)
       if (res.status >= 200 && res.status < 300) {
         toast.success("2FA enabled");
         router.push("/user/me");
       }
     } catch (error) {
+      console.error(error)
       toast.error("Invalid code");
     }
   };
