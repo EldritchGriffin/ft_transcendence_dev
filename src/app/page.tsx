@@ -37,3 +37,11 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+// no need to listen to all the profile actions block/unblock add cancel remove accept | check what to let and what to not let
+
+
+
+// {{{{{{ OPTIONAL }}}}}} add a clear button to clear the hestory of the notification , optional do it if you has found nothing to do

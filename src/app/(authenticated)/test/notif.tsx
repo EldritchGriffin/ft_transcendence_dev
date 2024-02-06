@@ -33,12 +33,17 @@ const handleRemoveItem = (idToRemove: any) => {
 
   <div className="">
     <BiSolidNotification size={35} tabIndex={0} className="text-white" />
+    <div className="flex flex-col">
+
     <ul
       tabIndex={0}
       className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box overflow-y-auto custom-scrollbar h-[350px] w-[350px]"
       // className="dropdown-content z-[1] menu p-2 shadow bg-primary_blue rounded-box   h-[350px] w-[350px]"
-    >
+      >
         <li >
+        <button className='flex justify-center items-end'  onClick={()=> props.setData([])}>
+          Clear
+        </button>
         {user_data?.map((item:any, index:number) => (
           <a key={index} onClick={()=> {
             handleRemoveItem(item);
@@ -59,6 +64,7 @@ const handleRemoveItem = (idToRemove: any) => {
         ))}
         </li>
     </ul>
+        </div>
   </div>
   )
 }

@@ -421,6 +421,22 @@ export const postaddfriend = async (channel: any) => {
     throw error;
   }
 };
+export const postrejectfriend = async (channel: any) => {
+  const url = `/user/rejectfriend/` + channel;
+
+  try {
+    const response = await api.post(url, channel);
+
+    if (response.status >= 200 && response.status < 300) {
+      const data = await response.data;
+      return data;
+    } else {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const fetchBlockedList = async () => {
   const url = `/user/blocked`;
