@@ -49,9 +49,9 @@ const handleRemoveItem = (idToRemove: any) => {
             handleRemoveItem(item);
             console.log()
           }}>
-            <div className='w-[300px] flex flex-row space-y-5 '>
-              <div className="flex w-full justify-between items-center">
-                <img src={item.sender.avatarLink} alt="" className='w-16 h-16' />
+            <div className='w-[320px] bg-white rounded-full flex flex-row space-y-5 '>
+              <div className="flex w-full space-x-12 items-center">
+                <img src={item.sender.avatarLink} alt="" className='w-16 h-16 rounded-full  ' />
                 <div className="">
                   {item.sender.intraLogin} {" "} 
                 </div>
