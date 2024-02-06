@@ -13,6 +13,7 @@ let p2score = 0;
 let gamestarted = false;
 
 interface Game {
+  intervalId?: NodeJS.Timeout;
   gameId: string;
   ballSpeed: number;
   ballDirection: {
@@ -24,8 +25,7 @@ interface Game {
     y: number;
   };
   player1: {
-    intraLogin: string;
-    nickname: string;
+    id: string;
     position: {
       x: number;
       y: number;
@@ -33,25 +33,19 @@ interface Game {
     score: number;
   };
   player2: {
-    intraLogin: string;
-    nickname: string;
+    id: string;
     position: {
       x: number;
       y: number;
     };
     score: number;
   };
-  paddle: {
-    width: number;
-    height: number;
-  };
-  ball: {
-    radius: number;
-  };
   result: number;
   startedAt: Date;
   finishedAt: Date;
   status: string;
+  expectedPlayer: string;
+  gameMode: string;
 }
 
 const Font = Press_Start_2P({
@@ -158,10 +152,13 @@ function initAssets(app: PIXI.Application) {
 
 function initPixi() {
   const app = new PIXI.Application({
-    width: 1200,
-    height: 800,
+    width: window.innerWidth / 3,
+    height: window.innerHeight / 2,
     backgroundColor: 0xf05454,
     antialias: true,
+  });
+  window.addEventListener("resize", () => {
+    app.renderer.resize(window.innerWidth / 3, window.innerHeight / 2);
   });
   app.stage.hitArea = app.screen;
   app.stage.eventMode = "static";
@@ -217,25 +214,26 @@ const PixiComponent = () => {
         mode: mode,
         expectedPlayer: invited,
       });
-      socket.on("WaitingForOpponent", (data) => {
-        console.log("waiting for opponent");
+      socket.on("waiting", () => {
         pixi.App.stage.addChild(assets.Waiting);
       });
 
       socket.on("gameReady", (data) => {
-        console.log("game ready");
         gamestarted = true;
         game = data;
         pixi.App.stage.removeChild(assets.Waiting);
         stageAssets(pixi.App, assets);
       });
+      socket.on("gameFinished", (data) => {
+        router.push("/pregame");
+      });
       socket.on("gameUpdate", (data) => {
         console.log("update received");
         game = data;
-        assets.Ball.x = game.ballPosition.x;
-        assets.Ball.y = game.ballPosition.y;
-        assets.Paddle1.y = game.player1.position.y;
-        assets.Paddle2.y = game.player2.position.y;
+        assets.Ball.x = game.ballPosition.x * pixi.App.screen.width;
+        assets.Ball.y = game.ballPosition.y * pixi.App.screen.height;
+        assets.Paddle1.y = game.player1.position.y * pixi.App.screen.height;
+        assets.Paddle2.y = game.player2.position.y * pixi.App.screen.height;
         assets.Score1.text = game.player1.score.toString();
         assets.Score2.text = game.player2.score.toString();
       });
@@ -273,7 +271,7 @@ const PixiComponent = () => {
         gamestarted = false;
         socket?.disconnect();
         pixi.App.destroy();
-        window.location.replace("/pregame"); //TODO REPLACE THIS WITH next/navigation
+        router.push("/pregame");
       });
       pixi.App.stage.on("pointermove", (e) => {
         if (!gamestarted) return;

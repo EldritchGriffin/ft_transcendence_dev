@@ -3,7 +3,11 @@ const nextConfig = {};
 
 module.exports = {
   images: {
-    domains: ["cdn.intra.42.fr"],
+    remotePatterns: ["res.cloudinary.com", "cdn.intra.42.fr"],
+    remotePatterns: [
+      { hostname: "res.cloudinary.com" },
+      { hostname: "cdn.intra.42.fr" },
+    ],
   },
   reactStrictMode: false,
 };
