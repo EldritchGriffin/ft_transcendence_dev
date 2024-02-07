@@ -25,9 +25,7 @@ const Achievements = (props:any) => {
    const achivement = select_achievements(the_history_match);
     setachivements(achivement);
   }, []);
-  if (achivements)
-   console.log("salam ana hya l first element fl achivements :", achivements[0].name);
-  const kkk = "/onegame.png";
+
   return (
     <div className="h-[50px] w-full sm:[464px] flex flex-row justify-center space-x-5 bg-primary_blue">
   {achivements?.map((item: any, index: any) => 

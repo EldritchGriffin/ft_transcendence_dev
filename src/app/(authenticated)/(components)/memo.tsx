@@ -37,7 +37,7 @@ export const Ft_memo = (props: any) => {
       if (!token) {
         router.push("/");
       }
-      console.log("socket created");
+
       setSocket(
         io("http://localhost:3001/channels", {
           extraHeaders: {

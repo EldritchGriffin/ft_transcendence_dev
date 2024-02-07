@@ -260,7 +260,7 @@ const PixiComponent = () => {
       router.push("/pregame");
     });
     socket.on("gameUpdate", (data) => {
-      console.log("update received");
+
       game = data;
       assets.Ball.x = game.ballPosition.x * pixi.App.screen.width;
       assets.Ball.y = game.ballPosition.y * pixi.App.screen.height;
@@ -273,7 +273,6 @@ const PixiComponent = () => {
     });
 
     socket.on("gameFinished", (data) => {
-      console.log("game finish");
       gamestarted = false;
       router.push("/pregame");
     });

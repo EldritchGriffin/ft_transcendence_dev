@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useEffect, useRef } from "react";
+import React, { Fragment, use, useEffect, useRef } from "react";
 import { useState } from "react";
 import {
   AiOutlineMenu,
@@ -22,6 +22,8 @@ import Notif from "../test/notif";
 import { User } from "../(interfaces)/userInterface";
 import { notif_element } from "../(interfaces)/channelInterface";
 import { useSocket } from "../(contexts)/socketContext";
+import Lottie from "lottie-react";
+import logo from "../../logo.json";
 
 const Navbar_search_list = (props: any) => {
   const router = useRouter();
@@ -100,13 +102,13 @@ export default function Navbar_compo() {
       toast.error("Error Disabling Two Factor Authentication");
     }
   };
-
+  
   const fetchserch = async () => {
     try {
       const res = await fetchAllUsers();
       setusers_data(res);
     } catch (error) {
-      console.log("error");
+
     }
   };
 
@@ -151,7 +153,7 @@ export default function Navbar_compo() {
         ...Data,
         {
           id: notif_counter,
-          action: "friendRequestCancelled",
+          action: "RequestCancelled",
           receiver: _data.receiver,
           sender: {
             avatarLink: _data.sender.avatarLink,
@@ -276,7 +278,13 @@ export default function Navbar_compo() {
         <div className="flex justify-between items-center h-full w-full px-4 2xl:px-9">
           <div className="flex items-center space-x-4">
             <div className="relative flex md:gap-8 lg:gap-16 items-center space-x-4">
-              <span className="oo text-sm md:text-2xl font-bold select-none">
+              <span className="oo flex items-center text-sm md:text-2xl font-bold select-none">
+                
+              <Lottie
+                  animationData={logo}
+                  loop={true}
+                  style={{ width: 100, height: 100 }}
+                />
                 PongVerse
               </span>
               <div
@@ -432,6 +440,16 @@ export default function Navbar_compo() {
                   : "fixed left-[-100%] top-16 h-screen p-10 ease-in duration-500"
               }
             >
+            <div className="dropdown dropdown-start flex  text-white items-center">
+                <Notif
+                  socket={socket}
+                  handlenotifclick={handlenotifclick}
+                  data={data}
+                  setData={setData}
+                  key={data?.length}
+                />
+                Notification
+              </div>
               <div className="flex flex-col space-y-10 mt-10">
                 <div
                   className="flex cursor-pointer"
