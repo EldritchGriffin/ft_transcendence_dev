@@ -48,13 +48,7 @@ interface Game {
   gameMode: string;
 }
 
-const Font = Press_Start_2P({
-  subsets: ["latin"],
-  weight: "400",
-});
-
 const textStyle = new PIXI.TextStyle({
-  fontFamily: Font.style.fontFamily,
   fontSize: 50,
   fill: 0xdddddd,
   align: "center",
@@ -63,14 +57,13 @@ const textStyle = new PIXI.TextStyle({
 function initBall(app: PIXI.Application) {
   const ballgfx = new PIXI.Graphics();
   ballgfx.beginFill(0xdddddd);
-  ballgfx.drawCircle(0, 0, 12);
+  const ballRadius = Math.min(app.screen.width, app.screen.height) / 40; // Adjust the divisor for desired size
+  ballgfx.drawCircle(0, 0, 100);
   ballgfx.endFill();
   const texture = app.renderer.generateTexture(ballgfx);
   const ball = new PIXI.Sprite(texture);
   ballgfx.destroy();
   ball.anchor.set(0.5);
-  ball.x = app.screen.width / 2;
-  ball.y = app.screen.height / 2;
   ball.eventMode = "dynamic";
   return ball;
 }
@@ -78,7 +71,9 @@ function initBall(app: PIXI.Application) {
 function initPaddle(app: PIXI.Application) {
   const paddlegfx = new PIXI.Graphics();
   paddlegfx.beginFill(0xdddddd);
-  paddlegfx.drawRect(0, 0, 20, 125);
+  const paddleWidth = Math.min(app.screen.width, app.screen.height) / 25; // Adjust the divisor for desired size
+  const paddleHeight = Math.min(app.screen.width, app.screen.height) / 4; // Adjust the divisor for desired size
+  paddlegfx.drawRect(0, 0, 500, 100);
   paddlegfx.endFill();
   const texture = app.renderer.generateTexture(paddlegfx);
   const paddle = new PIXI.Sprite(texture);
@@ -89,9 +84,8 @@ function initPaddle(app: PIXI.Application) {
 }
 
 function initText(app: PIXI.Application, score: number) {
-  const text = new PIXI.Text(score, {
-    fontFamily: Font.style.fontFamily,
-    fontSize: 50,
+  const text = new PIXI.Text(score.toString(), {
+    fontSize: Math.min(app.screen.width, app.screen.height) / 15, // Adjust the divisor for desired size
     fill: 0xdddddd,
     align: "center",
   });
@@ -125,15 +119,9 @@ function initAssets(app: PIXI.Application) {
   Waiting.y = app.screen.height / 2;
 
   score1.x = app.screen.width / 4;
-  score1.y = 50;
+  score1.y = app.screen.height / 4;
   score2.x = (app.screen.width / 4) * 3;
-  score2.y = 50;
-
-  paddle1.x = 50;
-  paddle1.y = app.screen.height / 2;
-
-  paddle2.x = app.screen.width - 50;
-  paddle2.y = app.screen.height / 2;
+  score2.y = app.screen.height / 4;
 
   halfline.x = app.screen.width / 2 - 2.5;
   halfline.y = 0;
@@ -151,15 +139,37 @@ function initAssets(app: PIXI.Application) {
 }
 
 function initPixi() {
+  let size = [window.innerWidth / 2, window.innerHeight / 2];
+  const ratio = 16 / 9;
+  let w;
+  let h;
+  if (size[0] / size[1] >= ratio) {
+    w = size[1] * ratio;
+    h = size[1];
+  } else {
+    w = size[0];
+    h = size[0] / ratio;
+  }
+
   const app = new PIXI.Application({
-    width: window.innerWidth / 3,
-    height: window.innerHeight / 2,
+    width: w,
+    height: h,
     backgroundColor: 0xf05454,
     antialias: true,
   });
-  window.addEventListener("resize", () => {
-    app.renderer.resize(window.innerWidth / 3, window.innerHeight / 2);
-  });
+
+  window.onresize = () => {
+    size = [window.innerWidth / 2, window.innerHeight / 2];
+    if (size[0] / size[1] >= ratio) {
+      w = size[1] * ratio;
+      h = size[1];
+      app.renderer.resize(w, h);
+    } else {
+      w = size[0];
+      h = size[0] / ratio;
+      app.renderer.resize(w, h);
+    }
+  };
   app.stage.hitArea = app.screen;
   app.stage.eventMode = "static";
   const pixiContainer = document.getElementById("pixi-container");
@@ -169,6 +179,29 @@ function initPixi() {
     Container: pixiContainer,
   };
 }
+
+//update the sizes of all the assets
+const updateAssetsSize = (app: PIXI.Application, assets:any) => {
+  const ballRadius = app.screen.height / 40;
+  const paddleWidth = app.screen.height / 25;
+  const paddleHeight = app.screen.height / 4;
+  assets.Ball.width = ballRadius * 2;
+  assets.Ball.height = ballRadius * 2;
+  assets.Paddle1.width = paddleWidth;
+  assets.Paddle1.height = paddleHeight;
+  assets.Paddle2.width = paddleWidth;
+  assets.Paddle2.height = paddleHeight;
+  assets.Score1.style.fontSize = app.screen.height / 15;
+  assets.Score2.style.fontSize = app.screen.height / 15;
+  assets.halfline.height = app.screen.height;
+  assets.halfline.x = app.screen.width / 2 - 2.5;
+  assets.Score1.x = app.screen.width / 4;
+  assets.Score1.y = app.screen.height / 4;
+  assets.Score2.x = (app.screen.width / 4) * 3;
+  assets.Score2.y = app.screen.height / 4;
+  assets.Waiting.x = app.screen.width / 2;
+  assets.Waiting.y = app.screen.height / 2;
+};
 
 const PixiComponent = () => {
   const router = useRouter();
@@ -206,90 +239,59 @@ const PixiComponent = () => {
     }
     if (!user || !socket) return;
     const pixi = initPixi();
-    const assets = initAssets(pixi.App);
-    try {
-      let game: Game;
-      socket.emit("joinGame", {
-        gameId: gameId,
-        mode: mode,
-        expectedPlayer: invited,
-      });
-      socket.on("waiting", () => {
-        pixi.App.stage.addChild(assets.Waiting);
-      });
+    let assets = initAssets(pixi.App);
+    let game: Game;
+    socket.emit("joinGame", {
+      gameId: gameId,
+      mode: mode,
+      expectedPlayer: invited,
+    });
+    socket.on("waiting", () => {
+      pixi.App.stage.addChild(assets.Waiting);
+    });
 
-      socket.on("gameReady", (data) => {
-        gamestarted = true;
-        game = data;
-        pixi.App.stage.removeChild(assets.Waiting);
-        stageAssets(pixi.App, assets);
-      });
-      socket.on("gameFinished", (data) => {
-        router.push("/pregame");
-      });
-      socket.on("gameUpdate", (data) => {
-        console.log("update received");
-        game = data;
-        assets.Ball.x = game.ballPosition.x * pixi.App.screen.width;
-        assets.Ball.y = game.ballPosition.y * pixi.App.screen.height;
-        assets.Paddle1.y = game.player1.position.y * pixi.App.screen.height;
-        assets.Paddle2.y = game.player2.position.y * pixi.App.screen.height;
-        assets.Score1.text = game.player1.score.toString();
-        assets.Score2.text = game.player2.score.toString();
-      });
-      socket.on("gameWin", (data) => {
-        if (data === user.intraLogin) {
-          console.log("game win");
-          gamestarted = false;
-          assets.Score1.text = game.player1.score.toString();
-          assets.Score2.text = game.player2.score.toString();
-          const winText = new PIXI.Text("You win !", textStyle);
-          winText.anchor.set(0.5);
-          winText.x = pixi.App.screen.width / 2;
-          winText.y = pixi.App.screen.height / 2;
-          winText.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-          pixi.App.stage.addChild(winText);
-          pixi.App.stage.removeChild(assets.Ball);
-          pixi.App.stage.removeChild(assets.halfline);
-        } else {
-          console.log("game lose");
-          gamestarted = false;
-          assets.Score1.text = game.player1.score.toString();
-          assets.Score2.text = game.player2.score.toString();
-          const loseText = new PIXI.Text("You lose !", textStyle);
-          loseText.anchor.set(0.5);
-          loseText.x = pixi.App.screen.width / 2;
-          loseText.y = pixi.App.screen.height / 2;
-          loseText.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-          pixi.App.stage.addChild(loseText);
-          pixi.App.stage.removeChild(assets.Ball);
-          pixi.App.stage.removeChild(assets.halfline);
-        }
-      });
-      socket.on("gameFinished", (data) => {
-        console.log("game finish");
-        gamestarted = false;
-        socket?.disconnect();
-        pixi.App.destroy();
-        router.push("/pregame");
-      });
-      pixi.App.stage.on("pointermove", (e) => {
-        if (!gamestarted) return;
+    socket.on("gameReady", (data) => {
+      gamestarted = true;
+      game = data;
+      pixi.App.stage.removeChild(assets.Waiting);
+      stageAssets(pixi.App, assets);
+    });
+    socket.on("gameFinished", (data) => {
+      router.push("/pregame");
+    });
+    socket.on("gameUpdate", (data) => {
+      console.log("update received");
+      game = data;
+      assets.Ball.x = game.ballPosition.x * pixi.App.screen.width;
+      assets.Ball.y = game.ballPosition.y * pixi.App.screen.height;
+      assets.Paddle1.y = game.player1.position.y * pixi.App.screen.height;
+      assets.Paddle2.y = game.player2.position.y * pixi.App.screen.height;
+      assets.Paddle1.x = game.player1.position.x * pixi.App.screen.width;
+      assets.Paddle2.x = game.player2.position.x * pixi.App.screen.width;
+      assets.Score1.text = game.player1.score.toString();
+      assets.Score2.text = game.player2.score.toString();
+    });
+
+    socket.on("gameFinished", (data) => {
+      console.log("game finish");
+      gamestarted = false;
+      router.push("/pregame");
+    });
+    pixi.App.stage.on("pointermove", (e) => {
+      if (!gamestarted) return;
+      if (game) {
         socket?.emit("move", {
           gameId: game.gameId,
           username: user.intraLogin,
           position: {
-            x: e.global.x,
-            y: e.global.y,
+            y: e.screenY / pixi.App.screen.height,
           },
         });
-      });
-      pixi.App.ticker.add((delta) => {
-        if (!gamestarted) return;
-      });
-    } catch (error) {
-      toast.error("An error occured, please try again later0");
-    }
+      }
+    });
+    pixi.App.ticker.add(() => {
+      updateAssetsSize(pixi.App, assets);
+    });
     return () => {
       socket?.off("gameReady");
       socket?.off("gameUpdate");
@@ -298,8 +300,9 @@ const PixiComponent = () => {
       socket?.off("WaitingForOpponent");
       socket?.off("error");
       socket?.off("disconnect");
-      pixi.App.destroy();
       socket?.disconnect();
+      pixi.App.destroy();
+      window.onresize = null;
     };
   }, [user]);
 
