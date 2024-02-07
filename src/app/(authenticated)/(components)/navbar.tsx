@@ -24,6 +24,8 @@ import { notif_element } from "../(interfaces)/channelInterface";
 import { useSocket } from "../(contexts)/socketContext";
 import Lottie from "lottie-react";
 import logo from "../../logo.json";
+import { useUser } from "../(contexts)/userContext";
+import Image from "next/image";
 
 const Navbar_search_list = (props: any) => {
   const router = useRouter();
@@ -40,11 +42,18 @@ const Navbar_search_list = (props: any) => {
         navigate_to_users_profile(props.item.intraLogin);
       }}
     >
-      <img
-        src={props.item.avatarLink}
-        alt=""
-        className="h-10 w-10 sm:h-[60px] sm:w-[60px] flex-none   "
-      />
+         { props.item.avatarLink ? <Image
+             src={props.item.avatarLink || ''}
+
+          width={320}
+          height={320}
+          alt=""
+          className="h-10 w-10 sm:h-[60px] sm:w-[60px] flex-none   "
+
+          draggable={false}
+          priority={true}
+        /> : null}
+
       <span className="h-fit w-fit  text-sm flex items-center  justify-center text-center text-white">
         {" "}
         {props.item.nickname}{" "}
@@ -65,7 +74,7 @@ export default function Navbar_compo() {
   const [twofa, settwofa] = useState(false);
   const checkpathname = usePathname();
   const socket = useSocket();
-  const [currUser, setCurrUser] = useState<User | null>(null);
+  const currUser = useUser();
   const [data, setData] = useState<notif_element[]>([]);
   const [notif_counter, setnotif_counter] = useState(0);
   const openNav = () => {
@@ -87,13 +96,6 @@ export default function Navbar_compo() {
     // }
   }, [checkpathname]);
 
-  const fetchuser = async () => {
-    try {
-      const res = await fetchCurrentUser();
-      settwofa(res.TFA);
-      setCurrUser(res);
-    } catch (error) {}
-  };
   const handeldesaible2fa = async () => {
     try {
       const res = await handlTFA();
@@ -122,7 +124,6 @@ export default function Navbar_compo() {
   useEffect(() => {
     // statnav();
     fetchserch();
-    fetchuser();
 
     socket.on("gameInvite", (invite) => {
       setnotif_counter(notif_counter + 1);
