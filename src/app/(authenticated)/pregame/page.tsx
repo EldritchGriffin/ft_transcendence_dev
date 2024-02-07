@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { User } from "../(interfaces)/userInterface";
 import { fetchCurrentUser } from "../(handlers)/requestHandler";
 import Image from "next/image";
-import Model from "../profile/[id]/(components)/test";
 
 const InviteToGameModal = (props: any) => {
   const [user, setUser] = useState<User | null>(null);

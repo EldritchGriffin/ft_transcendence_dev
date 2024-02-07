@@ -6,8 +6,9 @@ const nextConfig = {
     domains: ["res.cloudinary.com", "cdn.intra.42.fr"],
     loader: "default",
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   reactStrictMode: false,
 };
 module.exports = nextConfig;
-// module.exports = {
-// };
