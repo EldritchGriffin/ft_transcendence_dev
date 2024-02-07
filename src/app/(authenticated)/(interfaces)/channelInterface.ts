@@ -13,24 +13,19 @@ export interface Channel {
   bannedUsers: string[];
 }
 
-
-
-
-
 export interface sender {
-  avatarLink : string;
-  intraLogin : string;
-  nickname : string;
+  avatarLink: string;
+  intraLogin: string;
+  nickname: string;
 }
 
 export interface notif_element {
   id: number;
-  action : string;
-  receiver : string;
-  sender : sender ;
+  action: string;
+  receiver: string;
+  sender: sender;
 }
 
 // export interface notif_element {
 //   notif : notif_element[];
 // }
-
