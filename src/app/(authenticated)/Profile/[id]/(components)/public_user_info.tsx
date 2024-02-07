@@ -21,6 +21,7 @@ const Publicuserinfo_block_unblock = (props: any) => {
       try {
         const response = await postblockuser(user_data.intraLogin);
         setisBlocked(true);
+        props.setstrictedadd(true);
       } catch (error:any) {
     toast.error(error.response.data.message);
 
@@ -46,6 +47,8 @@ const Publicuserinfo_block_unblock = (props: any) => {
       try {
         const response = await postunblockuser(user_data.intraLogin);
         setisBlocked(false);
+        props.setstrictedadd(false);
+
       } catch (error:any) {
     toast.error(error.response.data.message);
 
@@ -91,6 +94,9 @@ const Publicuserinfo_add_remove_cancel = ( props:any ) => {
   const [reject_option, setreject_option] = useState(false);
   const [buttonstate, setbuttonstate] = useState<string>("Add");
   const user_data = props?.users_data;
+  useEffect(()=>{
+    setbuttonstate("add");
+  }, [props.stricted]);
   useEffect(() => {
     var relationship = knowstheuserrelationship(props?.connected_user, props?.users_data?.intraLogin);
     if (relationship === "Accept")
@@ -143,17 +149,12 @@ const Publicuserinfo_add_remove_cancel = ( props:any ) => {
       }
     }
   }, []);
-
-
-
   if (buttonstate === "Remove")
 {
-  
   const send_remove = async () => {
     try {
       const response = await postremovefriend(user_data.intraLogin);
       setbuttonstate("Add");
-
     } catch (error:any) {
       if (error.response.status === 401)
          window.location.replace("/");
@@ -374,7 +375,7 @@ const Publicuserinfo = (props: any) => {
   }, []);
 
 
-
+console.log("add rerror flag :",   strictedadd ,"block flag :", stricted)
   return (
     <div className="flex flex-col w-full sm:w-[464px]">
       <a className="text-white truncate ">PROFILE</a>
@@ -404,7 +405,7 @@ const Publicuserinfo = (props: any) => {
           <> 
           <div className="w-fit h-fit flex flex-row space-x-6">
             {
-             stricted ||  strictedadd ? 
+            ( strictedadd || stricted) ? 
               <button
               className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white opacity-40 " 
             >
@@ -416,24 +417,24 @@ const Publicuserinfo = (props: any) => {
               users_data={user_data}
               connected_user={props.connected_user}
               setstrictedadd={setstrictedadd}
+              stricted={stricted}
               />
-             }
-
+            }
           </div>
           <div className="w-fit h-fit">
           {
-              stricted ? 
-              <button
-              className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white opacity-40"
+            stricted ? 
+            <button
+            className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white opacity-40"
             >
               {" "}
               Block{" "}
             </button>
               :
-
-            <Publicuserinfo_block_unblock
+              <Publicuserinfo_block_unblock
               users_data={user_data}
               connected_user={props.connected_user}
+              setstrictedadd={setstrictedadd}
               setstricted={setstricted}
             />
           }
