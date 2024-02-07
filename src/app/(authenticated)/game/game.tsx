@@ -247,6 +247,7 @@ const PixiComponent = () => {
       stageAssets(pixi.App, assets);
     });
     socket.on("gameUpdate", (data) => {
+      if (!gamestarted || !data) return;
       if (game.gameId !== data.gameId) return;
       game = data;
       assets.Ball.x = game.ballPosition.x * pixi.App.screen.width;
@@ -260,6 +261,7 @@ const PixiComponent = () => {
     });
 
     socket.on("gameFinished", (data) => {
+      if (!gamestarted || !data) return;
       if (data.gameId !== game.gameId) return;
       gamestarted = false;
       router.push("/pregame");
