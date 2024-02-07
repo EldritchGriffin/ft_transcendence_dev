@@ -524,7 +524,7 @@ const SettingsModal = (props: any) => {
               />
             ) : null}
           </div>
-          <div className="flex flex-col gap-3 h-96 w-80">
+          <div className="flex flex-col gap-3 h-96 w-80 ">
             <MemberList
               channel={channel}
               userGrade={userGrade}
