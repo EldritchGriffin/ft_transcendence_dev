@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { User } from "../(interfaces)/userInterface";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "../(contexts)/userContext";
 
 let p1score = 0;
 let p2score = 0;
@@ -205,28 +206,16 @@ const updateAssetsSize = (app: PIXI.Application, assets: any) => {
 
 const PixiComponent = () => {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const user = useUser();
   const mode = useSearchParams().get("mode");
   const invited = useSearchParams().get("invite");
   const gameId = useSearchParams().get("id");
   let socket: Socket | null = null;
   const token = Cookies.get("token");
-  if (user && token) {
-  }
+
   useEffect(() => {
-    if (user) return;
-    const fetchData = async () => {
-      try {
-        const user = await fetchCurrentUser();
-        setUser(user);
-      } catch (error) {
-        toast.error("An error occured, please try again later1");
-      }
-    };
-    fetchData();
-  }, []);
-  useEffect(() => {
-    if (!socket && user && token) {
+    if (!user || !token) router.push("/");
+    if (!socket) {
       socket = io("http://localhost:3001/game", {
         extraHeaders: {
           Authorization: `Bearer ${token}`,
@@ -241,6 +230,7 @@ const PixiComponent = () => {
     const pixi = initPixi();
     let assets = initAssets(pixi.App);
     let game: Game;
+    console.log("emitting joinGame");
     socket.emit("joinGame", {
       gameId: gameId,
       mode: mode,
@@ -255,9 +245,6 @@ const PixiComponent = () => {
       game = data;
       pixi.App.stage.removeChild(assets.Waiting);
       stageAssets(pixi.App, assets);
-    });
-    socket.on("gameFinished", (data) => {
-      router.push("/pregame");
     });
     socket.on("gameUpdate", (data) => {
       if (game.gameId !== data.gameId) return;
@@ -277,14 +264,6 @@ const PixiComponent = () => {
       gamestarted = false;
       router.push("/pregame");
     });
-    socket.on("disconnect", () => {
-      if (gamestarted) {
-        socket?.emit("leaveGame", {
-          gameId: game.gameId,
-          username: user.intraLogin,
-        });
-      }
-    });
     pixi.App.stage.on("pointermove", (e) => {
       if (!gamestarted) return;
       if (game) {
@@ -301,18 +280,17 @@ const PixiComponent = () => {
       updateAssetsSize(pixi.App, assets);
     });
     return () => {
+      socket?.off("waiting");
       socket?.off("gameReady");
       socket?.off("gameUpdate");
       socket?.off("gameWin");
       socket?.off("gameFinished");
-      socket?.off("WaitingForOpponent");
       socket?.off("error");
-      socket?.off("disconnect");
       socket?.disconnect();
       pixi.App.destroy();
       window.onresize = null;
     };
-  }, [user]);
+  }, []);
 
   return <div id="pixi-container" className="box-shadow"></div>;
 };

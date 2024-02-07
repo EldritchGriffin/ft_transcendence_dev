@@ -22,8 +22,21 @@ export default function RootLayout({
 }) {
   return (
     <html data-theme="light" lang="en" suppressHydrationWarning>
-      <body  className={Font.className + " bg-bg_gray"}>
+      <body className={Font.className + " bg-bg_gray"}>
         {children}
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
       </body>
     </html>
   );

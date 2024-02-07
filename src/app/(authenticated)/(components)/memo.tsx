@@ -2,7 +2,7 @@
 
 import { fetchCurrentUser } from "../(handlers)/requestHandler";
 import { usePathname, useRouter } from "next/navigation";
-import React, { Fragment, useEffect, useMemo, useRef } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { User } from "../(interfaces)/userInterface";
 import Navbar_compo from "./navbar";
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { SocketContext } from "../(contexts)/socketContext";
 import { Socket, io } from "socket.io-client";
 import Cookies from "js-cookie";
+import { userContext } from "../(contexts)/userContext";
 
 export const Ft_memo = (props: any) => {
   const router = useRouter();
@@ -56,9 +57,11 @@ export const Ft_memo = (props: any) => {
 
   return valid ? (
     <>
-      <SocketContext.Provider value={socket}>
-        <Navbar_compo /> {props.children}
-      </SocketContext.Provider>
+      <userContext.Provider value={currUser}>
+        <SocketContext.Provider value={socket}>
+          <Navbar_compo /> {props.children}
+        </SocketContext.Provider>
+      </userContext.Provider>
     </>
   ) : null;
 };
