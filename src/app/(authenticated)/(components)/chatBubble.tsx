@@ -2,6 +2,7 @@ import React from "react";
 import { User } from "../(interfaces)/userInterface";
 import { Message } from "../(interfaces)/messageInterface";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const ChatBubble = (props: any) => {
   const user: User = props.user;
@@ -26,12 +27,13 @@ const ChatBubble = (props: any) => {
           onClick={() => handleUsernameClick()}
           className="flex gap-3 items-center"
         >
-          <img
+          <Image src={message.sender.avatarLink} alt="Profile Picture" width={64} height={64} className="rounded-full mb-2" draggable="false" />
+          {/* <img
             src={message.sender.avatarLink}
             alt="Profile Picture"
             className="w-16 h-16 rounded-full mb-2"
             draggable="false"
-          />
+          /> */}
           <span className="text-accent_red text-xl">{message.senderLogin}</span>
         </button>
         <div className="flex">

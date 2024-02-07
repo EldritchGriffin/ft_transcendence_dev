@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import OtpInput from 'react-otp-input';
 import { getImage, validTfa } from "../(handlers)/requestHandler";
+import Image from "next/image";
 
 
 export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
@@ -75,7 +76,8 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
                     <div className="flex flex-col items-center justify-center text-center">
                       <div className="font-bold text-2xl flex flex-col space-y-5 text-black justify-center items-center">
                         <p>Enter 6-digit code from your 2FA application</p>
-                        <img src={image} alt="" className="w-[150px] h-[150px] sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]" />
+
+                      {  image && <Image src={image} alt="" width={300} height={300} className="" priority={true} />}
                       </div>
                     </div>
                     <div>
