@@ -25,19 +25,6 @@ export default function RootLayout({
   return (
       <div  className={Font.className + " bg-bg_gray"}>
         <Ft_memo children={children}/>
-        <ToastContainer
-          position="top-right"
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          transition={Bounce}
-        />
       </div>
   );
 }

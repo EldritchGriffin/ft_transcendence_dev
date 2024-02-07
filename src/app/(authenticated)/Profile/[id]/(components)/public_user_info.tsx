@@ -310,7 +310,6 @@ else if(buttonstate === "Accept")
 }
 
 const getStatus = (status:any, pregame:any) => {
-  if (!pregame){
     if (status === "online") {
       return (      <span className="inline-flex items-center absolute bottom-[-8px] bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
       <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
@@ -324,14 +323,15 @@ const getStatus = (status:any, pregame:any) => {
               Offline
     </span>);
     }
+    else if (status === "ingame") {
+      return ( <span className="inline-flex items-center absolute bottom-[-8px] bg-orange-600 text-orange-100 text-xs font-medium px-2.5 py-0.5 rounded-full ">
+      <span className="w-2 h-2 me-1 bg-orange-400 rounded-full"></span>
+              Ingame
+    </span>);
+    }
+
 }
-else {
-  return ( <span className="inline-flex items-center absolute bottom-[-8px] bg-orange-600 text-orange-100 text-xs font-medium px-2.5 py-0.5 rounded-full ">
-  <span className="w-2 h-2 me-1 bg-orange-400 rounded-full"></span>
-          Ingame
-</span>);
-}
-}
+
 
 const Publicuserinfo = (props: any) => {
   const [status, setStatus] = useState(props.users_data.status);
@@ -341,26 +341,35 @@ const Publicuserinfo = (props: any) => {
   const [strictedadd, setstrictedadd] = useState(false);
   const [stricted, setstricted] = useState(props.connected_user.blockedOf?.filter(
     (item: any) => item.intraLogin === user_data.intraLogin
-  ).length);
-
-
+    ).length);
+    
+    const online = (user:string) => {
+      if(user === user_data.intraLogin)
+      setStatus("online");
+    };
+    
+    const offline = (user:string) => {
+      if(user === user_data.intraLogin)
+      setStatus("offline");
+    };
   useEffect(() => {
     if (socket) {
-      socket.on("online", (user) => {
-        if(user === user_data.intraLogin)
-         setStatus("online");
-      });
-      socket.on("offline", (user) => {
-        if(user === user_data.intraLogin)
-         setStatus("offline");
-      });
+      socket.on("online", (user) => online(user));
+      socket.on("offline", (user) => offline(user));
       socket.on("offgame", (user) => {
         if(user === user_data.intraLogin)
-          setpregame(true);
+        {
+          socket.on("online", (user) => online(user));
+          socket.on("offline", (user) => offline(user));
+        }
       });
       socket.on("ingame", (user) => {
         if(user === user_data.intraLogin)
-          setpregame(false);
+        {
+          socket.off("online")
+          socket.off("offline")
+          setStatus("ingame");
+        }
       });
     }
 
