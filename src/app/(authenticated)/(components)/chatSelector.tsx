@@ -101,7 +101,6 @@ const ChatSelector = (props: any) => {
     setSelected(index);
   };
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     const searchTerm = event.target.value;
     setFilter(searchTerm);
   };

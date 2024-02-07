@@ -1,6 +1,8 @@
 "use client";
+import Lottie from "lottie-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import logo from "./logo.json";
 
 const Home = () => {
   const router = useRouter();
@@ -24,13 +26,10 @@ const Home = () => {
           </button>
         </div>
       </div>
-      <Image
-        priority
-        src="/paddle.jpg"
-        width={232}
-        height={232}
-        alt="image"
-        className="w-[232px] h-[232px]"
+      <Lottie
+        animationData={logo}
+        loop={true}
+        style={{ width: 1000, height: 1000 }}
       />
     </div>
   );

@@ -22,7 +22,7 @@ const NewFriendModal = (props: any) => {
   };
 
   const startChat = async (friend: User) => {
-    console.log(friend);
+
     try {
       const channel: Channel = await postNewDM(friend.intraLogin);
     } catch (error: any) {

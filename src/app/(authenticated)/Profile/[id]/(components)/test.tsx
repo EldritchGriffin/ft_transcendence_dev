@@ -3,6 +3,7 @@ import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 export default function Model({Open, onClose}:any) {
   let current: number = 0;
@@ -55,27 +56,26 @@ export default function Model({Open, onClose}:any) {
       axios
       .get(backendUrl2, { withCredentials: true })
       .then((res) => {
-        // console.log("anass image",res.data);
         setImage(res.data);
       })
       .catch((error:any) => {
-        // console.log("l7waa")
+
       toast.error(error.response.data.message);
         if (error.response.status === 401)
            window.location.replace("/");
       });
     }, []);
     
-    // console.log("image",image)
+
     const handleButtonClick = () => {
       const requestData = {
         code: code as string,
       };
-      // console.log(requestData);
+
       axios
       .post(backendUrl, requestData, { withCredentials: true })
       .then((res) => {
-        // console.log(res.data);
+
       })
       .catch((error:any) => {
       toast.error(error.response.data.message);
@@ -149,7 +149,8 @@ export default function Model({Open, onClose}:any) {
         <div className="flex flex-col items-center justify-center text-center ">
             <div className="font-bold text-2xl flex flex-col space-y-5 text-white justify-center items-center">
               <p>Enter 6-digit code from your 2FA application</p>
-              <img src={image} alt="" className="w-[300px] h-[300px]" />
+              {<Image src={image} alt="2FA QR code" width={300} height={300} />}
+              {/* // <img src={image} alt="" className="w-[300px] h-[300px]" /> */}
             </div>
           </div>
         <div className="flex flex-col space-y-16 ">

@@ -654,13 +654,11 @@ const ChannelHeader = (props: any) => {
     socket.on(
       "newOwner",
       (message: { createdChannel: Channel; newOwner: string }) => {
-        console.log(message.createdChannel);
         if (
           selectedChannel &&
           message.createdChannel.id === selectedChannel.id
         ) {
           props.setSelectedChannel(message.createdChannel);
-          console.log("selected channel updated");
         }
         if (
           channels.some(
@@ -672,9 +670,7 @@ const ChannelHeader = (props: any) => {
               return message.createdChannel;
             return channel;
           });
-          console.log(message.createdChannel);
           props.setChannels(newChannels);
-          console.log("channels updated");
         }
       }
     );
@@ -786,7 +782,6 @@ const ChannelHeader = (props: any) => {
             </button>
             <button
               onClick={() => {
-                console.log("clicked play button");
               }}
               className="text-white text-sm hover:text-accent_red"
             >

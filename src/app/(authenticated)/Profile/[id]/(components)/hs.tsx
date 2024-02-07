@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 const checkname = (person: any) => {
   if (person.nickname) {
     if (person.nickname.length > 7) {
@@ -66,7 +67,7 @@ const Mhistory = ({ result }: any) => {
                       );
                     }}
                   >
-                    <img
+                    {/* <img
                       draggable="false"
                       className="h-12 w-12 sm:h-[100px] sm:w-[100px]  flex-none bg-gray-50"
                       src={
@@ -76,7 +77,13 @@ const Mhistory = ({ result }: any) => {
                           : h.players[1].avatarLink
                       }
                       alt=""
-                    />
+                    /> */}
+                    <Image src={
+                        h.players &&
+                        h.players[0].intraLogin === result.intraLogin
+                          ? h.players[0].avatarLink
+                          : h.players[1].avatarLink
+                      } alt="" width={100} height={100} className="" />
                     <p className="text-xs sm:text-lg  text-white">
                       {checkname(
                         h.players &&
@@ -102,7 +109,7 @@ const Mhistory = ({ result }: any) => {
                       );
                     }}
                   >
-                    <img
+                    {/* <img
                       draggable="false"
                       className="h-12 w-12 sm:h-[100px] sm:w-[100px] flex-none  bg-gray-50"
                       src={
@@ -112,7 +119,13 @@ const Mhistory = ({ result }: any) => {
                           : h.players[0].avatarLink
                       }
                       alt=""
-                    />
+                    /> */}
+                    <Image src={
+                        h.players &&
+                        h.players[0].intraLogin === result.intraLogin
+                          ? h.players[1].avatarLink
+                          : h.players[0].avatarLink
+                      } alt="" width={100} height={100} className="" />
                     <p className="text-xs sm:text-lg  text-white">
                       {checkname(
                         h.players &&

@@ -72,29 +72,21 @@ export default function Edit_nickname(props: any) {
           "An error occurred while attempting to update the new Nickname."
         );
     } catch (error) {
-      console.log(error);
     }
   };
   const handleFileUpload = async (files: any) => {
     // here i made the final tests for the new Profile Picture before POSTED on the back-end
     if (files.size > 5 * 10 ** 6) {
-      console.log("wrong image size !:", files.size);
       seterrimg(1);
       return;
     }
 
     if (files.type !== "image/jpeg") {
-      console.log("wrong image type !:", files.type);
       seterrimg(1);
       return;
     }
 
-    console.log(
-      "**correct image type !:",
-      files.type,
-      "correct image size !:",
-      files.size
-    );
+
     if (!files) return;
     try {
       seterrimg(0);
@@ -111,7 +103,6 @@ export default function Edit_nickname(props: any) {
           "An error occurred while attempting to update the new profile picture."
         );
     } catch (error) {
-      console.log(error);
     }
   };
   const handleInputChangek = (event: any) => {
@@ -140,8 +131,8 @@ export default function Edit_nickname(props: any) {
       if (nickname_state) nickname_state.style.borderColor = "white";
       handleNickNameUpload(updatenick);
     }
-    if (!new_file) console.log("FILE NOT SELECTED!!");
-    else handleFileUpload(new_file);
+
+    handleFileUpload(new_file);
   };
   return (
     <div className="h-full w-full edit_n ickname bg-primary_blue flex flex-col items-center space-y-10 pt-10">

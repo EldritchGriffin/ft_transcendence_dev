@@ -26,7 +26,6 @@ const ChatPage = () => {
         const user: User = await fetchCurrentUser();
         setUser(user);
       } catch (error) {
-        console.log(error);
       }
     };
     fetchData();
