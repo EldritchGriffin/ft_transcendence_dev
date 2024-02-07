@@ -10,8 +10,12 @@ const InviteToGameModal = (props: any) => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-  const inviteUser = (expected: string) => {
-    router.push(`/game?mode=${props.gameMode}&invite=${expected}`);
+  const inviteUser = (expected: User) => {
+    if (expected.status !== "online") {
+      toast.error("User cannot be invited");
+      return;
+    }
+    router.push(`/game?mode=${props.gameMode}&invite=${expected.intraLogin}`);
   };
 
   useEffect(() => {
@@ -58,7 +62,7 @@ const InviteToGameModal = (props: any) => {
                   <span className="text-2xl">{friend.nickname}</span>
                 </div>
                 <button
-                  onClick={() => inviteUser(friend.intraLogin)}
+                  onClick={() => inviteUser(friend)}
                   className="bg-accent_red w-20 h-10 text-white"
                 >
                   <span>Invite</span>

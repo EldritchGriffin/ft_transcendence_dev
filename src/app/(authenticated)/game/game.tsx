@@ -1,13 +1,11 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import * as PIXI from "pixi.js";
 import io, { Socket } from "socket.io-client";
-import { Press_Start_2P } from "next/font/google";
-import { fetchCurrentUser } from "../(handlers)/requestHandler";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import { User } from "../(interfaces)/userInterface";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "../(contexts)/userContext";
+import { Lilita_One } from "next/font/google";
 
 let p1score = 0;
 let p2score = 0;
@@ -49,10 +47,13 @@ interface Game {
   gameMode: string;
 }
 
+const Font = Lilita_One({
+  subsets: ["latin"],
+  weight: "400",
+});
+
 const textStyle = new PIXI.TextStyle({
-  fontSize: 50,
-  fill: 0xdddddd,
-  align: "center",
+  fontFamily: Font.style.fontFamily,
 });
 
 function initBall(app: PIXI.Application) {
@@ -86,6 +87,7 @@ function initPaddle(app: PIXI.Application) {
 
 function initText(app: PIXI.Application, score: number) {
   const text = new PIXI.Text(score.toString(), {
+    fontFamily: Font.style.fontFamily,
     fontSize: Math.min(app.screen.width, app.screen.height) / 15, // Adjust the divisor for desired size
     fill: 0xdddddd,
     align: "center",
