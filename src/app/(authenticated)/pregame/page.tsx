@@ -41,7 +41,7 @@ const InviteToGameModal = (props: any) => {
         </div>
         <span className="text-accent_red text-2xl">Invite a Friend</span>
         <div className="flex flex-col gap-4 mt-10 overflow-scroll custom-scrollbar">
-          {user.friends.map((friend, index) => {
+          {user.friends?.map((friend, index) => {
             return (
               <div
                 key={index}
@@ -54,6 +54,7 @@ const InviteToGameModal = (props: any) => {
                     width={50}
                     height={50}
                     className="rounded-full w-auto"
+                    priority={true}
                   />
                   <span className="text-2xl">{friend.nickname}</span>
                 </div>

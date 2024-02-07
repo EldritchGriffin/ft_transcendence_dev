@@ -7,23 +7,24 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { fetchUsernickname, postUserAvatar } from '../(handlers)/requestHandler';
+import Image from 'next/image';
 
 export default  function EditNickname( props:any ) {
   const router = useRouter();
     const [NickName, setNickName] = useState<any>(props.user_data?.intraLogin);
     const [updatenick, setupdatenick] = useState<any>(props.user_data?.nickname);
-    const [new_file, setnew_file] = useState<File>();
+    const [new_file, setnew_file] = useState<any>(props.user_data?.avatarLink);
     const [image, setRes] = useState(true); 
     const [name, setName] = useState(true); 
     let imgflag = 0;
     let nickflag = 0;
     const inputRef = useRef<HTMLInputElement | null>(null);
-  const handleClickProgrammatically = () => { // here i automaticly click the input_file to make it 
+  const handleClickProgrammatically = () => { 
     if (inputRef?.current) {
       inputRef?.current.click();
     }
   };
-  const handleNickNameUpload = async (name:any) => { // after the new NickName passes the error checks i POST it on the back-end
+  const handleNickNameUpload = async (name:any) => { 
     if (!name)  return 
     try{
       setName(false);
@@ -37,36 +38,37 @@ export default  function EditNickname( props:any ) {
             window.location.replace("/");
         }
   };
-  const handleInputChangek = (event:any) => {// here i keep the state of the updated NickName updated when the user click on "Enter" button
+  const handleInputChangek = (event:any) => {
     if (event?.key === 'Enter') {
       handleInputChange(event);
     }
   }
-  const handleInputChange = (event:any) => { // here i keep the state of the updated NickName updated when ever a character is wroten or removed from the input field
+  const handleInputChange = (event:any) => {
     setupdatenick(event?.target?.value);
   }
-  const handleFileUpload =  (files:any) => { // here i made the final tests for the new Profile Picture before POSTED on the back-end
+  const handleFileUpload =  (files:any) => {
+    console.log(files);
     if (files && files.type !== "image/jpeg")
     {
       imgflag = 1;
       toast.error("image type error");
       return 1;
-    } 
-   else if (files && files.size > 5 * 10 **6)  
+    }
+    else if (files && files.size > 5 * 10 **6)  
     {
       imgflag = 1;
       toast.error("image size error");
-
       return 1;
     }
       imgflag = 0;
       const data = new FormData();
       data.append('avatar', files);
         setRes(false);
-  const handleAvatarUpload = async (setavatar:any) => { // after the new NickName passes the error checks i POST it on the back-end
+  const handleAvatarUpload = async (setavatar:any) => {
           try {
             const res =   await postUserAvatar(setavatar);
               setRes(true);
+              setnew_file(res.avatarLink);
             }
             catch(error:any){
               toast.error(error.response.data.message);
@@ -77,18 +79,8 @@ export default  function EditNickname( props:any ) {
         }
       }
       handleAvatarUpload(data);
-      var imageDisplay = document.getElementById('profile_pic') as HTMLImageElement;
-              var reader = new FileReader();
-              reader.onload = function (e) {
-                if (e.target && imageDisplay)
-                {
-                  var imageUrl = e.target.result;
-                  imageDisplay.src = imageUrl as string;
-                }
-              };
-              reader.readAsDataURL(files);
   };
-    const updateNickname = () => { // here i check the values that will be POSTED to the back-end for any error
+    const updateNickname = () => {
       const nickname_state = document.getElementById("inpt_nickname");
       const validInput = /^[a-zA-Z0-9]*$/;
       if (!updatenick || updatenick?.length < 3 || updatenick?.length > 15 || updatenick?.length === 0 || !validInput?.test(updatenick) || !/^[a-zA-Z]*$/.test(updatenick?.charAt(0)))
@@ -112,16 +104,26 @@ export default  function EditNickname( props:any ) {
         router.push("/user/me");
     }
     }
-    return (
+    console.log("image displayed :", new_file);
+    return (props.user_data ?
       <div className="h-full w-full  bg-primary_blue flex flex-col items-center space-y-10 pt-20"  style={{ 
           opacity: (!name || !image) ? 0.4 : 1
         }} >
-
             <div className="h-fit w-fit flex flex-col items-center">
             <div className="h-fit w-fit border border-accent_red relative flex justify-center ">
-                <img src={props.user_data?.avatarLink} id="profile_pic" className=" h-44 w-44 border-4 border-red-400 " />
+           {new_file &&  <Image
+          priority={true}
+          src={new_file}
+          id="profile_pic"
+          width={320}
+          height={320}
+          alt=""
+         draggable={false}
+
+          className=" h-44 w-44 border-4 border-red-400 "
+        />}
                 <button  className=" w-12 h-6 bg-accent_red font-bold text-white absolute bottom-[-10px]" onClick={handleClickProgrammatically} > Edit </button>
-                <input  name="image" onChange={(e)=>{handleFileUpload(e.target.files?.[0])}} type="file" placeholder="Edit" id='inpt' accept='/image/*' className="outline-none  h-10 w-10 bg-red-500 hidden green absolute bottom-[-10px] opacity-10 " ref={inputRef} 
+                <input  name="image" onChange={(e)=>{handleFileUpload(e.target.files?.[0]); console.log(e.target.files?.[0])}} type="file" placeholder="Edit" id='inpt' accept='/image/*' className="outline-none  h-10 w-10 bg-red-500 hidden green absolute bottom-[-10px] opacity-10 " ref={inputRef} 
                  />
             </div>
              </div>
@@ -131,12 +133,7 @@ export default  function EditNickname( props:any ) {
             </div>
             <button className="bg-accent_red h-12 w-20 text-xl  text-white" onClick={updateNickname}> Save </button>
              </div>
+             :
+             null
     );
   }
-
-
-
-// 401
-//            403  Forbidden action
-//            415 
-// 302

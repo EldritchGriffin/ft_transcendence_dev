@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const UserFriendList = (props: any) => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const UserFriendList = (props: any) => {
         {!user_data?.length ? (
           <p className="h-full w-full flex justify-center items-center  text-white">
             {" "}
-            You have no friends{" "}
+            No friends{" "}
           </p>
         ) : (
           <div className="w-full h-full flex flex-col items-center space-y-3  pb-3 bg-primary_blue">
@@ -43,12 +44,17 @@ const UserFriendList = (props: any) => {
                       navigate_to_users_profile(item.intraLogin);
                     }}
                   >
-                    <img
-                      src={item.avatarLink}
-                      alt=""
-                      draggable="false"
+                             <Image
+          priority={true}
+          src={item.avatarLink}
+          id="profile_pic"
+          width={320}
+          height={320}
+          alt=""
+         draggable={false}
+
                       className="h-12 w-12 sm:h-24 sm:w-24  flex-none "
-                    />
+        />
                     <span className="h-2 w-2 text-sm  flex items-end justify-center text-center  text-white">
                       {" "}
                       {item.nickname}{" "}

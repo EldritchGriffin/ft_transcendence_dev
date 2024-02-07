@@ -59,7 +59,7 @@ const Stats = (props: any) => {
 
   return (
     <div className="flex flex-col w-full sm:w-[464px]">
-      <a className="text-white truncate flex ">STATS</a>
+      <a className="text-white truncate flex ">STATS/ACHIEVEMENTS</a>
       <div className="bg-primary_blue  flex flex-col w-full sm:w-[464px] h-[380px] container">
         <div className="w-full pt-7">
           <div className="">

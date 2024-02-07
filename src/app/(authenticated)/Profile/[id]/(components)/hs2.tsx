@@ -43,7 +43,7 @@ const Mhistory = ({ result }: any) => {
         {!history?.length ? (
           <p className="h-full w-full flex justify-center items-center  text-white">
             {" "}
-            You have no friends{" "}
+            No MATCH HISTORY{" "}
           </p>
         ) : (
           <div className="flex flex-col overflow-y-auto custom-scrollbar h-[800px] shadow-black">

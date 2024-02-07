@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { useSocket } from "@/app/(authenticated)/(contexts)/socketContext";
+import Image from "next/image";
 
 
 const ProfileUserInfo = (props: any) => {
@@ -22,16 +23,21 @@ const ProfileUserInfo = (props: any) => {
       <span className="text-white truncate ">PROFILE</span>
       <div className=" w-full h-[380px] sm:w-[464px]  bg-primary_blue flex flex-col items-center space-y-5 pt-8 pb-8">
      { user_data?.avatarLink && (
-        <img
-          src={user_data?.avatarLink}
-          alt=""
-          draggable="false"
-          className="h-32 w-32 sm:h-[174px] sm:w-[174px] border-4 br "
-        />
+               <Image
+                src={user_data?.avatarLink}
+                priority={true}
+                id="profile_pic"
+                width={320}
+                height={320}
+                alt=""
+               draggable={false}
+      
+                className="h-32 w-32 sm:h-[174px] sm:w-[174px] border-4 br "
+              />
         )}
      { user_data?.intraLogin && (
 
-        <span className="h-full w-full text-4xl sm:w-[140px] sm:h-[41px] text-center  text-white">
+        <span className="h-full  w-full text-4xl sm:w-fit sm:h-[41px] text-center  text-white">
           {" "}
           {user_data?.intraLogin}{" "}
         </span>

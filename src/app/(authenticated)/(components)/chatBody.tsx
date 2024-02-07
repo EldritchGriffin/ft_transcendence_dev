@@ -91,7 +91,7 @@ const ChatBody = (props: any) => {
         <input
           id="message"
           type="text"
-          className=" border-b-2 bg-transparent w-full h-full px-4 text-white focus:outline-none text-xl placeholder:text-white placeholder:opacity-50"
+          className=" border-b-2 bg-transparent w-full h-full px-4 text-white focus:outline-none text-xl placeholder:text-white placeholder:opacity-10"
           placeholder="Type a message..."
           autoComplete="off"
           onKeyDown={(e) => {

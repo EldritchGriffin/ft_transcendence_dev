@@ -1,12 +1,13 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+const { ModuleKind } = require('typescript')
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
-    remotePatterns: [
-      { hostname: "res.cloudinary.com" },
-      { hostname: "cdn.intra.42.fr" },
-    ],
-  },
-  reactStrictMode: false,
-};
+      domains: ['res.cloudinary.com', 'cdn.intra.42.fr'],
+      loader: 'default',
+    },
+    // reactStrictMode: false,
+}
+module.exports = nextConfig
+// module.exports = {
+// };
