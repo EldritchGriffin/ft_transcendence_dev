@@ -96,6 +96,10 @@ export default  function EditNickname( props:any ) {
         if (nickname_state)
           nickname_state.style.borderColor = 'white';
       handleNickNameUpload(updatenick);
+      if(!name || !image)
+      {
+        console.log("image or name still not fullfilled");
+      }
       if(name && image)
         router.push("/user/me");
     }
