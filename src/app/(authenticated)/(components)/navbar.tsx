@@ -72,19 +72,20 @@ export default function Navbar_compo() {
     setShow(!show);
   };
 
-  useEffect(()=>{
-
+  useEffect(() => {
     // const statnav = () => {
-      if (checkpathname === "/messages") {
-        setnavactive(2);
-      } else if (checkpathname === "/user/me" || checkpathname.includes("profil")) {
-        setnavactive(3);
-      } else if ((checkpathname === "/pregame") || (checkpathname === "/game")) {
-        setnavactive(4);
-      }
+    if (checkpathname === "/messages") {
+      setnavactive(2);
+    } else if (
+      checkpathname === "/user/me" ||
+      checkpathname.includes("profil")
+    ) {
+      setnavactive(3);
+    } else if (checkpathname === "/pregame" || checkpathname === "/game") {
+      setnavactive(4);
+    }
     // }
-  }, [checkpathname])
-
+  }, [checkpathname]);
 
   const fetchuser = async () => {
     try {
@@ -102,14 +103,12 @@ export default function Navbar_compo() {
       toast.error("Error Disabling Two Factor Authentication");
     }
   };
-  
+
   const fetchserch = async () => {
     try {
       const res = await fetchAllUsers();
       setusers_data(res);
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
 
   const handleLogoutClick = () => {
@@ -125,9 +124,25 @@ export default function Navbar_compo() {
     fetchserch();
     fetchuser();
 
+    socket.on("gameInvite", (invite) => {
+      setnotif_counter(notif_counter + 1);
+      setData((Data) => [
+        ...Data,
+        {
+          id: notif_counter,
+          action: invite.action,
+          receiver: invite.receiver,
+          sender: {
+            avatarLink: invite.sender.avatarLink,
+            intraLogin: invite.sender.intraLogin,
+            nickname: invite.sender.nickname,
+          },
+        },
+      ]);
+      toast.success("Game Invitation");
+    });
     socket.on("friendRequest", (_data: notif_element) => {
-      if (_data.sender.intraLogin === currUser?.intraLogin) 
-        return;
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
       setnotif_counter(notif_counter + 1);
       setData((Data) => [
         ...Data,
@@ -146,8 +161,7 @@ export default function Navbar_compo() {
     });
 
     socket.on("friendRequestCancelled", (_data: notif_element) => {
-      if (_data.sender.intraLogin === currUser?.intraLogin)
-        return;
+      if (_data.sender.intraLogin === currUser?.intraLogin) return;
       setnotif_counter(notif_counter + 1);
       setData((Data) => [
         ...Data,
@@ -224,6 +238,7 @@ export default function Navbar_compo() {
       socket.off("friendRejected");
       socket.off("friendAccepted");
       socket.off("friendRemoved");
+      socket.off("gameInvite");
     };
   }, [data]);
 
@@ -256,7 +271,6 @@ export default function Navbar_compo() {
       ) {
         hidesearchfield();
       }
-
     };
 
     // Add event listener to document on mount
@@ -279,8 +293,7 @@ export default function Navbar_compo() {
           <div className="flex items-center space-x-4">
             <div className="relative flex md:gap-8 lg:gap-16 items-center space-x-4">
               <span className="oo flex items-center text-sm md:text-2xl font-bold select-none">
-                
-              <Lottie
+                <Lottie
                   animationData={logo}
                   loop={true}
                   style={{ width: 100, height: 100 }}
@@ -305,7 +318,8 @@ export default function Navbar_compo() {
                     className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar"
                   >
                     {users_data?.map((item: any, index: any) =>
-                      (item.intraLogin != currUser?.intraLogin  && item.intraLogin.includes(navsearch)) ? (
+                      item.intraLogin != currUser?.intraLogin &&
+                      item.intraLogin.includes(navsearch) ? (
                         <Navbar_search_list
                           item={item}
                           index={index}
@@ -365,7 +379,9 @@ export default function Navbar_compo() {
                 }}
               >
                 <GiPingPongBat size={25} className="text-white mr-4" />
-                <a className="text-white text-sm lg:text-lg font-bold select-none ">Game</a>
+                <a className="text-white text-sm lg:text-lg font-bold select-none ">
+                  Game
+                </a>
               </div>
             </div>
           </div>
@@ -440,7 +456,7 @@ export default function Navbar_compo() {
                   : "fixed left-[-100%] top-16 h-screen p-10 ease-in duration-500"
               }
             >
-            <div className="dropdown dropdown-start flex  text-white items-center">
+              <div className="dropdown dropdown-start flex  text-white items-center">
                 <Notif
                   socket={socket}
                   handlenotifclick={handlenotifclick}

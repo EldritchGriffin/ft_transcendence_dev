@@ -181,7 +181,7 @@ function initPixi() {
 }
 
 //update the sizes of all the assets
-const updateAssetsSize = (app: PIXI.Application, assets:any) => {
+const updateAssetsSize = (app: PIXI.Application, assets: any) => {
   const ballRadius = app.screen.height / 40;
   const paddleWidth = app.screen.height / 25;
   const paddleHeight = app.screen.height / 4;
@@ -260,7 +260,7 @@ const PixiComponent = () => {
       router.push("/pregame");
     });
     socket.on("gameUpdate", (data) => {
-
+      if (game.gameId !== data.gameId) return;
       game = data;
       assets.Ball.x = game.ballPosition.x * pixi.App.screen.width;
       assets.Ball.y = game.ballPosition.y * pixi.App.screen.height;
@@ -273,8 +273,17 @@ const PixiComponent = () => {
     });
 
     socket.on("gameFinished", (data) => {
+      if (data.gameId !== game.gameId) return;
       gamestarted = false;
       router.push("/pregame");
+    });
+    socket.on("disconnect", () => {
+      if (gamestarted) {
+        socket?.emit("leaveGame", {
+          gameId: game.gameId,
+          username: user.intraLogin,
+        });
+      }
     });
     pixi.App.stage.on("pointermove", (e) => {
       if (!gamestarted) return;

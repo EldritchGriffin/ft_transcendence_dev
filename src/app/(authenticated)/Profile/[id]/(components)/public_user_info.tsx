@@ -93,6 +93,9 @@ const Publicuserinfo_add_remove_cancel = ( props:any ) => {
   const user_data = props?.users_data;
   useEffect(() => {
     var relationship = knowstheuserrelationship(props?.connected_user, props?.users_data?.intraLogin);
+    if (relationship === "Accept")
+      setreject_option(true);
+
     setbuttonstate(relationship);
     if (socket) {
       socket.on("friendRequestNotif", (user) => {
