@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { Socket } from 'socket.io-client/debug';
 import { useRouter } from 'next/navigation';
 import { BiSolidNotification } from 'react-icons/bi';
+import Image from 'next/image';
 export default function Notif(props:any) {
   const router = useRouter();
   const user_data = props.data;
@@ -40,7 +41,16 @@ const handleRemoveItem = (idToRemove: any) => {
           }}>
             <div className='w-[320px] bg-white rounded-full flex flex-row space-y-5 '>
               <div className="flex w-full space-x-12 items-center">
-                <img src={item.sender.avatarLink} alt="" className='w-16 h-16 rounded-full  ' />
+              <Image
+          priority={true}
+          src={item.sender.avatarLink}
+          id="profile_pic"
+          width={320}
+          height={320}
+          alt=""
+         draggable={false}
+          className="w-16 h-16 rounded-full  "
+        />
                 <div className="">
                   {item.sender.intraLogin} {" "} 
                 </div>

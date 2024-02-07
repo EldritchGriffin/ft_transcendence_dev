@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const checkname = (person: any) => {
   if (person.nickname) {
@@ -35,17 +36,20 @@ const Leadrboard = (props: any) => {
                 <div
                   className="flex  gap-x-4  cursor-pointer"
                   onClick={() => {
-                    router.push(`/Profile/${person.intraLogin}`);
+                    router.push(`/profile/${person.intraLogin}`);
                   }}
                 >
-                  {/* <Link href={""}> */}
-                  <img
-                    draggable="false"
-                    className=" h-12 w-12 sm:h-20 sm:w-20 flex-none bg-gray-50"
-                    src={person.avatarLink}
+                           {person &&  <Image
+                    priority={true}
+                    id="profile_pic"
+                    width={320}
+                    height={320}
                     alt=""
-                  />
-                  {/* </Link> */}
+                    src={person.avatarLink}
+                  draggable={false}
+
+                              className=" h-12 w-12 sm:h-20 sm:w-20 flex-none bg-gray-50"
+                  />}
                   <div className="min-w-0 flex items-center">
                     <p className="text-sm sm:text-xl  leading-6 text-white ">
                       {checkname(person)}

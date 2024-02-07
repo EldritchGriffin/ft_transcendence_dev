@@ -2,10 +2,9 @@ import { useSocket } from "@/app/(authenticated)/(contexts)/socketContext";
 import { postacceptfriend, postaddfriend, postblockuser, postcancelfriend, postrejectfriend, postremovefriend, postunblockuser } from "@/app/(authenticated)/(handlers)/requestHandler";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 function isRequesting(data: any, users_name: string) {
-  // if (!data)
-  //   return (false);
   return data.some(function (requester: any) {
     return requester.intraLogin === users_name;
   });
@@ -27,8 +26,6 @@ const Publicuserinfo_block_unblock = (props: any) => {
 
         if (error.response.status === 401)
           window.location.replace("/");
-        // if (error?.response?.status === 403)
-        //   toast.error("User Not Blocked !");
           props.setstricted(true);
       }
     };
@@ -54,8 +51,6 @@ const Publicuserinfo_block_unblock = (props: any) => {
 
         if (error.response.status === 401)
           window.location.replace("/");
-        // if (error?.response?.status === 403)
-        //   toast.error("User Not Blocked !");
           props.setstricted(true);
 
       }
@@ -382,14 +377,18 @@ const Publicuserinfo = (props: any) => {
       <a className="text-white truncate ">PROFILE</a>
       <div className=" w-full h-[380px]  sm:w-[464px]    bg-primary_blue flex flex-col items-center space-y-5 pt-8 pb-8">
       <div className="h-fit w-fit border border-accent_red relative flex justify-center">
-        <img
+        { (user_data && user_data?.avatarLink) ? <Image
           src={user_data?.avatarLink || ''}
+          width={320}
+          height={320}
           alt=""
-          className="h-32 w-32 sm:h-[174px] sm:w-[174px] border-4 br "
-        />
+          className="h-32 w-32 sm:h-[174px] sm:w-[174px] border-4 br border-5"
+          draggable={false}
+          priority={true}
+        /> : null}
           {getStatus(status, pregame)}
     </div>
-        <span className="h-full w-full text-4xl sm:w-[140px] sm:h-[41px] text-center text-white">
+        <span className="h-full w-full text-4xl sm:w-[140px]  sm:h-[41px] text-center text-white">
           {" "}
           {user_data?.intraLogin || ''}{" "}
         </span>

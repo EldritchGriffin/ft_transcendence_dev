@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import Achievements from "@/app/(authenticated)/achive/Achievements";
 import { fetchLeaderBoard, fetchUserPublic } from "@/app/(authenticated)/(handlers)/requestHandler";
 
-const PrivetProfile = (props: any) => {
+const PublicProfilePage = (props: any) => {
   const router = useRouter();
 
   const [users_data, setusers_data] = useState<any>(null);
@@ -29,7 +29,6 @@ const PrivetProfile = (props: any) => {
 
       if (error.response.status === 401)
         window.location.replace("/");
-      // toast.error("User existed !");
       router.push('/not-found')
     } finally {
       setloading(false);
@@ -87,4 +86,4 @@ const PrivetProfile = (props: any) => {
   );
 };
 
-export default PrivetProfile;
+export default PublicProfilePage;

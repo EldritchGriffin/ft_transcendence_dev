@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetchBlockedList, postunblockuser } from "@/app/(authenticated)/(handlers)/requestHandler";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 const UserBlockList = (props: any) => {
   const router = useRouter();
@@ -88,14 +89,20 @@ const UserBlockList = (props: any) => {
                     className="w-full h-[128px]  flex justify-between items-center  flex-row  mr-4 pt-4   "
                     key={index}
                   >
-                    <img
-                      src={item.avatarLink}
-                      alt=""
+                              <Image
+          priority={true}
+          src={item.avatarLink}
+          id="profile_pic"
+          width={320}
+          height={320}
+          alt=""
+         draggable={false}
+
                       className="h-16  w-16 sm:h-[92px] sm:w-[100px] flex-none "
                       onClick={() => {
                         navigate_to_users_profile(item.intraLogin);
                       }}
-                    />
+        />
                     <span
                       className="h-2 w-2 text-sm items-center  flex ml-1 text-center  mr-4  text-white "
                       onClick={() => {

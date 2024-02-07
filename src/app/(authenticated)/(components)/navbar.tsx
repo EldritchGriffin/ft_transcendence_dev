@@ -72,20 +72,20 @@ export default function Navbar_compo() {
     setShow(!show);
   };
 
-  const statnav = () => {
-    if (checkpathname === "/messages") {
-      setnavactive(2);
-    } else if (checkpathname === "/user/me") {
-      setnavactive(3);
-    } else if ((checkpathname === "/pregame") || (checkpathname === "/game")) {
-      setnavactive(4);
-    }else 
-    {
-      setnavactive(3);
-    }
-  }
-  
-  
+  useEffect(()=>{
+
+    // const statnav = () => {
+      if (checkpathname === "/messages") {
+        setnavactive(2);
+      } else if (checkpathname === "/user/me" || checkpathname.includes("profil")) {
+        setnavactive(3);
+      } else if ((checkpathname === "/pregame") || (checkpathname === "/game")) {
+        setnavactive(4);
+      }
+    // }
+  }, [checkpathname])
+
+
   const fetchuser = async () => {
     try {
       const res = await fetchCurrentUser();
@@ -121,7 +121,7 @@ export default function Navbar_compo() {
   };
 
   useEffect(() => {
-    statnav();
+    // statnav();
     fetchserch();
     fetchuser();
 
@@ -143,8 +143,6 @@ export default function Navbar_compo() {
         },
       ]);
       toast.success(`${_data.sender.intraLogin} Friend Requested`);
-      // if (checkpathname === `/profile/${_data.receiver}`)
-      //   toast.success("a sidi rak sifti l had khona");
     });
 
     socket.on("friendRequestCancelled", (_data: notif_element) => {
@@ -220,53 +218,13 @@ export default function Navbar_compo() {
       ]);
       toast.error(`${_data.sender.intraLogin} Removed From Friend`);
     });
-    // socket.on("userBlocked", (_data: notif_element) => {
-    //   if (_data.sender.intraLogin === currUser?.intraLogin) return;
-    //   setnotif_counter(notif_counter + 1);
-    //   setData((Data) => [
-    //     ...Data,
-    //     {
-    //       id: notif_counter,
-    //       action: "userBlocked",
-    //       receiver: _data.receiver,
-    //       sender: {
-    //         avatarLink: _data.sender.avatarLink,
-    //         intraLogin: _data.sender.intraLogin,
-    //         nickname: _data.sender.nickname,
-    //       },
-    //     },
-    //   ]);
-    //   toast.error(`${_data.sender.intraLogin} Blocked You`);
-    // });
-    // socket.on("userUnblocked", (_data: notif_element) => {
-    //   if (_data.sender.intraLogin === currUser?.intraLogin) return;
-    //   setnotif_counter(notif_counter + 1);
-    //   setData((Data) => [
-    //     ...Data,
-    //     {
-    //       id: notif_counter,
-    //       action: "userUnblocked",
-    //       receiver: _data.receiver,
-    //       sender: {
-    //         avatarLink: _data.sender.avatarLink,
-    //         intraLogin: _data.sender.intraLogin,
-    //         nickname: _data.sender.nickname,
-    //       },
-    //     },
-    //   ]);
-    //   toast.success(`${_data.sender.intraLogin} UnBlocked You`);
-    // });
-
     return () => {
       socket.off("friendRequest");
       socket.off("friendRequestCancelled");
       socket.off("friendRejected");
       socket.off("friendAccepted");
       socket.off("friendRemoved");
-      // socket.off("userBlocked");
-      // socket.off("userUnblocked");
     };
-    // }
   }, [data]);
 
   const handlenavsearch = (event: any) => {
@@ -346,8 +304,8 @@ export default function Navbar_compo() {
                     tabIndex={0}
                     className="absolute  w-[300px]  h-[200px] bg-primary_blue space-y-3  pt-2 overflow-y-auto custom-scrollbar"
                   >
-                    {users_data.map((item: any, index: any) =>
-                      item.intraLogin.includes(navsearch) ? (
+                    {users_data?.map((item: any, index: any) =>
+                      (item.intraLogin != currUser?.intraLogin  && item.intraLogin.includes(navsearch)) ? (
                         <Navbar_search_list
                           item={item}
                           index={index}
