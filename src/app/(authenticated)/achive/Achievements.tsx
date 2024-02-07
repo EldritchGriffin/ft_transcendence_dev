@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -31,7 +32,17 @@ const Achievements = (props:any) => {
   {achivements?.map((item: any, index: any) => 
     item.flag ?  
      <div className="h-[50px] w-[50px] border-5" key={index}>
-    <img src={item.name} alt="ggg" className="h-[50px] w-[50px] " />
+         {item.name &&  <Image
+          priority={true}
+          src={item.name}
+          id="ggg"
+          width={320}
+          height={320}
+          alt=""
+         draggable={false}
+
+          className=" h-[50px] w-[50px] "
+        />}
   </div>
   :
      <div className="h-[50px] w-[50px] border-5" key={index}>
