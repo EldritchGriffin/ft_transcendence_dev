@@ -26,6 +26,3 @@ export interface notif_element {
   sender: sender;
 }
 
-// export interface notif_element {
-//   notif : notif_element[];
-// }

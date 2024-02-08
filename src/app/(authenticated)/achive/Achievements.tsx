@@ -4,17 +4,18 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-function select_achievements(data:any)
+function select_achievements(data:any, user_data:any)
 {
   if (!data)
     return (null);
+  const numberofwins = data.filter((match:any) => (match.player1 === user_data.intraLogin && match.result > 0)).length + data.filter((match:any) => (match.player2 === user_data.intraLogin && match.result < 0)).length;
   const achievements = 
     [{name: '/achievements/firstgame.jpg', flag: data.length > 0},
     {name: '/achievements/fivegames.jpg', flag: data.length >= 5},
     {name: '/achievements/teengames.jpg', flag: data.length >= 10},
-    {name: '/achievements/firstwin.jpg', flag: (data.filter((match:any) => match.result > 0).length > 0)},
-    {name: '/achievements/fivewins.jpg', flag: (data.filter((match:any) => match.result > 0).length >= 5)},
-    {name: '/achievements/teenwins.jpg', flag: (data.filter((match:any) => match.result > 0).length >= 10)},]
+    {name: '/achievements/firstwin.jpg', flag: (numberofwins > 0)},
+    {name: '/achievements/fivewins.jpg', flag: (numberofwins >= 5)},
+    {name: '/achievements/teenwins.jpg', flag: (numberofwins >= 10)},]
   ;
   return (achievements);
 }
@@ -23,7 +24,7 @@ const Achievements = (props:any) => {
   const the_history_match = props.matchHistory;
   const [achivements, setachivements] = useState<any>(null);
   useEffect(() => {
-   const achivement = select_achievements(the_history_match);
+   const achivement = select_achievements(the_history_match, props.user_data);
     setachivements(achivement);
   }, []);
 
@@ -57,7 +58,6 @@ const Achievements = (props:any) => {
 
           className=" h-[50px] w-[50px] "
         />
-    {/* <img src="/achievements/unlocked.jpg" alt="ggg" className="h-[50px] w-[50px] " /> */}
   </div>
   )}
   </div>

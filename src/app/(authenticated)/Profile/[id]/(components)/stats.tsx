@@ -16,8 +16,8 @@ const Stats = (props: any) => {
     if (wine == null) return 0;
     for (let i = 0; i < tole; i++) {
       if (
-        (x[i].players[0].intraLogin === win.intraLogin && x[i].result > 0) ||
-        (x[i].players[1].intraLogin === win.intraLogin && x[i].result < 0)
+        (x[i].player1 === win.intraLogin && x[i].result > 0) ||
+        (x[i].player2 === win.intraLogin && x[i].result < 0)
       ) {
         wine++;
       }
@@ -39,7 +39,7 @@ const Stats = (props: any) => {
         }
       });
     }, 20);
-    return () => clearInterval(interval); // Clear the interval on component unmount
+    return () => clearInterval(interval); 
   }, []);
   const circularProgressStyle = {
     background: `conic-gradient(#F25F5C ${stat * 3.6}deg, #ededed 0deg)`,
@@ -63,7 +63,7 @@ const Stats = (props: any) => {
       <div className="bg-primary_blue  flex flex-col w-full sm:w-[464px] h-[380px] container">
         <div className="w-full pt-7">
           <div className="">
-               {win && <Achievements matchHistory={win.matchHistory} />}
+               {win && <Achievements matchHistory={win.matchHistory} user_data={win}/>}
           </div>
         </div>
         <div className="circular-progress" style={circularProgressStyle}>

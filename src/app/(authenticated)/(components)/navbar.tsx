@@ -82,7 +82,6 @@ export default function Navbar_compo() {
   };
 
   useEffect(() => {
-    // const statnav = () => {
     if (checkpathname === "/messages") {
       setnavactive(2);
     } else if (
@@ -93,7 +92,6 @@ export default function Navbar_compo() {
     } else if (checkpathname === "/pregame" || checkpathname === "/game") {
       setnavactive(4);
     }
-    // }
   }, [checkpathname]);
 
   const handeldesaible2fa = async () => {
@@ -122,7 +120,6 @@ export default function Navbar_compo() {
   };
 
   useEffect(() => {
-    // statnav();
     fetchserch();
 
     socket.on("gameInvite", (invite) => {
@@ -265,7 +262,6 @@ export default function Navbar_compo() {
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      // Check if the click is outside the search result list
       if (
         searchRef.current &&
         !(searchRef.current as HTMLElement).contains(event.target as Node)
@@ -273,11 +269,7 @@ export default function Navbar_compo() {
         hidesearchfield();
       }
     };
-
-    // Add event listener to document on mount
     document.addEventListener("click", handleOutsideClick);
-
-    // Cleanup the event listener on unmount
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
@@ -525,7 +517,6 @@ export default function Navbar_compo() {
                   className="w-fit h-fit   text-2xl gap-3 font-bold text-white"
                   onClick={handleLogoutClick}
                 >
-                  {/* Log out */}
                   <MdLogout size={50} className="oo" />
                 </button>
               </div>
@@ -533,12 +524,11 @@ export default function Navbar_compo() {
           </div>
         </div>
       </nav>
-      {/* {show2fa && <Model2Fa  OpenModel={show2fa} settwofa={settwofa} twofa={twofa}  CloseModel={()=> { toast.success("SALAM ana 9a7ba ") ,setshow2fa(false)}} /> } */}
       {show2fa && (
         <Model2Fa
           OpenModel={show2fa}
           settwofa={settwofa}
-          CloseModel={setshow2fa} /*takhwira hnaya 3andak tnsa */
+          CloseModel={setshow2fa} 
         />
       )}
     </Fragment>

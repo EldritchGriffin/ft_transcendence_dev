@@ -68,8 +68,12 @@ export default function TwoFactor() {
             </div>
           </div>
         </div>
+<<<<<<< HEAD
       </div>
     </div>
   );
   // }
+=======
+      );
+>>>>>>> c87954d2c49f8069d1e160fcdf93594b9bbe7c46
 }

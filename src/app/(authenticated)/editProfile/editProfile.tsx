@@ -1,4 +1,5 @@
 "use client";
+<<<<<<< HEAD
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -7,6 +8,13 @@ import {
   postUserAvatar,
 } from "../(handlers)/requestHandler";
 import Image from "next/image";
+=======
+import React, { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { fetchUsernickname, postUserAvatar } from '../(handlers)/requestHandler';
+import Image from 'next/image';
+>>>>>>> c87954d2c49f8069d1e160fcdf93594b9bbe7c46
 
 export default function EditNickname(props: any) {
   const router = useRouter();

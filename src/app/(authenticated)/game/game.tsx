@@ -59,7 +59,7 @@ const textStyle = new PIXI.TextStyle({
 function initBall(app: PIXI.Application) {
   const ballgfx = new PIXI.Graphics();
   ballgfx.beginFill(0xdddddd);
-  const ballRadius = Math.min(app.screen.width, app.screen.height) / 40; // Adjust the divisor for desired size
+  const ballRadius = Math.min(app.screen.width, app.screen.height) / 40; 
   ballgfx.drawCircle(0, 0, 100);
   ballgfx.endFill();
   const texture = app.renderer.generateTexture(ballgfx);
@@ -73,8 +73,8 @@ function initBall(app: PIXI.Application) {
 function initPaddle(app: PIXI.Application) {
   const paddlegfx = new PIXI.Graphics();
   paddlegfx.beginFill(0xdddddd);
-  const paddleWidth = Math.min(app.screen.width, app.screen.height) / 25; // Adjust the divisor for desired size
-  const paddleHeight = Math.min(app.screen.width, app.screen.height) / 4; // Adjust the divisor for desired size
+  const paddleWidth = Math.min(app.screen.width, app.screen.height) / 25;
+  const paddleHeight = Math.min(app.screen.width, app.screen.height) / 4;
   paddlegfx.drawRect(0, 0, 500, 100);
   paddlegfx.endFill();
   const texture = app.renderer.generateTexture(paddlegfx);
@@ -88,7 +88,7 @@ function initPaddle(app: PIXI.Application) {
 function initText(app: PIXI.Application, score: number) {
   const text = new PIXI.Text(score.toString(), {
     fontFamily: Font.style.fontFamily,
-    fontSize: Math.min(app.screen.width, app.screen.height) / 15, // Adjust the divisor for desired size
+    fontSize: Math.min(app.screen.width, app.screen.height) / 15,
     fill: 0xdddddd,
     align: "center",
   });
@@ -183,7 +183,6 @@ function initPixi() {
   };
 }
 
-//update the sizes of all the assets
 const updateAssetsSize = (app: PIXI.Application, assets: any) => {
   const ballRadius = app.screen.height / 40;
   const paddleWidth = app.screen.height / 25;

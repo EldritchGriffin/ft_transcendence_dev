@@ -37,8 +37,6 @@ const UserBlockList = (props: any) => {
     } catch (error:any) {
     toast.error(error.response.data.message);
 
-      // if (error?.response?.status === 403)
-      //   toast.error("User Not Blocked !");
       if (error.response.status === 401)
          window.location.replace("/");
     }

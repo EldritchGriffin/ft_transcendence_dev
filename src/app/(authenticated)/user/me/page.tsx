@@ -7,10 +7,8 @@ import Mhistory from "../../profile/[id]/(components)/hs";
 import UserFriendList from "../../profile/[id]/(components)/UserFriendList";
 import Stats from "../../profile/[id]/(components)/stats";
 import Leadrboard from "../../profile/[id]/(components)/board";
-import Achievements from "../../achive/Achievements";
 import { fetchCurrentUser, fetchLeaderBoard } from "../../(handlers)/requestHandler";
 import { toast } from "react-toastify";
-// import Navbar_compo from '/testing/page';
 
 const ProfilePage = (props: any) => {
   const [users_data, setusers_data] = useState<any>(null);

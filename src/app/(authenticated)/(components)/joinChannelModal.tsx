@@ -68,7 +68,6 @@ const ListProtectedChannels = (props: any) => {
     };
     try {
       const newChannel = await postJoinChannel(data);
-      //changed here
     } catch (error) {
       toast.error("Invalid password");
     }

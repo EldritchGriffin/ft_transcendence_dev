@@ -23,11 +23,6 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
 
       const res = await getImage();
       setImage(res);
-      // const res = await axios.get(backendUrl2, { withCredentials: true });
-      // if(res.status >= 200 && res.status < 300){
-      //   const data = await res.data;
-      //   setImage(data);
-      // }
     } catch (error) {
       toast.error("Already enabled 2FA");
     }
@@ -47,14 +42,6 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
         toast.success("2FA enabled successfully");
       settwofa(true);
       CloseModel(false);
-      // const res = await  axios.post(backendUrl, requestData, { withCredentials: true });
-      // if (res.status >= 200 && res.status < 300) {
-      //   settwofa(true);
-      //   CloseModel(false);
-      // }
-      // else{
-      //   toast.error("Invalid 2FA code");
-      // }
     } catch (error) {
       toast.error("Invalid 2FA code");
     }
@@ -112,5 +99,3 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
   )
 }
 
-
-// className="h-16 w-[20px] sm:h-[43px] sm:w-[50px] flex flex-col items-center justify-center text-center  outline-none border-b-4 border-black  text-black inpute_code text-sm lg:text-2xl"
