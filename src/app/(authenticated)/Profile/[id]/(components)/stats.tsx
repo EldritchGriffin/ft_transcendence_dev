@@ -74,7 +74,7 @@ const Stats = (props: any) => {
         </div>
         <div className="text-xl w-full  text-white flex flex-row">
           <p className="pb-7 pl-[45px]  sm:pl-[54px]">Rank:</p>
-          <p className="pl-[120px]">{place2 === 0 ? "None" : place2 + "st"}</p>
+          <p className="pl-[120px]">{place2 === 0 ? "None" : place2}</p>
         </div>
       </div>
     </div>
