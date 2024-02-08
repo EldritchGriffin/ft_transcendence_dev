@@ -66,8 +66,8 @@ export default function Notif(props: any) {
                       draggable={false}
                       className="w-16 h-16 rounded-full  "
                     />
-                    <div className="">{item.sender.intraLogin} </div>
-                    <div className="">
+                    <div className="text-black">{item.sender.intraLogin} </div>
+                    <div className="text-black">
                       {item.action.includes("gameInvite")
                         ? "Game invite"
                         : item.action}

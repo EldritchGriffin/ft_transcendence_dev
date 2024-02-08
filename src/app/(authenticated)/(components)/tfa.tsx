@@ -11,7 +11,7 @@ export default function TwoFactor() {
   const [otp, setOtp] = useState('');
   const router = useRouter();
 
-  const backendUrl = "http://localhost:3001/auth/signinTFA";
+  const backendUrl = `http://10.13.8.17:3001/auth/signinTFA`;
   const handleButtonClick = async () => {
     const requestData = {
       code: otp as string,

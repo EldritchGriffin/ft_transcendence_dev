@@ -39,7 +39,7 @@ export const Ft_memo = (props: any) => {
         router.push("/");
       }
       setSocket(
-        io("http://localhost:3001/channels", {
+        io(`http://10.13.8.17:3001/channels`, {
           extraHeaders: {
             Authorization: `Bearer ${token}`,
           },

@@ -1,12 +1,13 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: `http://10.13.8.17:3001`,
   withCredentials: true,
 });
 
 export const fetchCurrentUser = async () => {
   const url = `/user/me`;
+  console.log(process.env);
 
   try {
     const response = await api.get(url);

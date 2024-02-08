@@ -215,10 +215,15 @@ const PixiComponent = () => {
   let socket: Socket | null = null;
   const token = Cookies.get("token");
 
+  if(!mode && !invited && !gameId)
+  {
+    toast.error("No parameters provided");
+    router.push("/pregame");
+  }
   useEffect(() => {
     if (!user || !token) router.push("/");
     if (!socket) {
-      socket = io("http://localhost:3001/game", {
+      socket = io(`http://10.13.8.17:3001/game`, {
         extraHeaders: {
           Authorization: `Bearer ${token}`,
         },
