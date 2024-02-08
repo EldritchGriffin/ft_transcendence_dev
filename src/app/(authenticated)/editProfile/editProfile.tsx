@@ -1,9 +1,5 @@
 "use client";
 import React, { useEffect, useState, useRef } from 'react';
-// import ClipLoader from "react-spinners/ClipLoader";
-// import BeatLoader from "react-spinners/ClipLoader";
-// import GridLoader from "react-spinners/ClipLoader";
-// import HashLoader from "react-spinners/ClipLoader";
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { fetchUsernickname, postUserAvatar } from '../(handlers)/requestHandler';

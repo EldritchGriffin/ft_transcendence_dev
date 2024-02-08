@@ -105,40 +105,24 @@ const Publicuserinfo_add_remove_cancel = ( props:any ) => {
     setbuttonstate(relationship);
     if (socket) {
       socket.on("friendRequestNotif", (user) => {
-        // if(user === user_data.intraLogin)
           setbuttonstate("Accept");
           setreject_option(true);
-        //  setStatus("online");
       });
       socket.on("friendRemovedNotif", (user) => {
-        // if(user === user_data.intraLogin)
           setbuttonstate("Add");
-        //  setStatus("online");
-        // setreject_option(false);
-
       });
       socket.on("friendAcceptedNotif", (user) => {
-        // if(user === user_data.intraLogin)
           setbuttonstate("Remove");
           setreject_option(false);
-
-        //  setStatus("online");
       });
       socket.on("friendRejectedNotif", (user) => {
-        // if(user === user_data.intraLogin)
           setbuttonstate("Add");
           setreject_option(false);
-
-        //  setStatus("online");
       });
       socket.on("friendRequestCancelledNotif", (user) => {
-        // if(user === user_data.intraLogin)
           setbuttonstate("Add");
-          // setreject_option(false);
-        //  setStatus("online");
       });
     }
-
     return () => {
       if (socket) {
         socket.off("friendRequestNotif");
@@ -164,10 +148,8 @@ const Publicuserinfo_add_remove_cancel = ( props:any ) => {
 
     }
   }
-  
   const remove_user = () => {
     send_remove();
-
   }
   return (
     <button
@@ -186,23 +168,16 @@ else if(buttonstate === "Cancel")
     try {
       const response = await postcancelfriend(user_data.intraLogin);
     setbuttonstate("Add");
-
     } catch (error:any) {
     toast.error(error.response.data.message);
-
       if (error.response.status === 401)
         window.location.replace("/");
       props.setstrictedadd(true);
-
-
     }
   }
-  
   const cancel_user = () => {
     send_cancel();
-
   }
-  
   return (
     <button
       className=" border-red-400 w-[70px] h-[30px] bg-accent_red font-bold text-white"
@@ -215,28 +190,22 @@ else if(buttonstate === "Cancel")
   }
 else if(buttonstate === "Accept")
 {
-
   const send_accept = async () => {
     try {
       const response = await postacceptfriend(user_data.intraLogin);
     setbuttonstate("Remove");
     setreject_option(false);
-
     } catch (error:any) {
     toast.error(error.response.data.message);
 
       if (error.response.status === 401)
         window.location.replace("/");
         props.setstrictedadd(true);
-
     }
   }
-  
   const cancel_user = () => {
     send_accept();
-
   }
-    
   const Reject_Invite = async () => {
     try {
       const response = await postrejectfriend(user_data.intraLogin);
@@ -245,7 +214,6 @@ else if(buttonstate === "Accept")
     } catch (error:any) {
     toast.error(error.response.data.message);
     setbuttonstate("Remove");
-
     setreject_option(false);
       if (error.response.status === 401)
       window.location.replace("/");
@@ -278,15 +246,12 @@ else if(buttonstate === "Accept")
   );
   }
   else {
-
- 
     const send_add = async () => {
       try {
         const response = await postaddfriend(user_data.intraLogin);
         setbuttonstate("Cancel");
       } catch (error:any) {
     toast.error(error.response.data.message);
-
         if (error.response.status === 401)
         window.location.replace("/");
       props.setstrictedadd(true);
@@ -294,7 +259,6 @@ else if(buttonstate === "Accept")
     }
     const add_user = () => {
       send_add();
-
     }
   return (
     <button
@@ -305,17 +269,14 @@ else if(buttonstate === "Accept")
       {buttonstate}{" "}
     </button>
   );
-
 }
 }
-
 const getStatus = (status:any, pregame:any) => {
     if (status === "online") {
       return (      <span className="inline-flex items-center absolute bottom-[-8px] bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
       <span className="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
               Online
     </span>);
-
     }
     else if (status === "offline") {
       return (      <span className="inline-flex items-center absolute bottom-[-8px] bg-slate-400 text-slate-50 text-xs font-medium px-2.5 py-0.5 rounded-full ">
@@ -329,7 +290,6 @@ const getStatus = (status:any, pregame:any) => {
               Ingame
     </span>);
     }
-
 }
 
 
