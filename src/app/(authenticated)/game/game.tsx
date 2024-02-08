@@ -219,6 +219,11 @@ const PixiComponent = () => {
       toast.error("No parameters provided");
       router.push("/pregame");
     }
+    if(user.intraLogin === invited)
+    {
+      toast.error("You cannot invite yourself to a game");
+      router.push("/pregame");
+    }
     if (!user || !token) router.push("/");
     if (!socket) {
       socket = io(`http://${process.env.NEXT_PUBLIC_HOSTNAME}:3001/game`, {
