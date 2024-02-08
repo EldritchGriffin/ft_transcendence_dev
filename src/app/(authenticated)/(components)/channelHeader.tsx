@@ -553,6 +553,9 @@ const ChannelHeader = (props: any) => {
     setShowModal(!showModal);
   };
 
+  const handleInviteGame = (friend: string) => {
+    router.push(`/game?mode=medium&invite=${friend}`);
+  };
   const handleLeave = async () => {
     try {
       await postLeaveChannel(selectedChannel.id);
@@ -786,10 +789,12 @@ const ChannelHeader = (props: any) => {
               Profile
             </button>
             <button
-              onClick={() => {}}
-              className="text-white text-sm hover:text-accent_red"
+              onClick={() => handleInviteGame(selectedChannel.title)}
+              className="text-white text-sm "
             >
-              <span className="text-white text-lg">Play</span>
+              <span className="text-white text-lg hover:text-accent_red">
+                Play
+              </span>
             </button>
           </>
         )}

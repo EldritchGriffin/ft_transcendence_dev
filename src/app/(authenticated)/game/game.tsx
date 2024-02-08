@@ -232,7 +232,6 @@ const PixiComponent = () => {
     const pixi = initPixi();
     let assets = initAssets(pixi.App);
     let game: Game;
-    console.log("emitting joinGame");
     socket.emit("joinGame", {
       gameId: gameId,
       mode: mode,

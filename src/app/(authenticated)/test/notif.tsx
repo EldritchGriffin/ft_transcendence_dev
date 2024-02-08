@@ -20,7 +20,6 @@ export default function Notif(props: any) {
 
     if (idToRemove.action.includes("gameInvite")) {
       const id = idToRemove.action.replace("gameInvite", "");
-      console.log(id);
       router.push(`/game?id=${id}`);
     } else
       router.push(
