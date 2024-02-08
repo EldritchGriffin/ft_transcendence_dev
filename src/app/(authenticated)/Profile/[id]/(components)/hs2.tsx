@@ -2,37 +2,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-const checkname = (person: any) => {
-  if (person.nickname) {
-    if (person.nickname.length > 7) {
-      return person.nickname.slice(0, 7) + "...";
-    } else {
-      return person.nickname;
-    }
-  } else {
-    if (person.intraLogin.length > 7) {
-      return person.intraLogin.slice(0, 7) + "...";
-    } else {
-      return person.intraLogin;
-    }
-  }
-};
-
-const checkwiner = (person: any, h: any) => {
-  if (person.intraLogin === h.players[0].intraLogin) {
-    if (h.result > 0) {
-      return "Won";
-    } else {
-      return "Lost";
-    }
-  } else if (person.intraLogin === h.players[1].intraLogin) {
-    if (h.result < 0) {
-      return "Won";
-    } else {
-      return "Lost";
-    }
-  }
-};
 
 const Mhistory = ({ result }: any) => {
   const history: any = result?.matchHistory;
@@ -57,64 +26,52 @@ const Mhistory = ({ result }: any) => {
                   <div
                     className="flex flex-col items-center cursor-pointer"
                     onClick={() => {
-                      router.push(
-                        `/profile/${
-                          h.players &&
-                          h.players[0].intraLogin === result.intraLogin
-                            ? h.players[0].intraLogin
-                            : h.players[1].intraLogin
-                        }`
-                      );
+                      router.push(`/profile/${h.player1}`);
                     }}
                   >
-                    <Image src={
-                        h.players &&
-                        h.players[0].intraLogin === result.intraLogin
+                    <Image
+                      src={
+                        h.player1 === h.players[0].intraLogin
                           ? h.players[0].avatarLink
                           : h.players[1].avatarLink
-                      } alt="" width={100} height={100} className="cursor-pointer"
+                      }
+                      alt=""
+                      width={100}
+                      height={100}
+                      className="cursor-pointer"
                       draggable={false}
-                       />
+                    />
                     <p className="text-xs sm:text-lg  text-white">
-                      {checkname(
-                        h.players &&
-                          h.players[0].intraLogin === result.intraLogin
-                          ? h.players[0]
-                          : h.players[1]
-                      )}
+                      {h.player1 === h.players[0].intraLogin
+                        ? h.players[0].nickname
+                        : h.players[1].nickname}
                     </p>
                   </div>
                   <p className="text-xs  sm:text-lg test1:text-3xl px-2 pb-5 text-white">
-                    {checkwiner(result, h)}
+                    {h.result > 0 ? "WON" : "LOST"}
                   </p>
                   <div
                     className="flex flex-col items-center cursor-pointer"
                     onClick={() => {
-                      router.push(
-                        `/profile/${
-                          h.players &&
-                          h.players[1].intraLogin === result.intraLogin
-                            ? h.players[0].intraLogin
-                            : h.players[1].intraLogin
-                        }`
-                      );
+                      router.push(`/profile/${h.player2}`);
                     }}
                   >
-                    <Image src={
-                        h.players &&
-                        h.players[0].intraLogin === result.intraLogin
+                    <Image
+                      src={
+                        h.player2 === h.players[1].intraLogin
                           ? h.players[1].avatarLink
                           : h.players[0].avatarLink
-                      } alt="" width={100} height={100} className="cursor-pointer"
+                      }
+                      alt=""
+                      width={100}
+                      height={100}
+                      className="cursor-pointer"
                       draggable={false}
-                       />
+                    />
                     <p className="text-xs sm:text-lg  text-white">
-                      {checkname(
-                        h.players &&
-                          h.players[1].intraLogin === result.intraLogin
-                          ? h.players[0]
-                          : h.players[1]
-                      )}
+                      {h.player2 === h.players[1].intraLogin
+                        ? h.players[1].nickname
+                        : h.players[0].nickname}
                     </p>
                   </div>
                 </div>

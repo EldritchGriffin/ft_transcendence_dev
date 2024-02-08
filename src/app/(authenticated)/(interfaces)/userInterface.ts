@@ -9,4 +9,5 @@ export interface User {
   blocked: User[];
   avatarLink: string | null;
   status: string;
+  TFA: boolean;
 }

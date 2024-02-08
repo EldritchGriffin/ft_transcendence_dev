@@ -216,9 +216,13 @@ const PixiComponent = () => {
   const token = Cookies.get("token");
 
   useEffect(() => {
+    if (!mode && !invited && !gameId) {
+      toast.error("No parameters provided");
+      router.push("/pregame");
+    }
     if (!user || !token) router.push("/");
     if (!socket) {
-      socket = io("http://localhost:3001/game", {
+      socket = io(`http://${process.env.NEXT_PUBLIC_HOSTNAME}:3001/game`, {
         extraHeaders: {
           Authorization: `Bearer ${token}`,
         },

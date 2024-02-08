@@ -12,6 +12,7 @@ const InviteToGameModal = (props: any) => {
 
   const inviteUser = (expected: User) => {
     if (expected.status !== "online") {
+
       toast.error("User cannot be invited");
       return;
     }

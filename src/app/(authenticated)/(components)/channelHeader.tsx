@@ -414,7 +414,7 @@ const MemberList = (props: any) => {
           onChange={() => handleSearch()}
         />
       </div>
-      <div className="w-80 h-80 flex flex-col gap-4 overflow-scroll custom-scrollbar">
+      <div className="w-80 h-full  flex flex-col gap-4 ">
         {userGrade !== "member" ? (
           <div className="collapse bg-accent_red">
             <input type="checkbox" />
@@ -422,7 +422,7 @@ const MemberList = (props: any) => {
               <span className="text-white">Unban a user</span>
               <SlArrowDown className="text-sm ml-auto" />
             </div>
-            <div className="collapse-content flex gap-3 flex-col overflow-scroll custom-scrollbar">
+            <div className="collapse-content flex gap-3 flex-col ">
               {channel.bannedUsers.map((banned: string, index: number) => {
                 return (
                   <div
@@ -443,7 +443,7 @@ const MemberList = (props: any) => {
           </div>
         ) : null}
         {channel.access === "Private" && userGrade !== "member" ? (
-          <div className="collapse bg-accent_red">
+          <div className="collapse bg-accent_red ">
             <input type="checkbox" />
             <div className="collapse-title text-xl flex flex-row items-center">
               <span className="text-white">Invite a user</span>
@@ -469,34 +469,36 @@ const MemberList = (props: any) => {
             </div>
           </div>
         ) : null}
-        {filteredMembers.map((member: User, index) =>
-          member.intraLogin === user.intraLogin ? null : (
-            <div
-              key={index}
-              className="flex flex-row justify-between items-center "
-            >
-              <div className="collapse bg-base-200">
-                <input type="checkbox" />
-                <div className="collapse-title text-xl flex flex-row items-center">
-                  <span className="">{member.intraLogin}</span>
-                  <SlArrowDown className="text-sm ml-auto" />
-                </div>
-                <div className="collapse-content">
-                  {userGrade != "member" ? (
-                    <AdminControls
-                      channel={channel}
-                      userGrade={userGrade}
-                      member={member}
-                      socket={props.socket}
-                    />
-                  ) : (
-                    <UserControls member={member} />
-                  )}
+        <div className="space-y-2 overflow-y-auto  custom-scrollbar h-fit">
+          {filteredMembers.map((member: User, index) =>
+            member.intraLogin === user.intraLogin ? null : (
+              <div
+                key={index}
+                className="flex flex-row justify-between items-center "
+              >
+                <div className="collapse bg-base-200">
+                  <input type="checkbox" />
+                  <div className="collapse-title text-xl flex flex-row items-center">
+                    <span className="">{member.intraLogin}</span>
+                    <SlArrowDown className="text-sm ml-auto" />
+                  </div>
+                  <div className="collapse-content">
+                    {userGrade != "member" ? (
+                      <AdminControls
+                        channel={channel}
+                        userGrade={userGrade}
+                        member={member}
+                        socket={props.socket}
+                      />
+                    ) : (
+                      <UserControls member={member} />
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        )}
+            )
+          )}
+        </div>
       </div>
     </div>
   );
@@ -513,7 +515,7 @@ const SettingsModal = (props: any) => {
   );
   return (
     <div className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="flex flex-col bg-white rounded-lg shadow-lg p-4">
+      <div className="flex overflow-y-auto custom-scrollbar  h-[60%] flex-col bg-white rounded-lg shadow-lg p-4">
         <div className="flex flex-row justify-between items-center">
           <h1 className="text-xl">Settings</h1>
           <button onClick={() => props.toggleModal()} className="text-xl">
@@ -529,7 +531,7 @@ const SettingsModal = (props: any) => {
               />
             ) : null}
           </div>
-          <div className="flex flex-col gap-3 h-96 w-80 ">
+          <div className="flex flex-col gap-3 h-96 w-80">
             <MemberList
               channel={channel}
               userGrade={userGrade}

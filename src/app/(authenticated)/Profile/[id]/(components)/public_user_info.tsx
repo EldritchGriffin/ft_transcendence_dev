@@ -384,7 +384,7 @@ const Publicuserinfo = (props: any) => {
   }, []);
 
 
-console.log("add rerror flag :",   strictedadd ,"block flag :", stricted)
+
   return (
     <div className="flex flex-col w-full sm:w-[464px]">
       <a className="text-white truncate ">PROFILE</a>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: `http://${process.env.NEXT_PUBLIC_HOSTNAME}:3001`,
   withCredentials: true,
 });
 
@@ -513,16 +513,13 @@ export const handlTFA = async () => {
     if (response.status >= 200 && response.status < 300) {
       const data = await response.data;
       return data;
-    }
-    else {
+    } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
     throw error;
   }
 };
-
-
 
 export const getImage = async () => {
   const url = `/user/enable2fa`;
@@ -532,8 +529,7 @@ export const getImage = async () => {
     if (response.status >= 200 && response.status < 300) {
       const data = await response.data;
       return data;
-    }
-    else {
+    } else {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
   } catch (error) {
@@ -541,7 +537,7 @@ export const getImage = async () => {
   }
 };
 
-export const validTfa = async (requestData : any) => {
+export const validTfa = async (requestData: any) => {
   const url = `/user/validate2fa`;
 
   try {
