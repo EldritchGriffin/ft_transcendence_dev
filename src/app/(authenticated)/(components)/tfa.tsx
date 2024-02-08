@@ -25,7 +25,9 @@ export default function TwoFactor() {
       if (res.status >= 200 && res.status < 300) {
         router.push("/user/me");
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Invalid 2FA code");
+    }
   };
 
   return (
@@ -68,12 +70,7 @@ export default function TwoFactor() {
             </div>
           </div>
         </div>
-<<<<<<< HEAD
       </div>
     </div>
   );
-  // }
-=======
-      );
->>>>>>> c87954d2c49f8069d1e160fcdf93594b9bbe7c46
 }
