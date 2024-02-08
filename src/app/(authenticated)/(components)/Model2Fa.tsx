@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { useEffect, useState,useRef } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import OtpInput from 'react-otp-input';
 import { getImage, validTfa } from "../(handlers)/requestHandler";
@@ -87,11 +86,10 @@ export default function Model2Fa({OpenModel, settwofa,CloseModel}:any) {
                           value={otp}
                           onChange={setOtp}
                           numInputs={6}
-                          // containerStyle={"gap-4 md:gap-8 xl:gap-10"}
                           containerStyle={"gap-4 md:gap-8 xl:gap-10"}
                           inputStyle={'h-16 w-[20px] sm:h-[43px] sm:w-[50px] flex flex-col items-center justify-center text-center  outline-none border-b-2 border-black  text-black inpute_code text-sm lg:text-2xl'}
                           renderSeparator={<span>&nbsp;</span>}
-                          renderInput={(props) => <input {...props} />}
+                          renderInput={(props:any) => <input {...props} />}
                         />
                         </div>
                         <div className="flex flex-col ">

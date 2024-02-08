@@ -42,17 +42,17 @@ const Navbar_search_list = (props: any) => {
         navigate_to_users_profile(props.item.intraLogin);
       }}
     >
-         { props.item.avatarLink ? <Image
-             src={props.item.avatarLink || ''}
-
+      {props.item.avatarLink ? (
+        <Image
+          src={props.item.avatarLink || ""}
           width={320}
           height={320}
           alt=""
           className="h-10 w-10 sm:h-[60px] sm:w-[60px] flex-none   "
-
           draggable={false}
           priority={true}
-        /> : null}
+        />
+      ) : null}
 
       <span className="h-fit w-fit  text-sm flex items-center  justify-center text-center text-white">
         {" "}
@@ -71,10 +71,10 @@ export default function Navbar_compo() {
   const [navsearch, setnavsearch] = useState("");
   const searchRef = useRef(null);
   const [show2fa, setshow2fa] = useState(false);
-  const [twofa, settwofa] = useState(false);
+  const currUser = useUser();
+  const [twofa, settwofa] = useState(currUser.TFA);
   const checkpathname = usePathname();
   const socket = useSocket();
-  const currUser = useUser();
   const [data, setData] = useState<notif_element[]>([]);
   const [notif_counter, setnotif_counter] = useState(0);
   const openNav = () => {

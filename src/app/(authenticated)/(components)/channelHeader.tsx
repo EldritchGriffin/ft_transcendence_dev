@@ -170,11 +170,13 @@ const OwnerControls = (props: any) => {
 const UserControls = (props: any) => {
   const router = useRouter();
   const member: User = props.member;
+  const handlePlay = (member: User) => {
+    router.push(`/game?mode=medium&invite=${member.intraLogin}`);
+  };
   const handleProfile = () => {
     router.push(`/profile/${member.intraLogin}`);
   };
   return (
-    //TODO: add ability to invite a user to play a game
     <div className="flex gap-3">
       <button
         onClick={() => handleProfile()}
@@ -182,7 +184,10 @@ const UserControls = (props: any) => {
       >
         Profile
       </button>
-      <button className="text-accent_red text-sm hover:text-red-300">
+      <button
+        onClick={() => handlePlay(props.member)}
+        className="text-accent_red text-sm hover:text-red-300"
+      >
         Play
       </button>
     </div>
@@ -781,8 +786,7 @@ const ChannelHeader = (props: any) => {
               Profile
             </button>
             <button
-              onClick={() => {
-              }}
+              onClick={() => {}}
               className="text-white text-sm hover:text-accent_red"
             >
               <span className="text-white text-lg">Play</span>
