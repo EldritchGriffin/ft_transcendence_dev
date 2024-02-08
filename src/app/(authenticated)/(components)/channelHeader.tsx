@@ -414,7 +414,7 @@ const MemberList = (props: any) => {
           onChange={() => handleSearch()}
         />
       </div>
-      <div className="w-80 h-80 flex flex-col gap-4 overflow-scroll custom-scrollbar">
+      <div className="w-80 h-full  flex flex-col gap-4 ">
         {userGrade !== "member" ? (
           <div className="collapse bg-accent_red">
             <input type="checkbox" />
@@ -422,7 +422,7 @@ const MemberList = (props: any) => {
               <span className="text-white">Unban a user</span>
               <SlArrowDown className="text-sm ml-auto" />
             </div>
-            <div className="collapse-content flex gap-3 flex-col overflow-scroll custom-scrollbar">
+            <div className="collapse-content flex gap-3 flex-col ">
               {channel.bannedUsers.map((banned: string, index: number) => {
                 return (
                   <div
@@ -443,7 +443,7 @@ const MemberList = (props: any) => {
           </div>
         ) : null}
         {channel.access === "Private" && userGrade !== "member" ? (
-          <div className="collapse bg-accent_red">
+          <div className="collapse bg-accent_red ">
             <input type="checkbox" />
             <div className="collapse-title text-xl flex flex-row items-center">
               <span className="text-white">Invite a user</span>
@@ -469,6 +469,7 @@ const MemberList = (props: any) => {
             </div>
           </div>
         ) : null}
+        <div className="space-y-2 overflow-y-auto custom-scrollbar h-52">
         {filteredMembers.map((member: User, index) =>
           member.intraLogin === user.intraLogin ? null : (
             <div
@@ -497,6 +498,7 @@ const MemberList = (props: any) => {
             </div>
           )
         )}
+      </div>
       </div>
     </div>
   );
@@ -529,7 +531,7 @@ const SettingsModal = (props: any) => {
               />
             ) : null}
           </div>
-          <div className="flex flex-col gap-3 h-96 w-80 ">
+          <div className="flex flex-col gap-3 h-96 w-80">
             <MemberList
               channel={channel}
               userGrade={userGrade}

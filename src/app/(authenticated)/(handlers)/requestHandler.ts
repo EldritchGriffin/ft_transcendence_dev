@@ -7,7 +7,7 @@ const api = axios.create({
 
 export const fetchCurrentUser = async () => {
   const url = `/user/me`;
-  console.log(process.env);
+
 
   try {
     const response = await api.get(url);

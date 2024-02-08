@@ -46,7 +46,18 @@ const Achievements = (props:any) => {
   </div>
   :
      <div className="h-[50px] w-[50px] border-5" key={index}>
-    <img src="/achievements/unlocked.jpg" alt="ggg" className="h-[50px] w-[50px] " />
+      <Image
+          priority={true}
+          src="/achievements/unlocked.jpg"
+          id="ggg"
+          width={320}
+          height={320}
+          alt=""
+         draggable={false}
+
+          className=" h-[50px] w-[50px] "
+        />
+    {/* <img src="/achievements/unlocked.jpg" alt="ggg" className="h-[50px] w-[50px] " /> */}
   </div>
   )}
   </div>

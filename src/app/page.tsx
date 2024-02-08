@@ -20,13 +20,6 @@ const Home = () => {
               Start
             </button>
           </form>
-          <button className="w-[110px] h-[40px] text-white text-[14px] bg-primary_blue"
-            onClick={() => {
-              router.push("/aboutus");
-            }}
-          >
-            About us
-          </button>
         </div>
       </div>
       <Lottie

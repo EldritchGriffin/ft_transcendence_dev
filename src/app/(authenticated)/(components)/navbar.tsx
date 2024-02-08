@@ -320,7 +320,7 @@ export default function Navbar_compo() {
                   >
                     {users_data?.map((item: any, index: any) =>
                       item.intraLogin != currUser?.intraLogin &&
-                      item.intraLogin.includes(navsearch) ? (
+                      (item.intraLogin.includes(navsearch) || item.nickname.includes(navsearch)) ? (
                         <Navbar_search_list
                           item={item}
                           index={index}

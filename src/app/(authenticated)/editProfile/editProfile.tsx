@@ -47,7 +47,7 @@ export default  function EditNickname( props:any ) {
     setupdatenick(event?.target?.value);
   }
   const handleFileUpload =  (files:any) => {
-    console.log(files);
+
     if (files && files.type !== "image/jpeg")
     {
       imgflag = 1;
@@ -100,7 +100,7 @@ export default  function EditNickname( props:any ) {
         router.push("/user/me");
     }
     }
-    console.log("image displayed :", new_file);
+
     return (props.user_data ?
       <div className="h-full w-full  bg-primary_blue flex flex-col items-center space-y-10 pt-20"  style={{ 
           opacity: (!name || !image) ? 0.4 : 1
@@ -119,7 +119,7 @@ export default  function EditNickname( props:any ) {
           className=" h-44 w-44 border-4 border-red-400 "
         />}
                 <button  className=" w-12 h-6 bg-accent_red font-bold text-white absolute bottom-[-10px]" onClick={handleClickProgrammatically} > Edit </button>
-                <input  name="image" onChange={(e)=>{handleFileUpload(e.target.files?.[0]); console.log(e.target.files?.[0])}} type="file" placeholder="Edit" id='inpt' accept='/image/*' className="outline-none  h-10 w-10 bg-red-500 hidden green absolute bottom-[-10px] opacity-10 " ref={inputRef} 
+                <input  name="image" onChange={(e)=>{handleFileUpload(e.target.files?.[0])}} type="file" placeholder="Edit" id='inpt' accept='/image/*' className="outline-none  h-10 w-10 bg-red-500 hidden green absolute bottom-[-10px] opacity-10 " ref={inputRef} 
                  />
             </div>
              </div>

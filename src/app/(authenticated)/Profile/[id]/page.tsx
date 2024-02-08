@@ -34,7 +34,7 @@ const PublicProfile = (params: any) => {
   if (loading) {
     return <div className="flex justify-center items-center"> Loading . . . .  </div>;
   }
-  console.log("ok :", params.id);
+
     return (
       <div className="flex h-auto min-h-screen flex-col  justify-center items-center space-y-10  bg-bg_gray">
         {users_data &&  <PublicProfilePage id={params.params.id} users_data={users_data} />}
